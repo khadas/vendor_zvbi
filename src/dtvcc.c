@@ -33,9 +33,20 @@
 
 #include "libzvbi.h"
 #include "dtvcc.h"
+
 #ifdef ANDROID
 #include "am_debug.h"
-#endif
+#else
+//for buildroot begin
+#undef AM_DEBUG
+#define AM_DEBUG(_level,_fmt...) \
+	do {\
+		fprintf(stderr, "AM_DEBUG:(\"%s\" %d)", __FILE__, __LINE__);\
+		fprintf(stderr, _fmt);\
+		fprintf(stderr, "\n");\
+	} while (0) \
+//for buildroot end
+#endif//end ANDROID
 
 
 #define elements(array) (sizeof(array) / sizeof(array[0]))
