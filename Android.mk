@@ -24,6 +24,7 @@ LOCAL_ARM_MODE := arm
 LOCAL_C_INCLUDES := external/icu4c/common
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../dvb/include/am_adp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../dvb/include/am_adp
+LOCAL_C_INCLUDES += vendor/amlogic/dvb/include/am_adp
 
 ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 28&& echo OK),OK)
     ifeq ($(BOARD_COMPILE_IN_SYSTEM), true)
