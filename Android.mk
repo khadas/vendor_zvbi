@@ -66,17 +66,12 @@ LOCAL_C_INCLUDES := external/icu4c/common
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../dvb/include/am_adp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../dvb/include/am_adp
 
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 28&& echo OK),OK)
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../icu/icu4c/source/common
 LOCAL_STATIC_LIBRARIES += libicuuc libicuuc_stubdata libam_adp
 LOCAL_SHARED_LIBRARIES += liblog
-else
-LOCAL_C_INCLUDES += external/icu/icu4c/source/common
-LOCAL_STATIC_LIBRARIES += libicuuc liblog libam_adp
-endif
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_STATIC_LIBRARY)
+endif
 include $(LOCAL_PATH)/ntsc_decode/Android.mk
 #include $(LOCAL_PATH)/test/Android.mk
-endif
