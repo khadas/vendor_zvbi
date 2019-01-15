@@ -3667,7 +3667,8 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 	}
 
 	/* CEA 708-C defines no C2 or C3 commands. */
-	ds->curr_window->latest_cmd_cr = 0;
+	if (ds->curr_window)
+		ds->curr_window->latest_cmd_cr = 0;
 	if ((int8_t) c >= 0) {
 		/* C2 code. */
 		*se_length = (c >> 3) + 2;
