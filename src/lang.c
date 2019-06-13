@@ -472,7 +472,9 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 		return arabic_g2[c - 0x20];
 
 	case HEBREW_G0:
-		if (c < 0x5B)
+		if (c == 0x23)
+			return 0xA3;
+		else if (c < 0x5B)
 			return c;
 		else
 			return hebrew_g0[c - 0x5B];
