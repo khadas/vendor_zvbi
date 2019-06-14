@@ -28,10 +28,14 @@
 #include <errno.h>
 
 #include "version.h"
+#ifdef ANDROID
 #include <android/log.h>
 
 #define LOG_TAG    "ZVBI"
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#else
+#define LOGI(...) printf(__VA_ARGS__)
+#endif
 
 
 #if 2 == VBI_VERSION_MINOR

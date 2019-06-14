@@ -42,7 +42,9 @@
 #include "hamm.h"
 #include "lang.h"
 #include "teletext_decoder.h"
+#ifdef ANDROID
 #include <android/log.h>
+#endif
 
 
 extern const char _zvbi_intl_domainname[];
@@ -50,7 +52,11 @@ extern const char _zvbi_intl_domainname[];
 #include "intl-priv.h"
 
 #define LOG_TAG    "ZVBI"
+#ifdef ANDORID
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#else
+#define LOGI(...) printf(__VA_ARGS__)
+#endif
 
 
 #ifndef TELETEXT_DEBUG

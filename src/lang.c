@@ -37,8 +37,8 @@
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 #else
-#define LOGI(...) printf(...)
-#define LOGE(...) printf(...)
+#define LOGI(...) printf(__VA_ARGS__)
+#define LOGE(...) printf(__VA_ARGS__)
 #endif
 
 /*
