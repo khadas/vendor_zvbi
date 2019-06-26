@@ -2089,14 +2089,14 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 		struct raw_page *curr;
 		cache_page *vtp;
 		int i;
-
-		if ((page = vbi_unham16p (p)) < 0) {
+		page = vbi_unham16p (p);
+		if (page < 0 || page >= 0x100) {
 			vbi_teletext_desync(vbi);
 			LOGI("Hamming error in packet 0 page number\n");
 			return FALSE;
 		}
 
-		pgno = mag8 * 256 + page;
+		pgno = mag8 * 0x100 + page;
 
 		/*
 		 *  Store page terminated by new header.

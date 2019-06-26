@@ -926,20 +926,23 @@ vbi_draw_vt_page_region(vbi_page *pg,
 					pen.rgba[0] = 0x00FFFFFF;
 					pen.rgba[1] = 0x00FFFFFF;
 					unicode = 0x20;
+					ac->size = VBI_NORMAL_SIZE;
+					ac->italic = 0;
+					ac->underline = 0;
+					ac->bold = 0;
 				}
 			}
 			else if (mode == 2) //Display only clock
 			{
-				if ((row == 0 && (count > 9) && (count != 0)) || (row>0))
+				if ((row == 0 && (count > 9)) || (row>0))
 				{
-					pen.rgba[0] &= 0x00FFFFFF;
-					pen.rgba[1] &= 0x00FFFFFF;
+					pen.rgba[0] = 0x00FFFFFF;
+					pen.rgba[1] = 0x00FFFFFF;
 					unicode = 0x20;
-				}
-				else
-				{
-					pen.rgba[0] |= 0xFF000000;
-					pen.rgba[1] |= 0xFF000000;
+					ac->size = VBI_NORMAL_SIZE;
+					ac->italic = 0;
+					ac->underline = 0;
+					ac->bold = 0;
 				}
 			}
 
