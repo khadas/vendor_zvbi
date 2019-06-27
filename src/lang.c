@@ -408,6 +408,9 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 		if (0xF8000019UL & (1 << (c & 31))) {
 			if (n > 0) {
 				assert(n < 14);
+				/* Ugly change */
+				if (n == 4)
+					n = 2;
 
 				for (i = 0; i < 13; i++)
 					if (c == national_subset[0][i])
@@ -421,7 +424,6 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 			else if (c == 0x7F)
 				return 0x25A0u;
 		}
-
 		return c;
 
 	case LATIN_G2:
