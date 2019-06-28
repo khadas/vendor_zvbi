@@ -401,7 +401,7 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 	int i;
 
 	assert(c >= 0x20 && c <= 0x7F);
-	LOGE("vbi_character_set %d vbi_national_subset %d unicode 0x%x", s, n, c);
+	//LOGE("vbi_character_set %d vbi_national_subset %d unicode 0x%x", s, n, c);
 	switch (s) {
 	case LATIN_G0:
 		/* shortcut */

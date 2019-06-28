@@ -1335,15 +1335,12 @@ _vbi_cache_get_page		(vbi_cache *		ca,
 	if (NULL == cp) {
 		if (CACHE_DEBUG)
 			fputs ("Page not cached\n", stderr);
-		LOGI("Page not cached\n");
 		return NULL;
 	} else {
 		if (CACHE_DEBUG) {
-			LOGI ("Page cache Found ");
 			cache_page_dump (cp, stderr);
 			fputc ('\n', stderr);
 		}
-		LOGI ("Page cache Found ");
 	}
 
 	return cache_page_ref (cp);
@@ -1429,7 +1426,6 @@ _vbi_cache_find_next_page_2       (vbi_cache * ca,
 			}
 		}
 	}
-	LOGI("Max pgno %x min pgno %x", max_pgno, min_pgno);
 	if (ret)
 		return cache_page_ref(ret);
 	else if (!ret && dir > 0 && cp_min)
@@ -1663,7 +1659,7 @@ _vbi_cache_put_page		(vbi_cache *		ca,
 
 			if (VBI_CLOCK_PAGE == page_type
 			    || subno >= 0x0100) {
-			    LOGI("Clock page");
+			    //LOGI("Clock page");
 				/* A clock page or a rolling page without
 				   subpages (Section A.1 Note 1).
 				   One version. */

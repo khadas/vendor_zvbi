@@ -1517,15 +1517,12 @@ store_lop(vbi_decoder *vbi, const cache_page *vtp)
 
 	event.type = VBI_EVENT_TTX_PAGE;
 
-	event.ev.ttx_page.pgno = vtp->pgno;
-	event.ev.ttx_page.subno = vtp->subno;
-
 	event.ev.ttx_page.roll_header =
-		(((vtp->flags & (  C5_NEWSFLASH
+		(((vtp->flags & (C5_NEWSFLASH
 				 | C6_SUBTITLE
 				 | C7_SUPPRESS_HEADER
 				 | C9_INTERRUPTED
-			         | C10_INHIBIT_DISPLAY)) == 0)
+			     | C10_INHIBIT_DISPLAY)) == 0)
 		 && (vtp->pgno <= 0x199
 		     || (vtp->flags & C11_MAGAZINE_SERIAL))
 		 && vbi_is_bcd(vtp->pgno) /* no hex numbers */);
@@ -1670,6 +1667,8 @@ store_lop(vbi_decoder *vbi, const cache_page *vtp)
 
 	new_cp = _vbi_cache_put_page (vbi->ca, vbi->cn, vtp);
 	if (NULL != new_cp) {
+		event.ev.ttx_page.pgno = new_cp->pgno;
+		event.ev.ttx_page.subno = new_cp->subno;
 		vbi_send_event(vbi, &event);
 		cache_page_unref (new_cp);
 	}
@@ -2068,7 +2067,7 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 
 	p += 2;
 
-	if (1) { //Dump data
+	if (0) { //Dump data
 		unsigned int i;
 		char display_buffer[2048];
 		char display_raw_buffer[2048];

@@ -684,7 +684,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	}
 
 	//Prepare subno row, at the bottom, the 25th row
-#if 1
+#if 0
 	if (subno != 0)
 	{
 		if (subno > 10)
