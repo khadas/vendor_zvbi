@@ -66,6 +66,10 @@ struct teletext {
 
 	struct raw_page			raw_page[8];
 	struct raw_page			*current;
+	vbi_pgno current_pgno;
+	vbi_subno current_subno;
+	vbi_bool subtitle;
+	int goto_page;
 };
 
 /* Public */
@@ -81,6 +85,9 @@ extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
  * @addtogroup Cache
  * @{
  */
+extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag);
+extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
+extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
 					  vbi_pgno pgno, vbi_subno subno,
 					  vbi_wst_level max_level, int display_rows,

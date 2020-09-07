@@ -5,7 +5,7 @@ LOCAL_MODULE    := libzvbi
 ifeq ($(BOARD_COMPILE_IN_SYSTEM), true)
     LOCAL_VENDOR_MODULE := false
 else
-    LOCAL_VENDOR_MODULE := true
+LOCAL_VENDOR_MODULE := true
 endif
 LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := src/bit_slicer.c src/cache.c src/caption.c src/conv.c src/dvb_mux.c src/dvb_demux.c src/exp-html.c \
@@ -70,6 +70,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../icu/icu4c/source/common
 LOCAL_STATIC_LIBRARIES += libicuuc libicuuc_stubdata libam_adp
 LOCAL_SHARED_LIBRARIES += liblog
 LOCAL_PRELINK_MODULE := false
+#LOCAL_VENDOR_MODULE := true
 
 include $(BUILD_STATIC_LIBRARY)
 endif

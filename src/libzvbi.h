@@ -1848,6 +1848,9 @@ typedef enum {
 extern void		vbi_teletext_set_default_region(vbi_decoder *vbi, int default_region);
 extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
 
+extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
+extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag);
+extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
 					  vbi_pgno pgno, vbi_subno subno,
 					  vbi_wst_level max_level, int display_rows,
