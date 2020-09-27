@@ -47,7 +47,11 @@
 #endif
 
 
- extern const char _zvbi_intl_domainname[];
+//teletext graphics subtitle blackground
+//#define TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
+
+
+extern const char _zvbi_intl_domainname[];
 
 #include "intl-priv.h"
 
@@ -75,7 +79,7 @@ do {									\
 #define EXT_COLUMNS		41
 #define LAST_ROW		((ROWS - 2) * EXT_COLUMNS)
 #define LAST_LAST_ROW		((ROWS - 1) * EXT_COLUMNS)
-
+#define ENABLE_PAGE_BAR FALSE//TRUE
 #define SUBPAGE_MASK 0x3f7f
 extern vbi_bool
 _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len);
@@ -230,8 +234,8 @@ flof_links(vbi_page *pg, cache_page *vtp)
 					pg->nav_index[j] = k;
 				}
 
-		    		pg->nav_link[k].pgno = vtp->data.lop.link[k].pgno;
-		    		pg->nav_link[k].subno = vtp->data.lop.link[k].subno;
+				pg->nav_link[k].pgno = vtp->data.lop.link[k].pgno;
+				pg->nav_link[k].subno = vtp->data.lop.link[k].subno;
 			} else if (k < 4) {
 				pg->nav_link[k].pgno = 0;
 			}
@@ -566,7 +570,7 @@ top_index(vbi_decoder *vbi, vbi_page *pg, int subno)
 			break;
 
 		default:
-    			k = 1;
+			k = 1;
 		}
 
 		for (j = 0; j <= i; j++) {
@@ -584,7 +588,7 @@ top_index(vbi_decoder *vbi, vbi_page *pg, int subno)
 				n += 'A' - '9';
 
 			acp[j + 35].unicode = n;
- 		}
+		}
 
 		acp += EXT_COLUMNS;
 
@@ -1020,9 +1024,10 @@ void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno su
 	vbi->vt.current_subno = subno;
 }
 
-void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag)
+void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode)
 {
 	vbi->vt.subtitle = flag;
+	vbi->vt.subtitleMode = subtitleMode;
 }
 
 vbi_bool
@@ -1035,6 +1040,7 @@ void vbi_set_subtitle_page(vbi_decoder *vbi, int index)
 {
 	vbi->vt.goto_page = index;
 }
+
 /**
  * @param pg With vbi_fetch_vt_page() obtained vbi_page.
  * @param column Column 0 ... pg->columns - 1 of the character in question.
@@ -2026,7 +2032,7 @@ enhance(vbi_decoder *vbi,
 				break;
 
 			case 0x08:		/* modified G0 and G2 character set designation */
-				LOGI("modified G0 and G2 character set designation pgno %x %d", pg->pgno);
+				LOGI("modified G0 and G2 character set designation pgno %x %d", pg->pgno, pg->pgno);
 				if (max_level >= VBI_WST_LEVEL_2p5) {
 					if (column > active_column)
 						flush(column);
@@ -2219,7 +2225,7 @@ enhance(vbi_decoder *vbi,
 				while (row < ROWS && count > 0) {
 					for (col = inv_column + column; col < COLUMNS; col++) {
 						acp[col].italic = italic;
-		    				acp[col].bold = bold;
+						acp[col].bold = bold;
 						acp[col].proportional = proportional;
 					}
 
@@ -2583,6 +2589,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	pg->dirty.y1 = ROWS - 1;
 	pg->dirty.roll = 0;
 
+	pg->subtitleMode = VBI_TELETEXT_NON_BITMAP_SUBTITLE;
 	mag = (max_level <= VBI_WST_LEVEL_1p5) ?
 		&vbi->vt.default_magazine
 		: cache_network_magazine (vbi->cn, vtp->pgno);
@@ -2667,9 +2674,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		vbi_char ac, *acp = &pg->text[row * EXT_COLUMNS];
 
 		held_mosaic_unicode = 0xEE20; /* G1 block mosaic, blank, contiguous */
-
 		memset(&ac, 0, sizeof(ac));
 
+		if ((ROWS - 1 ) == row) {
+		    break;
+		}
 		ac.unicode      = 0x0020;
 		ac.foreground	= ext->foreground_clut + VBI_WHITE;
 		ac.background	= ext->background_clut + VBI_BLACK;
@@ -2760,11 +2769,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 				wide_char = /*!!*/(ac.size & VBI_DOUBLE_WIDTH);
 				if (wide_char) {
-                            		if (column < (COLUMNS - 1)) {
-                                    		acp[column + 1] = ac;
-                                    		acp[column + 1].size = VBI_OVER_TOP;
+					if (column < (COLUMNS - 1)) {
+						acp[column + 1] = ac;
+						acp[column + 1].size = VBI_OVER_TOP;
 					} else {
-                                    		acp[column].size = VBI_NORMAL_SIZE;
+						acp[column].size = VBI_NORMAL_SIZE;
 						wide_char = FALSE;
 					}
 				}
@@ -2836,6 +2845,14 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				font = pg->font[esc ^= 1];
 				break;
 			}
+
+			//keep bitmap subtitle first info bar data for project special requirement
+#ifdef TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
+			if (row == 0 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
+				pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
+				pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
+			}
+#endif
 		}
 
 
@@ -2919,7 +2936,8 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	/* Navigation */
 
-	if (!(vbi->vt.subtitle) && navigation) {
+	//if (!(vbi->vt.subtitle) && navigation) {
+	if (navigation) {
 		if (vbi->vt.current_pgno != pg->pgno)
 			display_rows = ROWS;
 		pg->nav_link[5].pgno = vbi->cn->initial_page.pgno;
@@ -2936,49 +2954,56 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					pg->nav_link[5].pgno = vtp->data.lop.link[5].pgno;
 					pg->nav_link[5].subno = vtp->data.lop.link[5].subno;
 				}
-
-				{
-					int len =0;
-					int temp_pgno = vbi->vt.current_pgno;
-					int temp_subpg = 1;
-					vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
-					vtp->data.lop.link[0].pgno = temp_pgno;
-			              vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
-					vtp->data.lop.link[1].pgno = temp_pgno;
-					vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
-					vtp->data.lop.link[2].pgno = temp_pgno;
-					vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
-					vtp->data.lop.link[3].pgno = temp_pgno;
+				if (vtp->lop_packets & (1 << 24)) {
+					flof_links(pg, vtp);
+				} else {
 					flof_navigation_bar(pg, vtp);
-
-					temp_pgno = vbi->vt.current_pgno;
-					int subsarray[36]; //36 is the size of the vtp->data.lop.link
-					int length = 36;
-					vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
-					if (ret && (length >0)) {
-						array_sort(subsarray, length);
-						if (length > 0) {
-							for (int t=0; t<length; t++) {
-								vtp->data.lop.link[t].subno = subsarray[t];
-							}
-							if (length< 36) {
-								vtp->data.lop.link[length].subno = SUBPAGE_MASK;
-							}
-							flof_subpage_bar(vbi, pg, vtp);
-						}
-					} else {
-						flof_clear_subpage_bar(vbi, pg, vtp);
-					}
 				}
-			} else if (vbi->cn->have_top)
+			} else if (vbi->cn->have_top) {
 				top_navigation_bar(vbi, pg, vtp);
+			} else if (ENABLE_PAGE_BAR) {
+				int len =0;
+				int temp_pgno = vbi->vt.current_pgno;
+				int temp_subpg = 1;
+				vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
+				vtp->data.lop.link[0].pgno = temp_pgno;
+		              vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
+				vtp->data.lop.link[1].pgno = temp_pgno;
+				vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
+				vtp->data.lop.link[2].pgno = temp_pgno;
+				vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
+				vtp->data.lop.link[3].pgno = temp_pgno;
+				if (!(vbi->vt.subtitle)) {
+				    flof_navigation_bar(pg, vtp);
+				}
+				//only afer display page then display subpage bar
+				//search state not display
+				if (vbi->vt.current_pgno == pg->pgno) {
+				    temp_pgno = vbi->vt.current_pgno;
+				    int subsarray[36]; //36 is the size of the vtp->data.lop.link
+				    int length = 36;
+				    vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
+				    if (ret && (length > 1)) {
+				        array_sort(subsarray, length);
+				        if (length > 1) {
+					      for (int t=0; t<length; t++) {
+					          vtp->data.lop.link[t].subno = subsarray[t];
+						}
+						if (length< 36) {
+						    vtp->data.lop.link[length].subno = SUBPAGE_MASK;
+						}
+						 flof_subpage_bar(vbi, pg, vtp);
+					    }
+					}
+				   }
+			    }
 
 			//pdc_method_a(pg, vtp, NULL);
 		}
 	}
 
 	column_41 (pg, ext);
-	if (!(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
+	if (ENABLE_PAGE_BAR && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
 		vbi_char ac;
 		LOGI(" vtp->flags = 0x%x",vtp->flags);
 		memset(&ac, 0, sizeof(ac));
@@ -2992,7 +3017,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					pg->text[(row-1)*EXT_COLUMNS + column] = ac;
 			}
 		}
-		}
+	}
 	if (0) {
 		vbi_char *acp;
 		unsigned int i;
@@ -3123,7 +3148,7 @@ vbi_get_next_pgno(vbi_decoder *vbi, int dir, vbi_pgno *pgno, vbi_pgno *subno)
 
 	vtp = _vbi_cache_find_next_page_2 (vbi->ca, dir, pg, sub);
 
-	if(vtp) {
+	if (vtp) {
 		*pgno  = vtp->pgno;
 		*subno = vtp->subno;
 		cache_page_unref (vtp);
@@ -3146,7 +3171,7 @@ vbi_get_next_sub_pgno(vbi_decoder *vbi, int dir, vbi_pgno *pgno, vbi_pgno *subno
 
 	vtp = _vbi_cache_find_next_page (vbi->ca, dir, pg, sub);
 
-	if(vtp) {
+	if (vtp) {
 		*pgno  = vtp->pgno;
 		*subno = vtp->subno;
 		cache_page_unref (vtp);

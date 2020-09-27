@@ -622,6 +622,11 @@ typedef struct vbi_char {
 	unsigned	unicode		: 16;
 } vbi_char;
 
+/**\Teletext subtitle mode*/
+typedef enum {
+    VBI_TELETEXT_NON_BITMAP_SUBTITLE = -1,     /** NON bitmap subtitle*/
+    VBI_TELETEXT_BITMAP_SUBTITLE     = 1,      /**< ttx bitmap subtitle*/
+}vbi_subtitle_mode;
 struct vbi_font_descr;
 
 typedef struct vbi_page {
@@ -659,6 +664,7 @@ typedef struct vbi_page {
 
 	vbi_opacity		page_opacity[2];
 	vbi_opacity		boxed_opacity[2];
+	vbi_subtitle_mode subtitleMode;
 } vbi_page;
 
 /* lang.h */
@@ -1849,7 +1855,7 @@ extern void		vbi_teletext_set_default_region(vbi_decoder *vbi, int default_regio
 extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
 
 extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
-extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag);
+extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode);
 extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
 					  vbi_pgno pgno, vbi_subno subno,

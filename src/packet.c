@@ -1857,6 +1857,8 @@ parse_28_29(vbi_decoder *vbi, uint8_t *p,
 
 			ext->charset_code[0] = bits(7);
 			ext->charset_code[1] = bits(7);
+			if (vbi->vt.region != ext->charset_code[0])
+			    vbi_teletext_set_default_region(vbi, ext->charset_code[0] );
 
 			left_panel = bits (1);
 			right_panel = bits (1);

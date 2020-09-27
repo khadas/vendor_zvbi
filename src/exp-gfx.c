@@ -809,6 +809,17 @@ vbi_draw_vt_page_region(vbi_page *pg,
 			if (canvas_type == 1) {
 				pen.pal8[0] = ac->background;
 				pen.pal8[1] = ac->foreground;
+				if (row == 0)
+				{
+					if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE)
+					{
+				        ac->opacity = VBI_OPAQUE;
+						if (width - count <= 7)
+						{
+							unicode = _vbi_to_ascii(page_no_buf[width - count]);
+						}
+					}
+				}
 			}
 			else
 			{
