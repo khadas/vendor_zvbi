@@ -174,7 +174,7 @@ static inline void array_sort(int *a, int len)
 	}
 }
 static inline void
-flof_navigation_bar(vbi_page *pg, cache_page *vtp)
+flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 {
 	vbi_char ac;
 	int n, i, k, ii;
@@ -201,8 +201,13 @@ flof_navigation_bar(vbi_page *pg, cache_page *vtp)
 				n += 'A' - '9';
 
 			ac.unicode = n;
-			ac.background = flof_link_col[i];
-			ac.foreground = VBI_BLACK;//flof_link_col[i];
+			if (vbi->vt.use_subtitleserver) {
+				ac.background = flof_link_col[i];
+				ac.foreground = VBI_BLACK;//flof_link_col[i];
+			} else {
+				ac.foreground = flof_link_col[i];
+			}
+
 			pg->text[LAST_ROW + ii + k] = ac;
 			pg->nav_index[ii + k] = i;
 		}
@@ -1024,10 +1029,11 @@ void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno su
 	vbi->vt.current_subno = subno;
 }
 
-void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode)
+void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_bool useSubtitleserver)
 {
 	vbi->vt.subtitle = flag;
 	vbi->vt.subtitleMode = subtitleMode;
+	vbi->vt.use_subtitleserver = useSubtitleserver;
 }
 
 vbi_bool
@@ -1813,9 +1819,16 @@ enhance(vbi_decoder *vbi,
 						pgno = vtp->data.lop.link[24].pgno;
 
 						if (NO_PAGE(pgno)) {
-							if (max_level < VBI_WST_LEVEL_3p5
-							    || NO_PAGE(pgno = mag->pop_link[1][0].pgno))
-								pgno = mag->pop_link[0][0].pgno;
+							if (vbi->vt.use_subtitleserver) {
+								if (max_level < VBI_WST_LEVEL_3p5
+									|| NO_PAGE(pgno = mag->pop_link[1][0].pgno))
+									pgno = mag->pop_link[0][0].pgno;
+							} else {
+								if (max_level < VBI_WST_LEVEL_3p5
+									|| NO_PAGE(pgno = mag->pop_link[0][8].pgno))
+									pgno = mag->pop_link[0][0].pgno;
+							}
+
 						} else
 							printv("... X/27/4 GPOP overrides MOT\n");
 					} else {
@@ -2126,9 +2139,16 @@ enhance(vbi_decoder *vbi,
 						pgno = vtp->data.lop.link[26].pgno;
 
 						if (NO_PAGE(pgno)) {
-							if (max_level < VBI_WST_LEVEL_3p5
-							    || NO_PAGE(pgno = mag->drcs_link[1][0]))
-								pgno = mag->drcs_link[0][0];
+							if (vbi->vt.use_subtitleserver) {
+								if (max_level < VBI_WST_LEVEL_3p5
+									|| NO_PAGE(pgno = mag->drcs_link[1][0]))
+									pgno = mag->drcs_link[0][0];
+							} else {
+								if (max_level < VBI_WST_LEVEL_3p5
+									|| NO_PAGE(pgno = mag->drcs_link[0][8]))
+									pgno = mag->drcs_link[0][0];
+							}
+
 						} else
 							printv("... X/27/4 GDRCS overrides MOT\n");
 					} else {
@@ -2644,16 +2664,22 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	/* Current page number in header */
 
 	//snprintf (buf, sizeof (buf),
-	if ((vbi->vt.goto_page >0x99) && (vbi->vt.goto_page <0x900)) {
-		snprintf (buf, sizeof (buf), "P%x     ", vbi->vt.goto_page);
-	} else  if((vbi->vt.goto_page >0) && (vbi->vt.goto_page <0x10)){
-		snprintf (buf, sizeof (buf), "P%x--    ", vbi->vt.goto_page);
-	} else  if(vbi->vt.goto_page == 0){
-	      vbi->vt.goto_page = 0x100;
-		snprintf (buf, sizeof (buf), "P%x    ", vbi->vt.goto_page);
+	if (vbi->vt.use_subtitleserver) {
+		if ((vbi->vt.goto_page >0x99) && (vbi->vt.goto_page <0x900)) {
+			snprintf (buf, sizeof (buf), "P%x	  ", vbi->vt.goto_page);
+		} else	if((vbi->vt.goto_page >0) && (vbi->vt.goto_page <0x10)){
+			snprintf (buf, sizeof (buf), "P%x--    ", vbi->vt.goto_page);
+		} else	if(vbi->vt.goto_page == 0){
+			  vbi->vt.goto_page = 0x100;
+			snprintf (buf, sizeof (buf), "P%x	 ", vbi->vt.goto_page);
+		} else {
+			snprintf (buf, sizeof (buf), "P%x-	 ", vbi->vt.goto_page);
+		}
 	} else {
-		snprintf (buf, sizeof (buf), "P%x-   ", vbi->vt.goto_page);
+		snprintf (buf, sizeof (buf),
+			"P%x	   ", vtp->pgno);
 	}
+
 	/* Level 1 formatting */
 
 	i = 0;
@@ -2661,7 +2687,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	//bottom row of display row is used for displaying sub pg no.
 	//So skip it.
-	if (!(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
+	if (vbi->vt.use_subtitleserver && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
 		display_rows = 1;
 	}
 	for (row = 0; row < display_rows; row++) {
@@ -2676,9 +2702,9 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		held_mosaic_unicode = 0xEE20; /* G1 block mosaic, blank, contiguous */
 		memset(&ac, 0, sizeof(ac));
 
-		if ((ROWS - 1 ) == row) {
+		/*if ((ROWS - 1 ) == row) {
 		    break;
-		}
+		}*/
 		ac.unicode      = 0x0020;
 		ac.foreground	= ext->foreground_clut + VBI_WHITE;
 		ac.background	= ext->background_clut + VBI_BLACK;
@@ -2938,7 +2964,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	//if (!(vbi->vt.subtitle) && navigation) {
 	if (navigation) {
-		if (vbi->vt.current_pgno != pg->pgno)
+		if (vbi->vt.current_pgno != pg->pgno || !vbi->vt.use_subtitleserver)
 			display_rows = ROWS;
 		pg->nav_link[5].pgno = vbi->cn->initial_page.pgno;
 		pg->nav_link[5].subno = vbi->cn->initial_page.subno;
@@ -2957,11 +2983,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				if (vtp->lop_packets & (1 << 24)) {
 					flof_links(pg, vtp);
 				} else {
-					flof_navigation_bar(pg, vtp);
+					flof_navigation_bar(vbi, pg, vtp);
 				}
 			} else if (vbi->cn->have_top) {
 				top_navigation_bar(vbi, pg, vtp);
-			} else if (ENABLE_PAGE_BAR) {
+			} else if (ENABLE_PAGE_BAR && vbi->vt.use_subtitleserver) {
 				int len =0;
 				int temp_pgno = vbi->vt.current_pgno;
 				int temp_subpg = 1;
@@ -2974,7 +3000,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				vbi_get_next_pgno(vbi, 1, &temp_pgno, &temp_subpg);
 				vtp->data.lop.link[3].pgno = temp_pgno;
 				if (!(vbi->vt.subtitle)) {
-				    flof_navigation_bar(pg, vtp);
+				    flof_navigation_bar(vbi, pg, vtp);
 				}
 				//only afer display page then display subpage bar
 				//search state not display
@@ -3003,7 +3029,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	}
 
 	column_41 (pg, ext);
-	if (ENABLE_PAGE_BAR && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
+	if (ENABLE_PAGE_BAR && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno) && vbi->vt.use_subtitleserver) {
 		vbi_char ac;
 		LOGI(" vtp->flags = 0x%x",vtp->flags);
 		memset(&ac, 0, sizeof(ac));

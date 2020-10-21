@@ -74,6 +74,7 @@ struct teletext {
 	vbi_pgno current_pgno;
 	vbi_subno current_subno;
 	vbi_bool subtitle;
+	vbi_bool use_subtitleserver;
 	vbi_submode subtitleMode;
 	int goto_page;
 };
@@ -91,7 +92,7 @@ extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
  * @addtogroup Cache
  * @{
  */
-extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode);
+extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_bool useSubtitleserver);
 extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
 extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
