@@ -79,10 +79,12 @@ do {									\
 #define EXT_COLUMNS		41
 #define LAST_ROW		((ROWS - 2) * EXT_COLUMNS)
 #define LAST_LAST_ROW		((ROWS - 1) * EXT_COLUMNS)
-#define ENABLE_PAGE_BAR FALSE//TRUE
+#define ENABLE_PAGE_BAR  TRUE
 #define SUBPAGE_MASK 0x3f7f
 extern vbi_bool
 _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len);
+extern vbi_bool
+vbi_get_sub_info(vbi_decoder *vbi, vbi_pgno pgno, int *subs, int *len);
 
 
 /*
@@ -99,7 +101,7 @@ static inline void flof_clear_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_
 
 	bc.foreground	= VBI_WHITE;
 	bc.background	= VBI_MAGENTA;
-	bc.opacity	= VBI_TRANSPARENT_FULL;//pg->page_opacity[1];
+	bc.opacity	= VBI_TRANSPARENT_SPACE;//VBI_TRANSPARENT_FULL;//pg->page_opacity[1];
 	bc.unicode	= 0x0020;
 
 	for (int i = 0; i < EXT_COLUMNS; i++) {
@@ -215,6 +217,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 		pg->nav_link[i].pgno = vtp->data.lop.link[i].pgno;
 		pg->nav_link[i].subno = vtp->data.lop.link[i].subno;
 	}
+	pg->have_flof = FALSE;
 }
 
 static inline void
@@ -257,6 +260,28 @@ flof_links(vbi_page *pg, cache_page *vtp)
 	}
 }
 
+static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp) {
+    if (vbi->vt.current_pgno == pg->pgno) {
+        int temp_pgno = vbi->vt.current_pgno;
+        int subsarray[36]; //36 is the size of the vtp->data.lop.link
+        int length = 36;
+        vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
+        if (ret && (length > 1)) {
+            array_sort(subsarray, length);
+            if (length >= 1) {
+                for (int t=0; t<length; t++) {
+                    vtp->data.lop.link[t].subno = subsarray[t];
+                }
+            if (length< 36) {
+                vtp->data.lop.link[length].subno = SUBPAGE_MASK;
+            }
+            flof_subpage_bar(vbi, pg, vtp);
+            }
+        } else {
+            flof_clear_subpage_bar(vbi, pg, vtp);
+        }
+    }
+}
 /*
  *  TOP navigation
  */
@@ -302,7 +327,7 @@ top_label(vbi_decoder *vbi, vbi_page *pg, struct vbi_font_descr *font,
 				if (ait->link.pgno == pgno) {
 					pg->nav_link[index].pgno = pgno;
 					pg->nav_link[index].subno = VBI_ANY_SUBNO;
-
+					pg->have_flof = TRUE;
 					for (i = 11; i >= 0; i--)
 						if (ait->text[i] > 0x20)
 							break;
@@ -2982,11 +3007,14 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				}
 				if (vtp->lop_packets & (1 << 24)) {
 					flof_links(pg, vtp);
+					draw_subpage_line (vbi, pg, vtp);
 				} else {
 					flof_navigation_bar(vbi, pg, vtp);
+				    draw_subpage_line (vbi, pg, vtp);
 				}
 			} else if (vbi->cn->have_top) {
 				top_navigation_bar(vbi, pg, vtp);
+				draw_subpage_line (vbi, pg, vtp);
 			} else if (ENABLE_PAGE_BAR && vbi->vt.use_subtitleserver) {
 				int len =0;
 				int temp_pgno = vbi->vt.current_pgno;
@@ -3004,24 +3032,8 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				}
 				//only afer display page then display subpage bar
 				//search state not display
-				if (vbi->vt.current_pgno == pg->pgno) {
-				    temp_pgno = vbi->vt.current_pgno;
-				    int subsarray[36]; //36 is the size of the vtp->data.lop.link
-				    int length = 36;
-				    vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
-				    if (ret && (length > 1)) {
-				        array_sort(subsarray, length);
-				        if (length > 1) {
-					      for (int t=0; t<length; t++) {
-					          vtp->data.lop.link[t].subno = subsarray[t];
-						}
-						if (length< 36) {
-						    vtp->data.lop.link[length].subno = SUBPAGE_MASK;
-						}
-						 flof_subpage_bar(vbi, pg, vtp);
-					    }
-					}
-				   }
+								draw_subpage_line (vbi, pg, vtp);
+
 			    }
 
 			//pdc_method_a(pg, vtp, NULL);

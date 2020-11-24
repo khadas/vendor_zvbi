@@ -665,6 +665,7 @@ typedef struct vbi_page {
 	vbi_opacity		page_opacity[2];
 	vbi_opacity		boxed_opacity[2];
 	vbi_subtitle_mode subtitleMode;
+	vbi_bool			have_flof;
 } vbi_page;
 
 /* lang.h */
