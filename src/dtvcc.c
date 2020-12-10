@@ -2284,7 +2284,7 @@ dtvcc_unicode			(unsigned int		c)
 {
 	unsigned int uc = dtvcc_unicode_real(c);
 	if (uc == 0)
-		uc = '_';
+		uc = ' ';
 
 	return uc;
 }
