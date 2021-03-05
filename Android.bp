@@ -90,9 +90,9 @@ cc_library_shared {
        "libzvbi_static",
     ],
     static_libs: [
-       "libicui18n_prebuilt",
-       "libicuuc_prebuilt",
-       "libicuuc_stubdata_prebuilt",
+       "libicui18n_product",
+       "libicuuc_product",
+       "libicuuc_stubdata_product",
        "libam_adp_prebuilt",
        "libam_mw_prebuilt",
     ],
