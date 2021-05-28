@@ -9,7 +9,7 @@ AMADEC_C_INCLUDES =
 
 SRC_FILES = $(wildcard src/*.c)
 
-CFLAGS   := -c -Wall -shared -fPIC -Wno-unknown-pragmas -Wno-format -O3 -fexceptions -fnon-call-exceptions
+CFLAGS   := -c -Wall -shared -fPIC -Wno-unknown-pragmas -Wno-format -O3 -fexceptions -fnon-call-exceptions -Wno-error=format-security
 
 LOCAL_C_INCLUDES := -I $(LOCAL_PATH)
 
