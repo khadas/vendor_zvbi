@@ -2635,6 +2635,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	pg->dirty.roll = 0;
 
 	pg->subtitleMode = VBI_TELETEXT_NON_BITMAP_SUBTITLE;
+	pg->have_flof = vtp->data.lop.have_flof;
 	mag = (max_level <= VBI_WST_LEVEL_1p5) ?
 		&vbi->vt.default_magazine
 		: cache_network_magazine (vbi->cn, vtp->pgno);
