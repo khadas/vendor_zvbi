@@ -2488,6 +2488,9 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	}
 	dw->latest_cmd_cr = 0;
 
+	if (dw->curr_pen.text_tag == TEXT_TAG_NOT_DISPLAYABLE ||
+		dw->curr_pen.text_tag == TEXT_TAG_EXPLETIVE)
+		return TRUE;
 	column = dw->curr_column;
 	row = dw->curr_row;
 
@@ -3120,7 +3123,7 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 		return TRUE;
 
 	/* Has to be something, no? */
-	dw->curr_pen.text_tag = TEXT_TAG_NOT_DISPLAYABLE;
+	dw->curr_pen.text_tag = TEXT_TAG_DIALOG;//TEXT_TAG_NOT_DISPLAYABLE;
 
 	dw->curr_column = 0;
 	dw->curr_row = 0;
@@ -4411,7 +4414,7 @@ update_display (struct tvcc_decoder *td)
 		//if (ds->created == 0)
 		//		continue;
 
-		if (ds->update) {
+		if (ds->update ) {
 			struct vbi_event event;
 
 			event.type = VBI_EVENT_CAPTION;
