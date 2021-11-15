@@ -339,6 +339,7 @@ struct dtvcc_window_style {
 
 	enum edge			border_type;
 	dtvcc_color			border_color;
+	vbi_bool			need_rollup;
 };
 
 struct dtvcc_window {

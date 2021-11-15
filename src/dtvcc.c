@@ -3331,6 +3331,10 @@ dtvcc_carriage_return		(struct dtvcc_decoder *	dc,
 			if (row + 1 < dw->row_count) {
 				dw->curr_row = row + 1;
 				break;
+			} else {
+			// carriage return + print[left->rignth] + scroll botoom->top = roll up
+			dw->style.need_rollup = TRUE;
+			AM_DEBUG(0, "CR: rollup");
 			}
 		}
 		dw->streamed >>= 1;
