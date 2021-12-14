@@ -860,17 +860,17 @@ int main ( int argc, char ** argv )
          {
             vbi_raw_decoder_init(&raw_dec);
 
-            raw_dec.scanning = p_dec->scanning; 
-            raw_dec.sampling_format = p_dec->sampling_format; 
-            raw_dec.sampling_rate = p_dec->sampling_rate; 
-            raw_dec.bytes_per_line = p_dec->bytes_per_line; 
-            raw_dec.offset = p_dec->offset; 
-            raw_dec.start[0] = p_dec->start[0]; 
-            raw_dec.start[1] = p_dec->start[1]; 
-            raw_dec.count[0] = p_dec->count[0]; 
-            raw_dec.count[1] = p_dec->count[1]; 
-            raw_dec.interlaced = p_dec->interlaced; 
-            raw_dec.synchronous = p_dec->synchronous; 
+            raw_dec.scanning = p_dec->scanning;
+            raw_dec.sampling_format = p_dec->sampling_format;
+            raw_dec.sampling_rate = p_dec->sampling_rate;
+            raw_dec.bytes_per_line = p_dec->bytes_per_line;
+            raw_dec.offset = p_dec->offset;
+            raw_dec.start[0] = p_dec->start[0];
+            raw_dec.start[1] = p_dec->start[1];
+            raw_dec.count[0] = p_dec->count[0];
+            raw_dec.count[1] = p_dec->count[1];
+            raw_dec.interlaced = p_dec->interlaced;
+            raw_dec.synchronous = p_dec->synchronous;
 
             vbi_raw_decoder_add_services(&raw_dec, ALL_SERVICES_525|ALL_SERVICES_625, 0);
          }
@@ -878,7 +878,7 @@ int main ( int argc, char ** argv )
 
       update_services = (opt_scanning != 0);
 
-      while(1)
+      while (1)
       {
          fd_set rd;
          int vbi_fd = vbi_capture_fd(pVbiCapt);

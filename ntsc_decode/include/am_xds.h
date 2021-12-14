@@ -22,7 +22,7 @@
 #include "hamm.h"
 #include "tables.h"
 #include "vbi.h"
-#include <android/log.h>    
+#include <android/log.h>
 #ifdef __cplusplus
 extern "C"
 {
@@ -39,9 +39,9 @@ typedef enum {
 	VBI_XDS_PROGRAM_CAPTION_SERVICES,
 	VBI_XDS_PROGRAM_CGMS,
 	VBI_XDS_PROGRAM_ASPECT_RATIO,
-	
+
 	VBI_XDS_PROGRAM_DATA = 0x0C,
-	
+
 	VBI_XDS_PROGRAM_MISC_DATA,
 	VBI_XDS_PROGRAM_DESCRIPTION_BEGIN = 0x10,
 	VBI_XDS_PROGRAM_DESCRIPTION_END = 0x18

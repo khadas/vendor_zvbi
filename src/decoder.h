@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -274,7 +274,7 @@ extern void		vbi_bit_slicer_init(vbi_bit_slicer *slicer,
  *  given as @a raw_samples to vbi_bit_slicer_init().
  * @param buf Output data. The buffer must be large enough to store
  *   the number of bits given as @a payload to vbi_bit_slicer_init().
- * 
+ *
  * Decode one scan line of raw vbi data. Note the bit slicer tries
  * to adapt to the average signal amplitude, you should avoid
  * using the same vbi_bit_slicer object for data from different
@@ -283,7 +283,7 @@ extern void		vbi_bit_slicer_init(vbi_bit_slicer *slicer,
  * @note As a matter of speed this function does not lock the
  * @a slicer. When you want to share a vbi_bit_slicer object between
  * multiple threads you must implement your own locking mechanism.
- * 
+ *
  * @return
  * @c FALSE if the raw data does not contain the expected
  * information, i. e. the CRI/FRC has not been found. This may also

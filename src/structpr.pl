@@ -347,7 +347,7 @@ sub add_symbolic {
     if ($count > 3) {
 	my $type = "symbol $prefix";
 
-	# No switch() such that fprint_symbolic() can determine if
+	# No switch () such that fprint_symbolic() can determine if
 	# these are flags or enum.
 	$funcs{$type} = {
 	    text => "static void\n"
@@ -674,7 +674,7 @@ while (($name, $type) = each %int_ioctls) {
 	}
     }
 
-    # No switch() such that fprint_symbolic() can determine if
+    # No switch () such that fprint_symbolic() can determine if
     # these are flags or enum.
     $funcs{$name} = {
 	text => "static void\n"

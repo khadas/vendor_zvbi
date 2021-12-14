@@ -9,7 +9,7 @@
 	  the Linux DVB interface is available.
 	* configure.in: Added an ENABLE_DVB conditional to disable
 	  zvbi-atsc-cc in contrib/Makefile.am. Bumped version to 0.2.33.
-	
+
 2008-08-20    <mschimek@users.sf.net>
 
 	* Release 0.2.32.
@@ -28,9 +28,9 @@
 	* contrib/README: Added atsc-cc info.
 	* contrib/atsc-cc.c: Added.
 	* contrib/Makefile.am (bin_PROGRAMS): Added atsc-cc.c.
-	
+
 	* configure.in: Bumped version to 0.2.32.
-	
+
 2008-07-26    <mschimek@users.sf.net>
 
 	* Release 0.2.31.
@@ -43,7 +43,7 @@
 
 	* src/ccfont2.xbm: Added a LGPLv2+ notice.
 	* test/cc-test-stream.dtd: Changed the license to GPLv2+.
-	* test/proxy-test.c, daemon/proxyd.c, daemon/chains.c: 
+	* test/proxy-test.c, daemon/proxyd.c, daemon/chains.c:
 	  Changed the license to GPLv2+ with Tom's permission.
 
 	* test/unicode-out-ref.txt: vbi_caption_unicode() fix.
@@ -53,7 +53,7 @@
 	* README: Line feed cosmetics.
 	* configure.in: Bumped version to 0.2.31, incremented .so
 	  revision.
-	
+
 2008-03-05    <mschimek@users.sf.net>
 
 	* Release 0.2.30.
@@ -73,17 +73,17 @@
 
 	* test/.cvsignore: Added ctest*, cpptest*.
 
-	* test/unicode.c, test/ttxfilter.c, test/test-vps.c: 
+	* test/unicode.c, test/ttxfilter.c, test/test-vps.c:
 	* test/test-raw_decoder.cc, test/test-hamm.cc:
 	* test/test-dvb_mux.cc, test/test-dvb_demux.cc:
-	* test/test-common.h, test/test-common.cc, test/sliced2pes.c: 
-	* test/proxy-test.c, test/osc.c, test/glyph.c, test/export.c: 
-	* test/explist.c, test/decode.c, test/ctest.c, test/cpptest.cc: 
+	* test/test-common.h, test/test-common.cc, test/sliced2pes.c:
+	* test/proxy-test.c, test/osc.c, test/glyph.c, test/export.c:
+	* test/explist.c, test/decode.c, test/ctest.c, test/cpptest.cc:
 	* test/cc-test-stream.dtd, test/capture.c, test/caption.c:
 	  Line feed cosmetics.
 
 	* test/sliced.h, test/sliced.c: Resynched with branch 0.3.
-	
+
 	* src/vt.h: Resynched with branch 0.3, adding
 	  ttx_page_function_valid() and ttx_page_coding_valid() helpers.
 
@@ -109,7 +109,7 @@
 
 2008-02-24    <mschimek@users.sf.net>
 
-	* src/xds_demux.h, src/vbi.h, src/macros.h, src/io.h: 
+	* src/xds_demux.h, src/vbi.h, src/macros.h, src/io.h:
 	* src/cache.h: ISO C89 does not permit a
 	  comma at the end of an enumerator list.
 	* src/hamm.h (vbi_unpar8): ISO C89 does not permit an #if #cpu
@@ -118,12 +118,12 @@
 	  checks of the libzvbi header.
 	* configure.in: Added a gcc -std check for test/ctest.c and
 	  test/cpptest.cc.
-	* test/test-common.h, src/xds_demux.h, src/vps.h: 
-	* src/sliced_filter.h, src/sliced.h, src/sampling_par.h: 
-	* src/pfc_demux.h, src/page_table.h, src/misc.h: 
-	* src/macros.h, src/io.h, src/io-v4l.c, src/idl_demux.h: 
-	* src/hamm.h, src/export.h, src/exp-txt.c, src/exp-gfx.c: 
-	* src/dvb_mux.h, src/dvb_demux.h, src/conv.h, src/caption.c: 
+	* test/test-common.h, src/xds_demux.h, src/vps.h:
+	* src/sliced_filter.h, src/sliced.h, src/sampling_par.h:
+	* src/pfc_demux.h, src/page_table.h, src/misc.h:
+	* src/macros.h, src/io.h, src/io-v4l.c, src/idl_demux.h:
+	* src/hamm.h, src/export.h, src/exp-txt.c, src/exp-gfx.c:
+	* src/dvb_mux.h, src/dvb_demux.h, src/conv.h, src/caption.c:
 	* src/cache.h, src/bit_slicer.h: Rewrote the GCC __attribute__
 	  wrapper macros for compatibility with strict ISO C.
 
@@ -155,9 +155,9 @@
 	  Changed the license to a 2-clause BSD-style license.
 
 	* src/xds_demux.h, src/xds_demux.c, src/wstfont2.xbm,
-	  src/wss.h, src/wss.c, src/vps.h, src/vps.c, 
-	  src/vbi.c, src/trigger.h, src/trigger.c, src/teletext.c, 
-	  src/tables.h, src/tables.c, src/sliced_filter.h, 
+	  src/wss.h, src/wss.c, src/vps.h, src/vps.c,
+	  src/vbi.c, src/trigger.h, src/trigger.c, src/teletext.c,
+	  src/tables.h, src/tables.c, src/sliced_filter.h,
 	  src/sliced_filter.c, src/sliced.h,
 	  src/sampling_par.h, src/sampling_par.c, src/raw_decoder.h,
 	  src/raw_decoder.c, src/pfc_demux.h, src/pfc_demux.c,
@@ -217,7 +217,7 @@
 	* src/dlist.h, src/cache-priv.h: Added for src/cache.c.
 	* src/cache.h, src/cache.c: Replaced by new Teletext cache code
 	  from branch 0.3 and changed license to LGPLv2+.
-	* src/vt.h: Resynched with branch 0.3. 
+	* src/vt.h: Resynched with branch 0.3.
 	* src/vt.h, src/teletext_decoder.h: Moved some definitions
 	  from vt.h to new file teletext_decoder.h, so I can include
 	  vt.h in cache-priv.h and cache-priv.h in teletext_decoder.h.
@@ -240,7 +240,7 @@
 	* test/export.c: The --default-cs option now works with libzvbi
 	  0.2 as well.
 
-	* m4/autogen.sh: Fixed a typo. 
+	* m4/autogen.sh: Fixed a typo.
 
 	* Makefile.am (EXTRA_DIST): Added COPYING.LIB.
 	* COPYING.LIB: Added.
@@ -310,7 +310,7 @@
 	  src/sliced.h, src/sampling_par.h, src/pfc_demux.h,
 	  src/page_table.h, src/misc.h, src/macros.h, src/io-v4l.c,
 	  src/idl_demux.h, src/export.h, src/exp-txt.c, src/exp-gfx.c,
-	  src/dvb_mux.h, src/dvb_demux.h, src/conv.h, src/caption.c, 
+	  src/dvb_mux.h, src/dvb_demux.h, src/conv.h, src/caption.c,
 	  src/bit_slicer.h: Use _vbi_attribute macro instead of
 	  __attribute__ so we can safely disable it in libzvbi.h if
 	  there are compiler problems.
@@ -348,7 +348,7 @@
 	  src/page_table.c, src/packet.c, src/lang.h, src/lang.c,
 	  src/io-v4l2k.c, src/io-v4l2.c, src/io-v4l.c,
 	  src/io-sim.h, src/io-sim.c, src/io-bktr.c, src/idl_demux.h,
-	  src/idl_demux.c, src/format.h, src/dvb_mux.h, src/dvb_mux.c, 
+	  src/idl_demux.c, src/format.h, src/dvb_mux.h, src/dvb_mux.c,
 	  src/dvb_demux.h, src/dvb_demux.c, src/decoder.h,
 	  src/decoder.c, src/bit_slicer.h, src/bit_slicer.c: Changed
 	  license from GPLv2 to GPLv2-or-later and updated the FSF
@@ -360,7 +360,7 @@
 	* NEWS: Added the xpm_support changes.
 
 	Merged in from the xpm_support branch:
-	
+
 	* test/exp-test.sh: Added for a quick export target test.
 	* test/export.c (do_export): Extended to test vbi_export_mem(),
 	  vbi_export_alloc() and vbi_export_file().
@@ -390,8 +390,8 @@
 	  buffer.
 
 	* src/export.h, src/export.c (initialize): New XPM module.
-	(_vbi_export_grow_buffer_space, vbi_export_flush, vbi_export_putc) 
-	(vbi_export_write, vbi_export_puts, vbi_export_puts_iconv) 
+	(_vbi_export_grow_buffer_space, vbi_export_flush, vbi_export_putc)
+	(vbi_export_write, vbi_export_puts, vbi_export_puts_iconv)
 	(vbi_export_puts_iconv_ucs2, vbi_export_vprintf, vbi_export_printf):
 	  New helper functions replacing stdio for export modules.
 	(vbi_export_mem, vbi_export_alloc): New functions to export pages
@@ -595,7 +595,7 @@
 	* test/sliced.c, test/sliced.h: Integrated capture and file output
 	  functions, added support for raw capturing and raw VBI files.
 	  More helper functions.
-	* test/export.c: Added --verbose option. 
+	* test/export.c: Added --verbose option.
 	* test/capture.c: File helpers changed. Removed VPS decoder, which
 	  is now part of the decode tool. Added raw capturing. Added a CC test
 	  for Rich. Added, changed and removed a few options, added some
@@ -652,7 +652,7 @@
 	* test/unicode.c, test/glyph.c: Replaced extern decls by includes.
 
 	* src/Makefile.am, src/sampling_par.h: Make vbi_videostd_set
-	  public for dvb_mux. 
+	  public for dvb_mux.
 
 	* test/sliced2pes.c: Fixes.
 
@@ -706,7 +706,7 @@
 	  (metronome) switch to -M, -T (time) to -m because -T is --ts
 	  everywhere else.
 	* test/caption.c: Replaced read loop etc by new read_stream helper
-	  functions. 
+	  functions.
 	* test/sliced.c, test/sliced.h: Added new helper functions.
 	  Improved the sliced VBI file reading functions.
 
@@ -735,7 +735,7 @@
 	* src/Makefile.am (libzvbi_la_SOURCES): Added page_table.c,
 	  page_table.h.
 
-	* src/proxy-msg.c (vbi_proxy_msg_logger) 
+	* src/proxy-msg.c (vbi_proxy_msg_logger)
 	(vbi_proxy_msg_accept_connection):
 	  Replaced sprintf() by the safer snprintf().
 	* test/osc.c (decode_ttx, dump_pil, decode_vps):
@@ -748,19 +748,19 @@
 	(vbi_proxyd_parse_argv):
 	  Replaced sprintf() by the safer snprintf().
 	* src/trigger.c (parse_eacem, parse_atvef):
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* src/proxy-msg.c (vbi_proxy_msg_get_local_socket_addr)
-	(vbi_proxy_msg_accept_connection, vbi_proxy_msg_resolve_symlinks): 
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	(vbi_proxy_msg_accept_connection, vbi_proxy_msg_resolve_symlinks):
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* src/proxy-client.c (proxy_client_start_acq):
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* src/packet.c (vbi_decode_vps, parse_bsd):
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* src/io-v4l.c (v4l_new):
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* daemon/proxyd.c (vbi_proxyd_take_service_req)
 	(vbi_proxyd_take_message, vbi_proxyd_take_message):
-	  Replaced strncpy() by the faster a safer strlcpy(). 
+	  Replaced strncpy() by the faster a safer strlcpy().
 	* src/misc.h: Undefined strncpy() and sprintf().
 
 	* autogen-maint.sh (CXXFLAGS): Same warnings as in CFLAGS,
@@ -781,7 +781,7 @@
 	  Context was only the function name. Added a file name
 	  argument to make it unique.
 	* src/misc.c (vbi_log_on_stderr): Minor formatting fix.
-	(_vbi_log_vprintf, _vbi_log_printf): 
+	(_vbi_log_vprintf, _vbi_log_printf):
 
 	* src/lang.c (vbi_caption_unicode): Clarified doxumentation.
 
@@ -937,7 +937,7 @@
 
 2006-06-17    <mschimek@users.sf.net>
 
-	* src/io.c (device_ioctl): 
+	* src/io.c (device_ioctl):
 	* src/structpr.pl (test_cond): Handle r+w fields.
 	* src/io.c (device_ioctl): Print saved errno.
 	  Print-r/w-field flags were reversed.
@@ -958,7 +958,7 @@
 
 2006-05-30    <mschimek@users.sf.net>
 
-	* src/vps.c, src/packet.c, src/wss.c, src/packet.c, 
+	* src/vps.c, src/packet.c, src/wss.c, src/packet.c,
 	  src/io.c, src/dvb_mux.c, src/caption.c, src/cache.c:
 	  Include config.h.
 
@@ -970,7 +970,7 @@
 	  service completely outside the current sampling parameters.
 
 	* src/proxy-client.c (proxy_client_alloc_msg_buf): Older
-	  gcc/libc do not recognize %zd for size_t. 
+	  gcc/libc do not recognize %zd for size_t.
 
 	* configure.in: Run function checks with -D_GNU_SOURCE
 	  because we also compile with this flag.
@@ -1014,7 +1014,7 @@
 	  is public now.
 	* src/sliced.h (vbi_sliced_payload_bits): Moved here from
 	  raw_decoder.h and made public.
-	* src/raw_decoder.h (vbi_sliced_payload_bits): Moved into sliced.h. 
+	* src/raw_decoder.h (vbi_sliced_payload_bits): Moved into sliced.h.
 
 2006-05-25    <mschimek@users.sf.net>
 
@@ -1160,7 +1160,7 @@
 2006-05-17    <mschimek@users.sf.net>
 
 	* src/io-v4l2k.c (print_vfmt): LF redundant.
-	
+
 	* test/osc.c, test/decode.c, test/capture.c, test/caption.c,
 	  src/xds_demux.c, src/teletext.c, src/search.c, src/packet.c,
 	  src/misc.h, src/dvb_demux.c, src/caption.c:
@@ -1185,7 +1185,7 @@
 	  check required both fields for services which exist only on one
 	  field.
 	* src/io-sim.c (signal_u8): Didn't handle sampling parameters
-	  with only a single field. 
+	  with only a single field.
 	(_vbi_test_image_vbi): Enabled warnings.
 	* test/raw_decoder.c (test2): Added regression test for line
 	  number check bug.
@@ -1203,7 +1203,7 @@
 	* test/test-vps.c: New test for VPS decoding functions.
 	* test/Makefile.am (TESTS): Added test-vps.
 	(noinst_PROGRAMS): Added test-vps, wss moved into examples dir.
-	* src/vbi.c, src/packet.c, src/event.h, src/caption.c (xds_decoder): 
+	* src/vbi.c, src/packet.c, src/event.h, src/caption.c (xds_decoder):
 	  Added VBI_EVENT_NETWORK_ID.
 	* src/Makefile.am (libzvbi_la_SOURCES): Added macros.h, pdc.h,
 	  vps.c, vps.h.
@@ -1239,12 +1239,12 @@
 	* test/osc.c: Include misc.h, now required by raw_decoder.h
 	* src/misc.h, src/misc.c: Added logging helper functions.
 	* src/bit_slicer.h,
-	  src/bit_slicer.c (vbi3_bit_slicer_slice, _vbi3_bit_slicer_init) 
+	  src/bit_slicer.c (vbi3_bit_slicer_slice, _vbi3_bit_slicer_init)
 	(vbi3_bit_slicer_new): Replaced the stderr log macros by a
 	  vbi3_bit_slicer.log_fn.
 	* src/raw_decoder.c, src/raw_decoder.h:
 	  s/_vbi_sampling_par_verify/_vbi_sampling_par_valid for clarity.
-	* src/raw_decoder.h, src/raw_decoder.c: 
+	* src/raw_decoder.h, src/raw_decoder.c:
 	  Replaced the stderr log macros by a vbi3_raw_decoder.log_fn
 	  for src/io-v4l2k.c.
 	* src/io-v4l2k.c: Use the new raw_decoder directly, so I can
@@ -1350,7 +1350,7 @@
 	  correct data_unit_length in compatibility mode (data_identifier
 	  in range 0x10 ... 0x1F), breaking test/capture --pes output.
 	* src/dvb_demux.c: Added more log points.
-	* src/misc.h (__builtin_expect, likely, unlikely), 
+	* src/misc.h (__builtin_expect, likely, unlikely),
 	  src/dvb_demux.c (demux_packet), src/bit_slicer.c (BIT_SLICER):
 	  Replaced __builtin_expect() by more readable likely()/unlikely()
 	  macros.  Thanks to Linux hackers for the idea.
@@ -1405,7 +1405,7 @@
 2005-04-27    <mschimek@users.sf.net>
 
 	* test/caption.c, test/osc.c: vbi_printable() undefined.
-	* test/osc.c (decode_vps): s/vbi_bit_reverse[]/vbi_rev8(). 
+	* test/osc.c (decode_vps): s/vbi_bit_reverse[]/vbi_rev8().
 	(decode_ttx): s/vbi_hamm16()/vbi_unham16p().
 	* configure.in: Bumped version number to 0.2.16. HAVE_X
 	  conditional was backwards, didn't compile test/osc and
@@ -1520,7 +1520,7 @@
 	* src/teletext.c (enhance), src/packet.c (parse_28_29),
 	  src/exp-gfx.c (png_export): Nested func fix for gcc 4.0,
 	  Debian bug #290444.
-	
+
 2005-01-13    <mschimek@users.sf.net>
 
 	* src/raw_decoder.c: VBI_SLICED_TELETEXT_B_L10_625 had incorrect F2
@@ -1554,7 +1554,7 @@
 	  missing vbi_dvb_demux_reset(), added documentation, made the
 	  interface public.
 	* doc/Doxyfile.in (FILE_PATTERNS): Added dvb_demux.h.
-	
+
 2004-12-23    <mschimek@users.sf.net>
 
 	* src/io-bktr.c, src/io-dvb.c, src/io-v4l.c, src/io-v4l2.c,
@@ -1594,7 +1594,7 @@
 
 	* test/osc.c: vbi_service_table definitions removed, now
 	  semi-public in raw_decoder.h.
-	* src/decoder.c (vbi_raw_decode): No longer YUV420-only. 
+	* src/decoder.c (vbi_raw_decode): No longer YUV420-only.
 	* src/decoder.c: Raw VBI decoder routines changed to wrappers of
 	  new raw_decoder.c, bit_slicer.c. Old bit slicer remains because
 	  it lacks a destroy function.
@@ -1682,7 +1682,7 @@
 	* src/dvb_mux.c, src/dvb_mux.h: Added, experimental.
 	* test/capture.c: Changed PTS source to timestamps.
 	* test/export.c: Extended to consume DVB streams.
-	
+
 2004-10-25    <mschimek@users.sf.net>
 
 	* po/POTFILES.in: Added proxy-client.c, proxy-msg.c.
@@ -1726,7 +1726,7 @@
 
 	* src/intl-priv.h: Added from 0.3 branch.
 	* src/io-v4l2.c: V4L2 0.20 API still recognized for debugging
-	  but no longer supported. 
+	  but no longer supported.
 	* src/io-v4l.c, src/io-v4l2.c, src/io-bktr.c: Added ioctl logging.
 	* src/io-v4l2k.c: Log mmap and munmap calls.
 	* src/io.c, src/io.h: Added mmap, munmap log wrappers.
@@ -1776,7 +1776,7 @@
 2004-05-12    <mschimek@users.sf.net>
 
 	* Release 0.2.8
-	
+
 2004-04-25    <mschimek@users.sf.net>
 
 	* src/tables.c: Updated CNI table, with Arte/La Cinquième
@@ -1813,7 +1813,7 @@
 
 2003-12-03    <mschimek@users.sf.net>
 
-	* src/teletext.c (top_navigation_bar): Segv if vtp->pgno == 0x899. 
+	* src/teletext.c (top_navigation_bar): Segv if vtp->pgno == 0x899.
 
 2003-11-13    <mschimek@users.sf.net>
 
@@ -1840,7 +1840,7 @@
 2003-10-16	<mschimek@users.sf.net>
 
 	* src/bcd.h (vbi_dec2bcd, vbi_bcd2dec, vbi_add_bcd,
-	  vbi_is_bcd): Corrected documentation. 
+	  vbi_is_bcd): Corrected documentation.
 
 2003-10-14      <mschimek@users.sf.net>
 
@@ -1849,7 +1849,7 @@
 	  packagers, I cannot create an init script for each distro
 	  out there.
 	* daemon/Makefile.am: Changed target ./proxyd to
-	  @sbindir@/zvbid. 'proxyd' was a bit too general. 
+	  @sbindir@/zvbid. 'proxyd' was a bit too general.
 
 2003-10-09      <mschimek@users.sf.net>
 
@@ -1971,8 +1971,8 @@
 
 2003-02-17	<mschimek@users.sf.net>
 
-	* src/vbi.c, src/vbi.h: Added vbi_version(). 
-	
+	* src/vbi.c, src/vbi.h: Added vbi_version().
+
 2003-02-16	<mschimek@users.sf.net>
 
 	* Release 0.2.4.
@@ -2107,7 +2107,7 @@
 
 2002-06-14	<mschimek@users.sf.net>
 
-	* doc/zdoc-scan: Fix re zapping-Bugs-568052. 
+	* doc/zdoc-scan: Fix re zapping-Bugs-568052.
 
 2002-06-13	<mschimek@users.sf.net>
 

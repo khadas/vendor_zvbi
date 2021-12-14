@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -139,7 +139,7 @@ typedef enum {
 	 * A normal page containing information concerning the
 	 * content of the current TV programmes so that the viewer
 	 * can be warned of the suitability of the contents for
-	 * general viewing.  
+	 * general viewing.
 	 */
 	VBI_PROGR_WARNING	= 0x7A,
 

@@ -438,7 +438,7 @@ write_xml_sliced		(struct stream *	st,
 static void
 write_xml_raw			(struct stream *	st,
 				 const uint8_t *	raw,
-				 const vbi_sampling_par *sp)		 
+				 const vbi_sampling_par *sp)
 {
 	const char *format;
 	unsigned int n_samples;
@@ -1086,7 +1086,7 @@ read_loop_old_sliced		(struct stream *	st)
 			case 1:
 				s->id = VBI_SLICED_CAPTION_625;
 				next_block (st, s->data, 2);
-				break; 
+				break;
 
 			case 2:
 				s->id = VBI_SLICED_VPS;
@@ -1363,7 +1363,7 @@ capture_loop			(struct stream *	st)
 			read_error_exit (/* msg: errno */ NULL);
 
 		case 0:
-			error_exit (_("Read timeout.")); 
+			error_exit (_("Read timeout."));
 
 		case 1:
 			break;

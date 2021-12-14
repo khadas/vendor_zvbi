@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -84,7 +84,7 @@ vbi_decode_vps_cni		(unsigned int *		cni,
  * @param pid PDC data will be stored here.
  * @param buffer VPS packet as defined for @c VBI_SLICED_VPS,
  *   i.e. 13 bytes without clock run-in and start code.
- * 
+ *
  * Decodes a VPS datagram according to EN 300 231,
  * storing PDC recording-control data in @a pid.
  *
@@ -133,7 +133,7 @@ vbi_decode_vps_pdc		(vbi_program_id *	pid,
 
 	pid->month	= VBI_PIL_MONTH (pil);
 	pid->day	= VBI_PIL_DAY (pil);
-	pid->hour	= VBI_PIL_HOUR (pil); 
+	pid->hour	= VBI_PIL_HOUR (pil);
 	pid->minute	= VBI_PIL_MINUTE (pil);
 
 	pid->pcs_audio	= buffer[2] >> 6;
@@ -147,7 +147,7 @@ vbi_decode_vps_pdc		(vbi_program_id *	pid,
  * @param pid PDC data will be stored here.
  * @param buffer A DVB PDC descriptor as defined in EN 300 468,
  *   including descriptor_tag and descriptor_length.
- * 
+ *
  * Decodes a DVB PDC descriptor as defined in EN 300 468 and EN 300 231,
  * storing PDC recording-control data in @a pid.
  *
@@ -203,7 +203,7 @@ vbi_decode_dvb_pdc_descriptor	(vbi_program_id *	pid,
 
 	pid->month	= VBI_PIL_MONTH (pil);
 	pid->day	= VBI_PIL_DAY (pil);
-	pid->hour	= VBI_PIL_HOUR (pil); 
+	pid->hour	= VBI_PIL_HOUR (pil);
 	pid->minute	= VBI_PIL_MINUTE (pil);
 
 	return TRUE;
@@ -247,7 +247,7 @@ vbi_encode_vps_cni		(uint8_t		buffer[13],
  * @param buffer VPS packet as defined for @c VBI_SLICED_VPS,
  *   i.e. 13 bytes without clock run-in and start code.
  * @param pid PDC data to encode.
- * 
+ *
  * Stores PDC recording-control data (CNI, PIL, PCS audio, PTY) in
  * a VPS datagram according to EN 300 231. If non-zero the function
  * encodes @a pid->pil, otherwise it calculates the PIL from
@@ -325,7 +325,7 @@ vbi_encode_vps_pdc		(uint8_t		buffer[13],
  * @param buffer A DVB PDC descriptor as defined in EN 300 468,
  *   including descriptor_tag and descriptor_length.
  * @param pid PDC data to encode.
- * 
+ *
  * Stores PDC recording-control data (PIL only) in a DVB PDC descriptor
  * as defined in EN 300 468 and EN 300 231. If non-zero the function
  * encodes @a pid->pil, otherwise it calculates the PIL from

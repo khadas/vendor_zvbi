@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -93,7 +93,7 @@ vbi_dvb_mux_cor		(vbi_dvb_mux *		mx,
 				 unsigned int *		sliced_lines,
 				 vbi_service_set	service_mask,
 				 const uint8_t *	raw,
-				 const vbi_sampling_par *sampling_par,	 
+				 const vbi_sampling_par *sampling_par,
 				 int64_t		pts)
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   _vbi_nonnull ((1, 2, 3, 4, 5))

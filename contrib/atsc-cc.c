@@ -713,7 +713,7 @@ struct buffer {
 	unsigned int			in;
 
 	/* Offset in bytes from base where the next data will be
-	   removed. */ 
+	   removed. */
 	unsigned int			out;
 };
 
@@ -1366,7 +1366,7 @@ open_minicut_file		(struct program *	pr,
 
 	for (i = 0; i < 100; ++i) {
 		int fd;
-		
+
 		if (0 == i) {
 			sprintf (buf + base_len + dir_len,
 				 "%s%s",
@@ -1672,7 +1672,7 @@ cr_timestamp			(struct caption_recorder *cr,
 			error_exit ("System time invalid.\n");
 		}
 	}
-		
+
 	snprintf (time_str, sizeof (time_str),
 		  "%04u%02u%02u%02u%02u%02u|",
 		  tm->tm_year + 1900, tm->tm_mon + 1,
@@ -1747,7 +1747,7 @@ cr_new_line			(struct caption_recorder *cr,
 		return;
 
 	cr->ucs_buffer_length = 0;
-	
+
 	if (cr->usesen) {
 		unsigned int uc[3];
 		unsigned int column;
@@ -1956,7 +1956,7 @@ dump_cc				(FILE *			fp,
 		unsigned int row;
 
 		/* Preamble Address Codes -- 001 crrr  1ri bbbu */
-  
+
 		row = cc_pac_row_map [a7 * 2 + ((c2 >> 5) & 1)];
 		if (c2 & 0x10)
 			fprintf (fp, " PAC ch=%u row=%d column=%u u=%u\n",
@@ -2105,7 +2105,7 @@ cc_channel_num			(struct cc_decoder *	cd,
    receipt of a PAC during roll-up captioning. In that case, if the
    base row designated in the PAC is not the same as the current base
    row, the display shall be moved immediately to the new base
-   row. [...] 
+   row. [...]
 
 
 cc_channel_num                  (struct cc_decoder *    cd,
@@ -3922,7 +3922,7 @@ static int XDSdecode(struct caption_recorder *cr, int data)
 
 	if (data == -1)
 		return -1;
-	
+
 	b1 = data & 0x7F;
 	b2 = (data>>8) & 0x7F;
 
@@ -3930,7 +3930,7 @@ static int XDSdecode(struct caption_recorder *cr, int data)
 		/* Filler, discard. */
 		return -1;
 	}
-	else if (b1 < 15) // start packet 
+	else if (b1 < 15) // start packet
 	{
 		cr->mode = b1;
 		cr->type = b2;
@@ -4007,16 +4007,16 @@ static int webtv_check(struct caption_recorder *cr, char * buf,int len)
 	unsigned short  csum=0;
 	char temp[9];
 	int nbytes=0;
-	
-	while (buf[0]!='<' && len > 6)  //search for the start
+
+	while (buf[0] != '<' && len > 6)  //search for the start
 	{
 		buf++; len--;
 	}
-	
+
 	if (len == 6) //failure to find start
 		return 0;
-				
-	
+
+
 	while (nbytes+6 <= len)
 	{
 		//look for end of object checksum, it's enclosed in []'s and there shouldn't be any [' after
@@ -4025,9 +4025,9 @@ static int webtv_check(struct caption_recorder *cr, char * buf,int len)
 		else
 			nbytes++;
 	}
-	if (nbytes+6>len) //failure to find end
+	if (nbytes+6 > len) //failure to find end
 		return 0;
-	
+
 	nwords = nbytes >> 1; sum = 0;
 
 	//add up all two byte words
@@ -4039,13 +4039,13 @@ static int webtv_check(struct caption_recorder *cr, char * buf,int len)
 		sum += *buf << 8;
 	}
 	csum = (unsigned short)(sum >> 16);
-	while(csum !=0) {
+	while (csum !=0) {
 		sum = csum + (sum & 0xffff);
 		csum = (unsigned short)(sum >> 16);
 	}
 	sprintf(temp,"%04X\n",(int)~sum&0xffff);
 	buf++;
-	if(!strncmp(buf,temp,4))
+	if (!strncmp(buf,temp,4))
 	{
 		buf[5]=0;
 		if (cr->cur_ch[cr->field] >= 0 && cr->cc_fp[cr->cur_ch[cr->field]]) {
@@ -5400,7 +5400,7 @@ dtvcc_delete_windows		(struct dtvcc_decoder *	dc,
 	dw = ds->curr_window;
 	if (NULL != dw) {
 		unsigned int window_id;
-		
+
 		window_id = dtvcc_window_id (ds, dw);
 		if (0 != (window_map & (1 << window_id))) {
 			dtvcc_stream_event (dc, ds, dw, dw->curr_row);
@@ -5674,7 +5674,7 @@ dtvcc_decode_packet		(struct dtvcc_decoder *	dc,
 		   (null_fill [2], extended_service_number [6]),
 		   (Block_data [n * 8]) */
 
-		c = dc->packet[i]; 
+		c = dc->packet[i];
 		service_number = (c & 0xE0) >> 5;
 
 		/* CEA 708-C Section 6.3: Ignore block_size if
@@ -6304,7 +6304,7 @@ mpeg2_crc			(const uint8_t *	buf,
 	/* ISO 13818-1 Annex B. */
 
 	if (unlikely (0 == crc_table[255])) {
-		const unsigned int poly = 
+		const unsigned int poly =
 			((1 << 26) | (1 << 23) | (1 << 22) | (1 << 16) |
 			 (1 << 12) | (1 << 11) | (1 << 10) | (1 << 8) |
 			 (1 << 7) | (1 << 5) | (1 << 4) | (1 << 2) |
@@ -7320,7 +7320,7 @@ ts_decoder			(const uint8_t		buf[188])
 
 	if (unlikely (buf[1] & 0x80)) {
 		log (2, "TS transmission error.\n");
-		
+
 		/* The PID may be wrong, we don't know how much data
 		   was lost, and continuity counters match by chance
 		   with 1:16 probability. */
@@ -7395,7 +7395,7 @@ demux_thread			(void *			arg)
 	unsigned int out;
 
 	arg = arg; /* unused */
-		
+
 	assert (0 == ts_buffer_capacity % 188);
 
 	out = ts_buffer_out;
@@ -7721,7 +7721,7 @@ ct_filter			(const uint8_t		buf[188])
 
 	in += 188;
 	if (in >= ts_buffer_capacity)
-    		in = 0;
+		in = 0;
 
 	ts_buffer_in = in;
 
@@ -7900,7 +7900,7 @@ static int
 xopen_device			(const char *		dev_name,
 				 int			flags)
 {
-	struct stat st; 
+	struct stat st;
 	int fd;
 
 	if (-1 == stat (dev_name, &st)) {
@@ -8627,7 +8627,7 @@ get_channel_conf_name		(enum fe_type		type)
 	const char *home;
 	const char *s;
 
- 	s = option_channel_conf_file_name;
+	s = option_channel_conf_file_name;
 
 	if (NULL == s) {
 		switch (type) {
@@ -9245,7 +9245,7 @@ parse_args			(int			argc,
 
 	format_option (&pr->cr, "ntsc-cc");
 
-	have_xds_filter_option = FALSE;	
+	have_xds_filter_option = FALSE;
 	have_cc_filter_option = FALSE;
 	n_program_options = 0;
 
@@ -9367,7 +9367,7 @@ parse_args			(int			argc,
 					      have_xds_filter_option);
 			pr = add_program ();
 			pr->option_station_name = name;
-			have_xds_filter_option = FALSE;	
+			have_xds_filter_option = FALSE;
 			have_cc_filter_option = FALSE;
 			n_program_options = 0;
 			break;

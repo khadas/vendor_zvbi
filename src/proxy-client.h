@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -106,7 +106,7 @@ extern void
 vbi_proxy_client_destroy( vbi_proxy_client * vpc );
 
 extern vbi_capture *
-vbi_proxy_client_get_capture_if( vbi_proxy_client * vpc );
+vbi_proxy_client_get_capture_if ( vbi_proxy_client * vpc );
 
 extern VBI_PROXY_CLIENT_CALLBACK *
 vbi_proxy_client_set_callback( vbi_proxy_client * vpc,

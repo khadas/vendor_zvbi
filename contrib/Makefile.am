@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = zvbi-ntsc-cc 
+bin_PROGRAMS = zvbi-ntsc-cc
 
 zvbi_ntsc_cc_SOURCES = ntsc-cc.c
 

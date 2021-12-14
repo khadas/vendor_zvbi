@@ -37,21 +37,21 @@ iconv_open(const char *tocode, const char *fromcode)
 	UErrorCode err1 = U_ZERO_ERROR, err2 = U_ZERO_ERROR;
 
 	cd = (iconv_t)malloc(sizeof(AM_IConv_t));
-	if(!cd)
+	if (!cd)
 		goto error;
-	
+
 	cd->target = ucnv_open(tocode, &err1);
 	cd->source = ucnv_open(fromcode, &err2);
-	if((!U_SUCCESS(err1)) || (!U_SUCCESS(err2)))
+	if ((!U_SUCCESS(err1)) || (!U_SUCCESS(err2)))
 		goto error;
-	
+
 	return cd;
 error:
-	if(cd)
+	if (cd)
 	{
-		if(U_SUCCESS(err1))
+		if (U_SUCCESS(err1))
 			ucnv_close(cd->target);
-		if(U_SUCCESS(err2))
+		if (U_SUCCESS(err2))
 			ucnv_close(cd->source);
 		free(cd);
 	}
@@ -61,9 +61,9 @@ error:
 static inline int
 iconv_close(iconv_t cd)
 {
-	if(!cd)
+	if (!cd)
 		return 0;
-	
+
 	ucnv_close(cd->target);
 	ucnv_close(cd->source);
 	free(cd);
@@ -78,7 +78,7 @@ iconv(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outb
 	const char *sbegin, *send;
 	char *tbegin, *tend;
 
-	if(!cd)
+	if (!cd)
 		return -1;
 
 	sbegin = *inbuf;
@@ -88,9 +88,9 @@ iconv(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outb
 
 	ucnv_convertEx(cd->target, cd->source, &tbegin, tend, &sbegin, send,
 			NULL, NULL, NULL, NULL, FALSE, TRUE, &err);
-	if(!U_SUCCESS(err))
+	if (!U_SUCCESS(err))
 		return -1;
-	
+
 	*inbuf  = (char*)sbegin;
 	*inbytesleft  = send - sbegin;
 	*outbuf = tbegin;

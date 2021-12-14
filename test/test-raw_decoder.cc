@@ -364,7 +364,7 @@ compare_sliced			(const vbi_sampling_par *sp,
 			for (s = in1; s < in1 + in_lines; ++s)
 				if (s->id == out[i].id)
 					break;
-			
+
 			assert (s < in1 + in_lines);
 
 			/* fprintf (stderr, "from line %3u\n", s->line); */

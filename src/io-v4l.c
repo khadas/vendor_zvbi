@@ -15,8 +15,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -110,6 +110,7 @@ typedef struct vbi_capture_v4l {
 static void
 v4l_read_stop(vbi_capture_v4l *v)
 {
+	if ( NULL ==  v->raw_buffer ) return;
 	for (; v->num_raw_buffers > 0; v->num_raw_buffers--) {
 		free(v->raw_buffer[v->num_raw_buffers - 1].data);
 		v->raw_buffer[v->num_raw_buffers - 1].data = NULL;
@@ -539,7 +540,6 @@ open_video_dev(vbi_capture_v4l *v, struct stat *p_vbi_stat, vbi_bool do_dev_scan
 		"/dev/v4l/video3",
 	};
 	struct dirent *dirent;
-	struct dirent *pdirent;
 	DIR *dir;
 	int video_fd;
 	unsigned int i;
@@ -567,9 +567,9 @@ open_video_dev(vbi_capture_v4l *v, struct stat *p_vbi_stat, vbi_bool do_dev_scan
 			perm_check (v, "/dev");
 			goto done;
 		}
+		free (dirent);
 
-		while (0 == readdir_r (dir, dirent, &pdirent)
-		       && pdirent == dirent) {
+		while ((dirent = readdir (dir)) != NULL) {
 			char name[256];
 
 			snprintf (name, sizeof(name),
@@ -580,14 +580,12 @@ open_video_dev(vbi_capture_v4l *v, struct stat *p_vbi_stat, vbi_bool do_dev_scan
 			video_fd = probe_video_device(v, name, p_vbi_stat);
 			if (video_fd != -1) {
 				v->p_video_name = strdup(name);
-				free (dirent);
 				closedir (dir);
 				goto done;
 			}
 		}
 		printv("Traversing finished\n");
 
-		free (dirent);
 		closedir (dir);
 	}
 	errno = ENOENT;
@@ -991,7 +989,7 @@ v4l_update_services(vbi_capture *vc,
 
 		/* Unknown. */
 		v->has_select = FALSE;
-	} else { 
+	} else {
 		int size;
 
 		/*
@@ -1378,7 +1376,7 @@ vbi_capture_v4l_new(const char *dev_name, int scanning,
  * This functions behaves much like vbi_capture_v4l_new, with the sole
  * difference that it uses the given file handle to determine the current
  * video standard if such queries aren't supported by the VBI device.
- * 
+ *
  * @return
  * Initialized vbi_capture context, @c NULL on failure.
  */
@@ -1415,7 +1413,7 @@ vbi_capture_v4l_sidecar_new(const char *dev_name, int given_fd,
  * @param errstr If not @c NULL this function stores a pointer to an error
  *   description here. You must free() this string when no longer needed.
  * @param trace If @c TRUE print progress messages on stderr.
- * 
+ *
  * @return
  * Initialized vbi_capture context, @c NULL on failure.
  */

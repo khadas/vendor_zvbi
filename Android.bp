@@ -93,7 +93,5 @@ cc_library_shared {
        "libicui18n_product",
        "libicuuc_product",
        "libicuuc_stubdata_product",
-       "libam_adp_prebuilt",
-       "libam_mw_prebuilt",
     ],
 }

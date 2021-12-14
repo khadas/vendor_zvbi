@@ -332,10 +332,10 @@ typedef enum {
 } vbi_subt;
 
 typedef struct {
- 	int			first_line;
+	int			first_line;
 	int			last_line;
 	double			ratio;
- 	vbi_bool		film_mode;
+	vbi_bool		film_mode;
 	vbi_subt		open_subtitles;
 } vbi_aspect_ratio;
 
@@ -627,14 +627,16 @@ typedef enum {
     VBI_TELETEXT_NON_BITMAP_SUBTITLE = -1,     /** NON bitmap subtitle*/
     VBI_TELETEXT_BITMAP_SUBTITLE     = 1,      /**< ttx bitmap subtitle*/
 }vbi_subtitle_mode;
+
+
 struct vbi_font_descr;
 
 typedef struct vbi_page {
 	vbi_decoder *		vbi;
 
-        vbi_nuid	       	nuid;
+	vbi_nuid	       	nuid;
 	/* FIXME this shouldn't be int */
- 	int			pgno;
+	int			pgno;
 	/* FIXME this shouldn't be int */
 	int			subno;
 	int			rows;
@@ -642,7 +644,7 @@ typedef struct vbi_page {
 	vbi_char		text[1200];
 
 	struct {
-	     /* int			x0, x1; */
+	/* int			x0, x1; */
 		int			y0, y1;
 		int			roll;
 	}			dirty;
@@ -1644,7 +1646,7 @@ extern void
 vbi_proxy_client_destroy( vbi_proxy_client * vpc );
 
 extern vbi_capture *
-vbi_proxy_client_get_capture_if( vbi_proxy_client * vpc );
+vbi_proxy_client_get_capture_if ( vbi_proxy_client * vpc );
 
 extern VBI_PROXY_CLIENT_CALLBACK *
 vbi_proxy_client_set_callback( vbi_proxy_client * vpc,

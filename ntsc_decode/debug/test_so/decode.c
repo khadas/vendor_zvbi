@@ -174,7 +174,7 @@ caption_command			(unsigned int		line,
 		unsigned int rrrr;
 
 		/* Preamble Address Codes -- 001 crrr  1ri bbbu */
-  
+
 		rrrr = a7 * 2 + ((c2 >> 5) & 1);
 
 		if (c2 & 0x10)
@@ -281,7 +281,7 @@ xds_cb				(vbi_xds_demux *	xd,
 	printf("************xds_cb**********\n");
 	vbi_program_info *pi;
 	_vbi_xds_packet_dump (xp, stdout);
-	
+
 	ntsc_xds_callback(NTSC_XDS_CB_STATUS,1);
 
 	return TRUE; /* no errors */
@@ -302,7 +302,7 @@ caption				( uint8_t		buffer[2],
 	}
 
 	if (option_decode_caption
-	    && (21 == line || 284 == line /* NTSC */   
+	    && (21 == line || 284 == line /* NTSC */
 		|| 22 == line /* PAL? */)) {
 		int c1;
 		int c2;
@@ -311,8 +311,8 @@ caption				( uint8_t		buffer[2],
 		//c2 = vbi_unpar8 (buffer[1]);
 		c1 = buffer[0];//vbi_unpar8 (buffer[0]);
 		c2 = buffer[1];//vbi_unpar8 (buffer[1]);
-		
-		
+
+
 
 		if ((c1 | c2) < 0) {
 			printf ("Parity error in CC line=%u "
@@ -746,7 +746,7 @@ vps				(const uint8_t		buffer[13],
 			printf ("Error in VPS packet PDC data.\n");
 			return;
 		}
-		
+
 		printf ("VPS line=%3u ", line);
 
 		_vbi_program_id_dump (&pi, stdout);
@@ -780,7 +780,7 @@ vps				(const uint8_t		buffer[13],
 		label[i][l[i]] = _vbi_to_ascii (c);
 
 		l[i] = (l[i] + 1) % 16;
-		
+
 		printf ("VPS line=%3u bytes 3-10: "
 			"%02x %02x (%02x='%c') %02x %02x "
 			"%02x %02x %02x %02x (\"%s\")\n",
@@ -798,7 +798,7 @@ vps				(const uint8_t		buffer[13],
 static void
 wss_625				(const uint8_t		buffer[2])
 {
-	if (option_decode_wss) {  
+	if (option_decode_wss) {
 		vbi_aspect_ratio ar;
 
 		if (!vbi_decode_wss_625 (&ar, buffer)) {
@@ -834,12 +834,12 @@ decode_frame			(const vbi_sliced *	s,
 
 	if (option_dump_time || option_metronome_tick > 0.0) {
 		/* Sample time: When we captured the data, in
-		   		seconds since 1970-01-01 (gettimeofday()).
+				seconds since 1970-01-01 (gettimeofday()).
 		   Stream time: For ATSC/DVB the Presentation Time Stamp.
 				For analog the frame number multiplied by
 				the nominal frame period (1/25 or
 				1001/30000 s). Both given in 90 kHz units.
-		   Note this isn't fully implemented yet. */
+		Note this isn't fully implemented yet. */
 
 		if (option_metronome_tick > 0.0) {
 			printf ("ST %f (adv %+f, err %+f) PTS %"
@@ -860,7 +860,7 @@ decode_frame			(const vbi_sliced *	s,
 		last_stream_time = stream_time;
 	}
 	printf("decode_frame while\n");
-	
+
 	while (n_lines > 0) {
 		switch (s->id) {
 		case VBI_SLICED_TELETEXT_B_L10_625:
@@ -999,34 +999,34 @@ static int			option_index;
 
 
 
- vbi_bool
+vbi_bool
 decode_vbi_test		(int dev_no, int fid, const uint8_t *data, int len, void *user_data){
 	option_decode_xds = TRUE;
 	option_decode_caption = TRUE;
 	printf("decode_vbi  len = %d\n",len);
-    int length =  len;
+	int length =  len;
 	struct stream *st;
-	if(len < 0  || data == NULL)
+	if (len < 0  || data == NULL)
 		goto error;
 	st = read_stream_new (data,length,
 			       FILE_FORMAT_SLICED,
 			       0,
 			       decode_frame,NULL);
-	
+
 	stream_loop (st);
 	stream_delete (st);
 	error:
 		return 0;
-  
+
 }
 
 
 
 
 int  start_demux_ntsc(){
-	
+
 	unsigned char pBuffer [5100] ;
-	memset(pBuffer,0, 5100 ); 
+	memset(pBuffer,0, 5100 );
 	option_decode_xds = TRUE;
 	option_decode_caption = TRUE;
 	int length =  N_ELEMENTS (pBuffer);
@@ -1035,7 +1035,7 @@ int  start_demux_ntsc(){
 					 /* used_data */ NULL);
 		if (NULL == xds)
 			no_mem_exit ();
-	
+
 
 	rst = read_stream_new (pBuffer,length,
 			       option_in_file_format,
@@ -1050,7 +1050,7 @@ int  start_demux_ntsc(){
 
 	vbi_xds_demux_delete (xds);
 	xds = NULL;
-	
+
 	return TRUE;
 
 }

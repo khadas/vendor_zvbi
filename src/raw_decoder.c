@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -128,7 +128,7 @@ _vbi_service_table [] = {
 		{ 23, 0 },
 		11000, 5000000, 833333, /* 160/3 x FH */
 		/* ...1000 111 / 0 0011 1100 0111 1000 0011 111x */
-		/* ...0010 010 / 0 1001 1001 0011 0011 1001 110x */	
+		/* ...0010 010 / 0 1001 1001 0011 0011 1001 110x */
 		0x8E3C783E, 0x2499339C, 32, 0, 14 * 1,
 		VBI_MODULATION_BIPHASE_LSB,
 		/* Hm. Too easily confused with caption?? */
@@ -573,10 +573,10 @@ decode_pattern			(vbi3_raw_decoder *	rd,
  * $param max_lines Size of $a sliced data array, in lines, not bytes.
  * $param raw A raw vbi image as described by the vbi_sampling_par
  *   associated with $a rd.
- * 
+ *
  * Decodes a raw vbi image, consisting of several scan lines of raw vbi data,
  * to sliced vbi data. The output is sorted by ascending line number.
- * 
+ *
  * Note this function attempts to learn which lines carry which data
  * service, or if any, to speed up decoding. You should avoid using the same
  * vbi3_raw_decoder object for different sources.
@@ -639,7 +639,7 @@ vbi3_raw_decoder_decode		(vbi3_raw_decoder *	rd,
 /**
  * $param rd Pointer to vbi3_raw_decoder object allocated with
  *   vbi3_raw_decoder_new().
- * 
+ *
  * Resets a vbi3_raw_decoder object, removing all services added
  * with vbi3_raw_decoder_add_services().
  */
@@ -704,11 +704,11 @@ remove_job_from_pattern		(vbi3_raw_decoder *	rd,
  * $param rd Pointer to vbi3_raw_decoder object allocated with
  *   vbi3_raw_decoder_new().
  * $param services Set of data services.
- * 
+ *
  * Removes one or more data services to be decoded from the
  * vbi3_raw_decoder object.
- * 
- * $return 
+ *
+ * $return
  * Set describing the remaining data services $a rd will decode.
  */
 vbi_service_set
@@ -890,10 +890,10 @@ lines_containing_data		(unsigned int		start[2],
  *  non-confusing way) but $c 1 or $c 2 will not. If the data service
  *  might use more lines than are sampled, $c 1 will accept but $c 2
  *  will not. If unsure, set to $c 1.
- * 
+ *
  * Adds one or more data services to be decoded. Currently the libzvbi
  * raw vbi decoder can decode up to eight data services in parallel.
- * 
+ *
  * $return
  * Set describing the data services $a rd will decode. The function
  * eliminates services which cannot be decoded with the current
@@ -1051,7 +1051,7 @@ vbi3_raw_decoder_add_services	(vbi3_raw_decoder *	rd,
 		     par->frc_bits,
 		     par->payload,
 		     par->bit_rate,
-		     par->modulation)) {
+		     (vbi3_modulation)par->modulation)) {
 			assert (!"bit_slicer_set_params");
 		}
 
@@ -1275,7 +1275,7 @@ _vbi3_raw_decoder_destroy	(vbi3_raw_decoder *	rd)
 
 /**
  * @internal
- * 
+ *
  * See vbi3_raw_decoder_new().
  */
 vbi_bool

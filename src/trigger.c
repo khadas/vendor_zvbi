@@ -18,8 +18,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -283,7 +283,7 @@ parse_eacem(vbi_trigger *t, char *s1, unsigned int nuid, double now)
 					sizeof(attributes) / sizeof(attributes[0]))) {
 			case 0: /* active */
 				active = parse_time(text);
-			       	if (active < 0)
+				if (active < 0)
 					return NULL;
 				break;
 
@@ -298,7 +298,7 @@ parse_eacem(vbi_trigger *t, char *s1, unsigned int nuid, double now)
 				t->_delete = TRUE;
 				break;
 
-                        case 3: /* expires */
+			case 3: /* expires */
 				t->link.expires = parse_date(text);
 				if (t->link.expires == (time_t) -1)
 					return NULL;
@@ -310,7 +310,7 @@ parse_eacem(vbi_trigger *t, char *s1, unsigned int nuid, double now)
 				t->link.name[sizeof(t->link.name) - 1] = 0;
 				break;
 
-                        case 5: /* priority */
+			case 5: /* priority */
 				t->link.priority = strtoul(text, NULL, 10);
 				if (t->link.priority > 9)
 					return NULL;
@@ -456,7 +456,7 @@ parse_atvef(vbi_trigger *t, char *s1, double now)
 			if (!attr[0])
 				return NULL;
 
-			s++; 
+			s++;
 
 			if (c != ':') {
 				unsigned int i;
@@ -565,7 +565,7 @@ parse_atvef(vbi_trigger *t, char *s1, double now)
 /**
  * vbi_trigger_flush:
  * @param vbi Initialized vbi decoding context.
- * 
+ *
  * Discard all triggers stored to fire at a later time. This function
  * must be called before deleting the @vbi context.
  **/
@@ -583,7 +583,7 @@ vbi_trigger_flush(vbi_decoder *vbi)
 /**
  * vbi_deferred_trigger:
  * @param vbi Initialized vbi decoding context.
- * 
+ *
  * This function must be called at regular intervals,
  * preferably once per video frame, to fire (send a trigger
  * event) previously received triggers which reached their
@@ -592,9 +592,9 @@ vbi_trigger_flush(vbi_decoder *vbi)
 void
 vbi_deferred_trigger(vbi_decoder *vbi)
 {
-	vbi_trigger *t, **tp;
+	vbi_trigger *t, *tmp;
 
-	for (tp = &vbi->triggers; (t = *tp); tp = &t->next)
+	for (tmp = vbi->triggers; (t = tmp); )
 		if (t->fire <= vbi->time) {
 			vbi_event ev;
 
@@ -602,10 +602,10 @@ vbi_deferred_trigger(vbi_decoder *vbi)
 			ev.ev.trigger = &t->link;
 			vbi_send_event(vbi, &ev);
 
-			*tp = t->next;
+			tmp = t->next;
 			free(t);
 		} else
-			tp = &t->next;
+			tmp = t->next;
 }
 
 static void
@@ -614,15 +614,15 @@ add_trigger(vbi_decoder *vbi, vbi_trigger *a)
 	vbi_trigger *t;
 
 	if (a->_delete) {
-		vbi_trigger **tp;
+		vbi_trigger *tmp;
 
-		for (tp = &vbi->triggers; (t = *tp); tp = &t->next)
+		for (tmp = vbi->triggers; (t = tmp); )
 			if (strcmp((char *) a->link.url, (char *) t->link.url) == 0
 			    && fabs(a->fire - t->fire) < 0.1) {
-				*tp = t->next;
+				tmp = t->next;
 				free(t);
 			} else
-				tp = &t->next;
+				tmp = t->next;
 
 		return;
 	}
@@ -653,7 +653,7 @@ add_trigger(vbi_decoder *vbi, vbi_trigger *a)
  * vbi_atvef_trigger:
  * @param vbi Initialized vbi decoding context.
  * @param s EACEM string (supposedly ASCII).
- * 
+ *
  * Parse an EACEM string and add it to the trigger list (where it
  * may fire immediately or at a later time).
  **/
@@ -691,7 +691,7 @@ vbi_eacem_trigger(vbi_decoder *vbi, unsigned char *s)
  * vbi_atvef_trigger:
  * @param vbi Initialized vbi context.
  * @param s ATVEF string (ASCII).
- * 
+ *
  * Parse an ATVEF string and add it to the trigger list (where it
  * may fire immediately or at a later time).
  **/

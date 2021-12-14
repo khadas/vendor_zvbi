@@ -59,16 +59,16 @@ static AM_VBI_Device_t dmx_devices[DMX_DEV_COUNT] =
 /****************************************************************************
  * Static functions
  ***************************************************************************/
- 
+
 /**\brief 根据设备号取得设备结构指针*/
 static inline AM_ErrorCode_t dmx_get_dev(int dev_no, AM_VBI_Device_t **dev)
 {
-	if((dev_no<0) || (dev_no>=DMX_DEV_COUNT))
+	if ((dev_no < 0) || (dev_no >= DMX_DEV_COUNT))
 	{
 		AM_DEBUG("invalid demux device number %d, must in(%d~%d)", dev_no, 0, DMX_DEV_COUNT-1);
 		return AM_VBI_DMX_ERR_INVALID_DEV_NO;
 	}
-	
+
 	*dev = &dmx_devices[dev_no];
 	return AM_SUCCESS;
 }
@@ -77,13 +77,13 @@ static inline AM_ErrorCode_t dmx_get_dev(int dev_no, AM_VBI_Device_t **dev)
 static inline AM_ErrorCode_t dmx_get_openned_dev(int dev_no, AM_VBI_Device_t **dev)
 {
 	int ret = (dmx_get_dev(dev_no, dev));
-	
-	if(!(*dev)->openned)
+
+	if (!(*dev)->openned)
 	{
 		AM_DEBUG( "demux device %d has not been openned", dev_no);
 		return AM_VBI_DMX_ERR_INVALID_DEV_NO;
 	}
-	
+
 	return AM_SUCCESS;
 }
 
@@ -91,21 +91,21 @@ static inline AM_ErrorCode_t dmx_get_openned_dev(int dev_no, AM_VBI_Device_t **d
 static inline AM_ErrorCode_t dmx_get_used_filter(AM_VBI_Device_t *dev, int filter_id, AM_VBI_Filter_t **pf)
 {
 	AM_VBI_Filter_t *filter;
-	
-	if((filter_id<0) || (filter_id>=DMX_FILTER_COUNT))
+
+	if ((filter_id < 0) || (filter_id >= DMX_FILTER_COUNT))
 	{
 		AM_DEBUG( "invalid filter id, must in %d~%d", 0, DMX_FILTER_COUNT-1);
 		return AM_VBI_DMX_ERR_INVALID_ID;
 	}
-	
+
 	filter = &dev->filters[filter_id];
-	
-	if(!filter->used)
+
+	if (!filter->used)
 	{
 		AM_DEBUG( "filter %d has not been allocated", filter_id);
 		return AM_VBI_DMX_ERR_NOT_ALLOCATED;
 	}
-	
+
 	*pf = filter;
 	return AM_SUCCESS;
 }
@@ -120,7 +120,7 @@ static void* dmx_data_thread(void *arg)
 	AM_VBI_FilterMask_t mask;
 	AM_ErrorCode_t ret;
 	int count = 0;
-	while(dev->enable_thread)
+	while (dev->enable_thread)
 	{
 		//**********************************temp****************
 		AM_DEBUG( "***************!!!!thread count = %d\n",count++);
@@ -129,12 +129,12 @@ static void* dmx_data_thread(void *arg)
 		//**********************************finish****************
 		AM_DMX_FILTER_MASK_CLEAR(&mask);
 		int id;
-		
+
 		ret = dev->drv->poll(dev, &mask, DMX_POLL_TIMEOUT);
-		if(ret==AM_SUCCESS)
+		if (ret == AM_SUCCESS)
 		{
 			AM_DEBUG( "***************thread AM_SUCCESS **********\n");
-			if(AM_DMX_FILTER_MASK_ISEMPTY(&mask))
+			if (AM_DMX_FILTER_MASK_ISEMPTY(&mask))
 				continue;
 
 #if defined(DMX_WAIT_CB) || defined(DMX_SYNC)
@@ -142,25 +142,25 @@ static void* dmx_data_thread(void *arg)
 			dev->flags |= DMX_FL_RUN_CB;
 			pthread_mutex_unlock(&dev->lock);
 #endif
-				
-			for(id=0; id<DMX_FILTER_COUNT; id++)
+
+			for (id=0; id<DMX_FILTER_COUNT; id++)
 			{
 				AM_VBI_Filter_t *filter=&dev->filters[id];
 				AM_DMX_DataCb cb;
 				void *data;
-				
-				if(!AM_DMX_FILTER_MASK_ISSET(&mask, id))
+
+				if (!AM_DMX_FILTER_MASK_ISSET(&mask, id))
 					continue;
-				
-				if(!filter->enable || !filter->used)
+
+				if (!filter->enable || !filter->used)
 					continue;
-				
+
 				sec_len = sizeof(sec_buf);
 
 #ifndef DMX_WAIT_CB
 				pthread_mutex_lock(&dev->lock);
 #endif
-				if(!filter->enable || !filter->used)
+				if (!filter->enable || !filter->used)
 				{
 					ret = AM_FAILURE;
 				}
@@ -173,12 +173,12 @@ static void* dmx_data_thread(void *arg)
 #ifndef DMX_WAIT_CB
 				pthread_mutex_unlock(&dev->lock);
 #endif
-				if(ret==AM_VBI_DMX_ERR_TIMEOUT)
+				if (ret == AM_VBI_DMX_ERR_TIMEOUT)
 				{
 					sec = NULL;
 					sec_len = 0;
 				}
-				else if(ret!=AM_SUCCESS)
+				else if (ret!=AM_SUCCESS)
 				{
 					continue;
 				}
@@ -186,10 +186,10 @@ static void* dmx_data_thread(void *arg)
 				{
 					sec = sec_buf;
 				}
-				
-				if(cb)
+
+				if (cb)
 				{
-					if(id && sec) {
+					if (id && sec) {
 						int fd = (long)filter->drv_data;
 						AM_DEBUG( "filter %d data callback len fd:%d len:%d, %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
 						id, fd, sec_len,
@@ -197,7 +197,7 @@ static void* dmx_data_thread(void *arg)
 						sec[5], sec[6], sec[7], sec[8], sec[9]);
 					}
 					cb(dev->dev_no, id, sec, sec_len, data);
-					if(id && sec)
+					if (id && sec)
 					AM_DEBUG( "filter %d data callback ok", id);
 				}
 			}
@@ -212,7 +212,7 @@ static void* dmx_data_thread(void *arg)
 			AM_DEBUG( "poll fail \n");
 		usleep(1000 * 200);
 	}
-	
+
 	return NULL;
 }
 
@@ -220,9 +220,9 @@ static void* dmx_data_thread(void *arg)
 static inline AM_ErrorCode_t dmx_wait_cb(AM_VBI_Device_t *dev)
 {
 #ifdef DMX_WAIT_CB
-	if(dev->thread!=pthread_self())
+	if (dev->thread != pthread_self())
 	{
-		while(dev->flags&DMX_FL_RUN_CB)
+		while (dev->flags&DMX_FL_RUN_CB)
 			pthread_cond_wait(&dev->cond, &dev->lock);
 	}
 #endif
@@ -233,22 +233,22 @@ static inline AM_ErrorCode_t dmx_wait_cb(AM_VBI_Device_t *dev)
 static AM_ErrorCode_t dmx_stop_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *filter)
 {
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
-	if(!filter->used || !filter->enable)
+
+	if (!filter->used || !filter->enable)
 	{
 		return ret;
 	}
-	
-	if(dev->drv->enable_filter)
+
+	if (dev->drv->enable_filter)
 	{
 		ret = dev->drv->enable_filter(dev, filter, AM_FALSE);
 	}
-	
-	if(ret>=0)
+
+	if (ret >= 0)
 	{
 		filter->enable = AM_FALSE;
 	}
-	
+
 	return ret;
 }
 
@@ -256,25 +256,25 @@ static AM_ErrorCode_t dmx_stop_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *fil
 static int dmx_free_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *filter)
 {
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
-	if(!filter->used)
+
+	if (!filter->used)
 		return ret;
-		
+
 	ret = dmx_stop_filter(dev, filter);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
-		if(dev->drv->free_filter)
+		if (dev->drv->free_filter)
 		{
 			ret = dev->drv->free_filter(dev, filter);
 		}
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		filter->used=AM_FALSE;
 	}
-	
+
 	return ret;
 }
 
@@ -293,49 +293,49 @@ AM_ErrorCode_t AM_NTSC_DMX_Open(int dev_no, const AM_VBI_DMX_OpenPara_t *para)
 {
 	AM_VBI_Device_t *dev;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	assert(para);
-	
+
 	ret = (dmx_get_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&am_gAdpLock);
-	
-	if(dev->openned)
+
+	if (dev->openned)
 	{
 		AM_DEBUG( "demux device %d has already been openned", dev_no);
 		ret = AM_VBI_DMX_ERR_BUSY;
 		goto final;
 	}
-	
+
 	dev->dev_no = dev_no;
-	
-	if(dev->drv->open)
+
+	if (dev->drv->open)
 	{
 		ret = dev->drv->open(dev, para);
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		pthread_mutex_init(&dev->lock, NULL);
 		pthread_cond_init(&dev->cond, NULL);
 		dev->enable_thread = AM_TRUE;
 		dev->flags = 0;
-		
-		if(pthread_create(&dev->thread, NULL, dmx_data_thread, dev))
+
+		if (pthread_create(&dev->thread, NULL, dmx_data_thread, dev))
 		{
 			pthread_mutex_destroy(&dev->lock);
 			pthread_cond_destroy(&dev->cond);
 			ret = AM_VBI_DMX_ERR_CANNOT_CREATE_THREAD;
 		}
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		dev->openned = AM_TRUE;
 	}
 final:
 	pthread_mutex_unlock(&am_gAdpLock);
-	
+
 	return ret;
 }
 
@@ -350,31 +350,31 @@ AM_ErrorCode_t AM_NTSC_DMX_Close(int dev_no)
 	AM_VBI_Device_t *dev;
 	AM_ErrorCode_t ret = AM_SUCCESS;
 	int i;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&am_gAdpLock);
 
 	dev->enable_thread = AM_FALSE;
 	pthread_join(dev->thread, NULL);
 
-	for(i=0; i<DMX_FILTER_COUNT; i++)
+	for (i=0; i<DMX_FILTER_COUNT; i++)
 	{
 		dmx_free_filter(dev, &dev->filters[i]);
 	}
 
-	if(dev->drv->close)
+	if (dev->drv->close)
 	{
 		dev->drv->close(dev);
 	}
 
 	pthread_mutex_destroy(&dev->lock);
 	pthread_cond_destroy(&dev->cond);
-	
+
 	dev->openned = AM_FALSE;
-	
+
 	pthread_mutex_unlock(&am_gAdpLock);
-	
+
 	return ret;
 }
 
@@ -390,48 +390,48 @@ AM_ErrorCode_t AM_NTSC_DMX_AllocateFilter(int dev_no, int *fhandle)
 	AM_VBI_Device_t *dev;
 	AM_ErrorCode_t ret = AM_SUCCESS;
 	int fid;
-	
+
 	assert(fhandle);
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
-	for(fid=0; fid<DMX_FILTER_COUNT; fid++)
+
+	for (fid=0; fid<DMX_FILTER_COUNT; fid++)
 	{
 		AM_DEBUG( "dev->filters[fid].used = %d\n",dev->filters[fid].used);
-		if(!dev->filters[fid].used)
+		if (!dev->filters[fid].used)
 			break;
 	}
-	
-	if(fid>=DMX_FILTER_COUNT)
+
+	if (fid >= DMX_FILTER_COUNT)
 	{
 		AM_DEBUG( "no free section filter");
 		ret = AM_VBI_DMX_ERR_NO_FREE_FILTER;
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		AM_DEBUG( "AM_NTSC_DMX_AllocateFilter AM_SUCCESS fid = %d\n",fid);
 		dmx_wait_cb(dev);
-		
+
 		dev->filters[fid].id   = fid;
-		if(dev->drv->alloc_filter)
+		if (dev->drv->alloc_filter)
 		{
 			ret = dev->drv->alloc_filter(dev, &dev->filters[fid]);
 		}
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		dev->filters[fid].used = AM_TRUE;
 		*fhandle = fid;
-		
+
 		AM_DEBUG( "allocate filter %d \n", fid);
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -448,22 +448,22 @@ AM_ErrorCode_t AM_NTSC_DMX_FreeFilter(int dev_no, int fhandle)
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
+
 	ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		dmx_wait_cb(dev);
 		ret = dmx_free_filter(dev, filter);
 		AM_DEBUG( "free filter %d", fhandle);
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -480,31 +480,31 @@ AM_ErrorCode_t AM_NTSC_DMX_StartFilter(int dev_no, int fhandle)
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter = NULL;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
+
 	ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(!filter->enable)
+
+	if (!filter->enable)
 	{
-		if(ret==AM_SUCCESS)
+		if (ret == AM_SUCCESS)
 		{
-			if(dev->drv->enable_filter)
+			if (dev->drv->enable_filter)
 			{
 				ret = dev->drv->enable_filter(dev, filter, AM_TRUE);
 			}
 		}
-		
-		if(ret==AM_SUCCESS)
+
+		if (ret == AM_SUCCESS)
 		{
 			filter->enable = AM_TRUE;
 		}
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -520,24 +520,24 @@ AM_ErrorCode_t AM_NTSC_DMX_StopFilter(int dev_no, int fhandle)
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter = NULL;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
+
 	ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(filter->enable)
+
+	if (filter->enable)
 	{
-		if(ret==AM_SUCCESS)
+		if (ret == AM_SUCCESS)
 		{
 			dmx_wait_cb(dev);
 			ret = dmx_stop_filter(dev, filter);
 		}
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -554,25 +554,25 @@ AM_ErrorCode_t AM_NTSC_DMX_SetBufferSize(int dev_no, int fhandle, int size)
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
-	if(!dev->drv->set_buf_size)
+
+	if (!dev->drv->set_buf_size)
 	{
 		AM_DEBUG( "do not support set_buf_size");
 		ret = AM_VBI_DMX_ERR_NOT_SUPPORTED;
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 		ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 		ret = dev->drv->set_buf_size(dev, filter, size);
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -590,24 +590,24 @@ AM_ErrorCode_t AM_NTSC_DMX_GetCallback(int dev_no, int fhandle, AM_DMX_DataCb *c
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
+
 	ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
-		if(cb)
+		if (cb)
 			*cb = filter->cb;
-	
-		if(data)
+
+		if (data)
 			*data = filter->user_data;
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -626,24 +626,24 @@ AM_ErrorCode_t AM_NTSC_DMX_SetCallback(int dev_no, int fhandle, AM_DMX_DataCb cb
 	AM_VBI_Device_t *dev;
 	AM_VBI_Filter_t *filter;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	
+
 	ret = dmx_get_used_filter(dev, fhandle, &filter);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		AM_DEBUG("AM_NTSC_DMX_SetCallback AM_SUCCESS\n");
 		dmx_wait_cb(dev);
-	
+
 		filter->cb = cb;
 		filter->user_data = data;
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 
@@ -658,30 +658,30 @@ AM_ErrorCode_t AM_NTSC_DMX_SetSource(int dev_no, AM_VBI_DMX_Source_t src)
 {
 	AM_VBI_Device_t *dev;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	if(!dev->drv->set_source)
+	if (!dev->drv->set_source)
 	{
 		AM_DEBUG( "do not support set_source");
 		ret = AM_VBI_DMX_ERR_NOT_SUPPORTED;
 	}
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		ret = dev->drv->set_source(dev, src);
 	}
-	
+
 	pthread_mutex_unlock(&dev->lock);
-	
-	if(ret==AM_SUCCESS)
+
+	if (ret == AM_SUCCESS)
 	{
 		pthread_mutex_lock(&am_gAdpLock);
 		dev->src = src;
 		pthread_mutex_unlock(&am_gAdpLock);
 	}
-	
+
 	return ret;
 }
 
@@ -695,17 +695,17 @@ AM_ErrorCode_t AM_NTSC_DMX_Sync(int dev_no)
 {
 	AM_VBI_Device_t *dev;
 	AM_ErrorCode_t ret = AM_SUCCESS;
-	
+
 	ret = (dmx_get_openned_dev(dev_no, &dev));
-	
+
 	pthread_mutex_lock(&dev->lock);
-	if(dev->thread!=pthread_self())
+	if (dev->thread != pthread_self())
 	{
-		while(dev->flags&DMX_FL_RUN_CB)
+		while (dev->flags & DMX_FL_RUN_CB)
 			pthread_cond_wait(&dev->cond, &dev->lock);
 	}
 	pthread_mutex_unlock(&dev->lock);
-	
+
 	return ret;
 }
 

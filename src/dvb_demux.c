@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -2257,7 +2257,7 @@ demux_ts_packet			(vbi_dvb_demux *	dx,
 	if (likely (avail <= 188)) {
 		/* Skip this TS packet. */
 		dx->ts_wrap.skip = 188 - avail;
-		
+
 		dx->ts_wrap.bp = dx->ts_buffer;
 		dx->ts_wrap.lookahead = TS_HEADER_LOOKAHEAD;
 	} else {
@@ -2505,7 +2505,7 @@ vbi_dvb_demux_delete		(vbi_dvb_demux *	dx)
 
 	CLEAR (*dx);
 
-	vbi_free (dx);		
+	vbi_free (dx);
 }
 
 /* Experimental. */

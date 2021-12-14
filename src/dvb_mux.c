@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -335,7 +335,7 @@ insert_sliced_data_units	(uint8_t **		packet,
 					goto bad_line;
 			}
 			break;
-			
+
 		case VBI_SLICED_CAPTION_625:
 		case VBI_SLICED_CAPTION_625_F1:
 			du_size = 2 + 1 + 2;
@@ -361,7 +361,7 @@ insert_sliced_data_units	(uint8_t **		packet,
 			if (strict || 0 == line)
 				goto bad_service;
 			break;
-			
+
 		case VBI_SLICED_CAPTION_525_F1:
 		case VBI_SLICED_CAPTION_525_F2:
 		case VBI_SLICED_CAPTION_525:
@@ -370,7 +370,7 @@ insert_sliced_data_units	(uint8_t **		packet,
 			if (strict || 0 == line)
 				goto bad_service;
 			break;
-			
+
 		case VBI_SLICED_WSS_CPR1204:
 			/* Libzvbi extension. */
 			du_size = 2 + 1 + 3;
@@ -385,7 +385,7 @@ insert_sliced_data_units	(uint8_t **		packet,
 		bad_service:
 			*packet = p;
 			*sliced = s;
-			
+
 			return VBI_ERR_INVALID_SERVICE;
 		}
 
@@ -778,7 +778,7 @@ insert_raw_data_units		(uint8_t **		packet,
 		f2_start = 313;
 	} else {
 		return VBI_ERR_AMBIGUOUS_VIDEOSTD;
-	}		
+	}
 
 	r = *raw;
 
@@ -1189,7 +1189,7 @@ samples_pointer			(const uint8_t **	samples,
 
 	return 0; /* success */
 }
-				 
+
 _vbi_inline void
 encode_timestamp		(uint8_t *		p,
 				 int64_t		pts,
@@ -1748,7 +1748,7 @@ vbi_dvb_mux_cor		(vbi_dvb_mux *		mx,
 				 unsigned int *		sliced_left,
 				 vbi_service_set	service_mask,
 				 const uint8_t *	raw,
-				 const vbi_sampling_par *sp,	 
+				 const vbi_sampling_par *sp,
 				 int64_t		pts)
 {
 	uint8_t *p;
@@ -1949,7 +1949,7 @@ vbi_dvb_mux_feed		(vbi_dvb_mux *		mx,
 				 unsigned int		sliced_lines,
 				 vbi_service_set	service_mask,
 				 const uint8_t *	raw,
-				 const vbi_sampling_par *sp,	 
+				 const vbi_sampling_par *sp,
 				 int64_t		pts)
 {
 	const vbi_sliced *s;

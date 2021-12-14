@@ -354,13 +354,13 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-x11font$(EXEEXT): $(x11font_OBJECTS) $(x11font_DEPENDENCIES) 
+x11font$(EXEEXT): $(x11font_OBJECTS) $(x11font_DEPENDENCIES)
 	@rm -f x11font$(EXEEXT)
 	$(LINK) $(x11font_LDFLAGS) $(x11font_OBJECTS) $(x11font_LDADD) $(LIBS)
-zvbi-atsc-cc$(EXEEXT): $(zvbi_atsc_cc_OBJECTS) $(zvbi_atsc_cc_DEPENDENCIES) 
+zvbi-atsc-cc$(EXEEXT): $(zvbi_atsc_cc_OBJECTS) $(zvbi_atsc_cc_DEPENDENCIES)
 	@rm -f zvbi-atsc-cc$(EXEEXT)
 	$(LINK) $(zvbi_atsc_cc_LDFLAGS) $(zvbi_atsc_cc_OBJECTS) $(zvbi_atsc_cc_LDADD) $(LIBS)
-zvbi-ntsc-cc$(EXEEXT): $(zvbi_ntsc_cc_OBJECTS) $(zvbi_ntsc_cc_DEPENDENCIES) 
+zvbi-ntsc-cc$(EXEEXT): $(zvbi_ntsc_cc_OBJECTS) $(zvbi_ntsc_cc_DEPENDENCIES)
 	@rm -f zvbi-ntsc-cc$(EXEEXT)
 	$(LINK) $(zvbi_ntsc_cc_LDFLAGS) $(zvbi_ntsc_cc_OBJECTS) $(zvbi_ntsc_cc_LDADD) $(LIBS)
 

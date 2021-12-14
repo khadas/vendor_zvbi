@@ -15,8 +15,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -117,8 +117,8 @@ _vbi_strndup			(const char *		s,
 	size_t n;
 	char *r;
 
-	if (NULL == s)
-		return NULL;
+	//if (NULL == s)
+	//	return NULL;
 
 	n = strlen (s);
 	len = MIN (len, n);
@@ -399,8 +399,8 @@ _vbi_log_vprintf		(vbi_log_fn		log_fn,
 	assert (NULL != context);
 	assert (NULL != templ);
 
-	if (NULL == log_fn)
-		return;
+	//if (NULL == log_fn)
+	//	return;
 
 	saved_errno = errno;
 

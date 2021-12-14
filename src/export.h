@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -173,7 +173,7 @@ typedef enum {
 	 * <table>
 	 * <tr><td>Type:</td><td>int</td></tr>
 	 * <tr><td>Default:</td><td>vbi_option_info.def.num</td></tr>
-	 * <tr><td>Bounds:</td><td>vbi_option_info.min.num (0) ... max.num, 
+	 * <tr><td>Bounds:</td><td>vbi_option_info.min.num (0) ... max.num,
 	 *    step.num (1)</td></tr>
 	 * <tr><td>Menu:</td><td>vbi_option_info.menu.str[vbi_option_info.min.num ... max.num],
 	 *    step.num (1).
@@ -212,11 +212,11 @@ typedef union {
  * manipulate them without knowing about their presence or purpose.
  * To do so, some information about the option is necessary,
  * given in this structure.
- * 
+ *
  * You can obtain this information with vbi_export_option_info_enum().
  */
 typedef struct {
-  	vbi_option_type		type;	/**< @see vbi_option_type */
+	vbi_option_type		type;	/**< @see vbi_option_type */
 
 	/**
 	 * Unique (within the respective export module) keyword to identify
@@ -275,7 +275,7 @@ vbi_export_alloc		(vbi_export *		e,
 				 void **		buffer,
 				 size_t *		buffer_size,
 				 const vbi_page *	pg)
-  _vbi_nonnull ((1)); /* sic */
+_vbi_nonnull ((1)); /* sic */
 extern vbi_bool			vbi_export_stdio(vbi_export *, FILE *fp, vbi_page *pg);
 extern vbi_bool			vbi_export_file(vbi_export *, const char *name, vbi_page *pg);
 
@@ -566,7 +566,7 @@ extern int			vbi_ucs2be(void);
  * @endcode
  *
  * No label and tooltip (@c NULL), i. e. this option is not to be
- * listed in the user interface. Default is entry 1 ("30") of 3 entries. 
+ * listed in the user interface. Default is entry 1 ("30") of 3 entries.
  */
 #define VBI_OPTION_INT_MENU_INITIALIZER(key_, label_, def_,		\
   menu_, entries_, tip_) { VBI_OPTION_INT, key_, label_,		\

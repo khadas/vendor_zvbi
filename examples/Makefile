@@ -82,7 +82,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run aclocal-1.9 -I m4
 AMDEP_FALSE = #
-AMDEP_TRUE = 
+AMDEP_TRUE =
 AMTAR = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run tar
 AR = ar
 AUTOCONF = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run autoconf
@@ -90,12 +90,12 @@ AUTOHEADER = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run autoh
 AUTOMAKE = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run automake-1.9
 AWK = gawk
 BUILD_STATIC_LIB_FALSE = #
-BUILD_STATIC_LIB_TRUE = 
+BUILD_STATIC_LIB_TRUE =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
-CPPFLAGS = 
+CPPFLAGS =
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -104,56 +104,56 @@ CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO = echo
-ECHO_C = 
+ECHO_C =
 ECHO_N = -n
-ECHO_T = 
+ECHO_T =
 EGREP = /usr/bin/grep -E
 ENABLE_DVB_FALSE = #
-ENABLE_DVB_TRUE = 
+ENABLE_DVB_TRUE =
 ENABLE_PROXY_FALSE = #
-ENABLE_PROXY_TRUE = 
-EXEEXT = 
-F77 = 
-FFLAGS = 
+ENABLE_PROXY_TRUE =
+EXEEXT =
+F77 =
+FFLAGS =
 GMSGFMT = /usr/bin/msgfmt
 GMSGFMT_015 = /usr/bin/msgfmt
 GREP = /usr/bin/grep
 HAVE_DOXYGEN = no
-HAVE_DOXYGEN_FALSE = 
+HAVE_DOXYGEN_FALSE =
 HAVE_DOXYGEN_TRUE = #
 HAVE_GCC_C89_SUPPORT_FALSE = #
-HAVE_GCC_C89_SUPPORT_TRUE = 
+HAVE_GCC_C89_SUPPORT_TRUE =
 HAVE_GCC_C94_SUPPORT_FALSE = #
-HAVE_GCC_C94_SUPPORT_TRUE = 
+HAVE_GCC_C94_SUPPORT_TRUE =
 HAVE_GCC_C99_SUPPORT_FALSE = #
-HAVE_GCC_C99_SUPPORT_TRUE = 
+HAVE_GCC_C99_SUPPORT_TRUE =
 HAVE_GCC_LIMITS_FALSE = #
-HAVE_GCC_LIMITS_TRUE = 
+HAVE_GCC_LIMITS_TRUE =
 HAVE_GXX_CXX98_SUPPORT_FALSE = #
-HAVE_GXX_CXX98_SUPPORT_TRUE = 
+HAVE_GXX_CXX98_SUPPORT_TRUE =
 HAVE_X_FALSE = #
-HAVE_X_TRUE = 
-INSIDE_GNOME_COMMON_FALSE = 
+HAVE_X_TRUE =
+INSIDE_GNOME_COMMON_FALSE =
 INSIDE_GNOME_COMMON_TRUE = #
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-INTLLIBS = 
-INTL_MACOSX_LIBS = 
-LDFLAGS = 
-LIBICONV = 
-LIBINTL = 
-LIBOBJS = 
+INTLLIBS =
+INTL_MACOSX_LIBS =
+LDFLAGS =
+LIBICONV =
+LIBINTL =
+LIBOBJS =
 LIBS =  -lpthread  -lm  -lpng -lz
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBZVBI_SO_VERSION = 13:1:13
 LN_S = ln -s
-LTLIBICONV = 
-LTLIBINTL = 
-LTLIBOBJS = 
+LTLIBICONV =
+LTLIBINTL =
+LTLIBOBJS =
 MAINT = #
-MAINTAINER_MODE_FALSE = 
+MAINTAINER_MODE_FALSE =
 MAINTAINER_MODE_TRUE = #
 MAKEINFO = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run makeinfo
 MSGFMT = /usr/bin/msgfmt
@@ -161,7 +161,7 @@ MSGFMT_015 = /usr/bin/msgfmt
 MSGMERGE = /usr/bin/msgmerge
 OBJEXT = o
 PACKAGE = zvbi
-PACKAGE_BUGREPORT = 
+PACKAGE_BUGREPORT =
 PACKAGE_NAME = zvbi
 PACKAGE_STRING = zvbi 0.2.33
 PACKAGE_TARNAME = zvbi
@@ -169,35 +169,35 @@ PACKAGE_VERSION = 0.2.33
 PATH_SEPARATOR = :
 POSUB = po
 RANLIB = ranlib
-SET_MAKE = 
+SET_MAKE =
 SHELL = /bin/sh
 STRIP = strip
-UNICODE_CFLAGS = 
-UNICODE_LIBS = 
+UNICODE_CFLAGS =
+UNICODE_LIBS =
 USE_NLS = yes
 VERSION = 0.2.33
 XGETTEXT = /usr/bin/xgettext
 XGETTEXT_015 = /usr/bin/xgettext
-XMKMF = 
-X_CFLAGS = 
-X_EXTRA_LIBS = 
+XMKMF =
+X_CFLAGS =
+X_EXTRA_LIBS =
 X_LIBS =  -lX11
 X_PRE_LIBS =  -lSM -lICE
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = 
+ac_ct_F77 =
 am__fastdepCC_FALSE = #
-am__fastdepCC_TRUE = 
+am__fastdepCC_TRUE =
 am__fastdepCXX_FALSE = #
-am__fastdepCXX_TRUE = 
+am__fastdepCXX_TRUE =
 am__include = include
 am__leading_dot = .
-am__quote = 
+am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
 build = x86_64-unknown-linux-gnu
-build_alias = 
+build_alias =
 build_cpu = x86_64
 build_os = linux-gnu
 build_vendor = unknown
@@ -207,7 +207,7 @@ docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
 host = x86_64-unknown-linux-gnu
-host_alias = 
+host_alias =
 host_cpu = x86_64
 host_os = linux-gnu
 host_vendor = unknown
@@ -229,7 +229,7 @@ psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
-target_alias = 
+target_alias =
 INCLUDES = -I$(top_srcdir)/src
 LDADD = $(top_builddir)/src/libzvbi.la \
 	$(PTHREAD_LIB) -lm $(PNG_LIB)
@@ -274,13 +274,13 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-network$(EXEEXT): $(network_OBJECTS) $(network_DEPENDENCIES) 
+network$(EXEEXT): $(network_OBJECTS) $(network_DEPENDENCIES)
 	@rm -f network$(EXEEXT)
 	$(LINK) $(network_LDFLAGS) $(network_OBJECTS) $(network_LDADD) $(LIBS)
-rawout$(EXEEXT): $(rawout_OBJECTS) $(rawout_DEPENDENCIES) 
+rawout$(EXEEXT): $(rawout_OBJECTS) $(rawout_DEPENDENCIES)
 	@rm -f rawout$(EXEEXT)
 	$(LINK) $(rawout_LDFLAGS) $(rawout_OBJECTS) $(rawout_LDADD) $(LIBS)
-wss$(EXEEXT): $(wss_OBJECTS) $(wss_DEPENDENCIES) 
+wss$(EXEEXT): $(wss_OBJECTS) $(wss_DEPENDENCIES)
 	@rm -f wss$(EXEEXT)
 	$(LINK) $(wss_LDFLAGS) $(wss_OBJECTS) $(wss_LDADD) $(LIBS)
 

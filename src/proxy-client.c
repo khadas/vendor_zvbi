@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -49,8 +49,8 @@ static const char rcsid[] =
 
 #ifdef ENABLE_PROXY
 
-#define dprintf1(fmt, arg...)    do {if (vpc->trace >= 1) fprintf(stderr, "proxy-client: " fmt, ## arg);} while(0)
-#define dprintf2(fmt, arg...)    do {if (vpc->trace >= 2) fprintf(stderr, "proxy-client: " fmt, ## arg);} while(0)
+#define dprintf1(fmt, arg...)    do {if (vpc->trace >= 1) fprintf(stderr, "proxy-client: " fmt, ## arg);} while (0)
+#define dprintf2(fmt, arg...)    do {if (vpc->trace >= 2) fprintf(stderr, "proxy-client: " fmt, ## arg);} while (0)
 
 /* ----------------------------------------------------------------------------
 ** Declaration of types of internal state variables
@@ -1146,7 +1146,7 @@ vbi_proxy_client_set_callback( vbi_proxy_client * vpc,
 
 /* document below */
 vbi_capture *
-vbi_proxy_client_get_capture_if( vbi_proxy_client * vpc )
+vbi_proxy_client_get_capture_if ( vbi_proxy_client * vpc )
 {
    if (vpc != NULL)
    {
@@ -1676,7 +1676,7 @@ vbi_proxy_client_channel_suspend( vbi_proxy_client * vpc,
  *
  * This function allows to manipulate parameters of the underlying
  * VBI device.  Not all ioctls are allowed here.  It's mainly intended
- * to be used for channel enumeration and channel/norm changes.  
+ * to be used for channel enumeration and channel/norm changes.
  * The request codes and parameters are the same as for the actual device.
  * The caller has to query the driver API first and use the respective
  * ioctl codes, same as if the device would be used directly.
@@ -1813,7 +1813,7 @@ vbi_proxy_client_set_callback( vbi_proxy_client * vpc,
  * @since 0.2.9
  */
 vbi_capture *
-vbi_proxy_client_get_capture_if( vbi_proxy_client * vpc )
+vbi_proxy_client_get_capture_if ( vbi_proxy_client * vpc )
 {
    return NULL;
 }
@@ -1845,7 +1845,7 @@ vbi_proxy_client_get_capture_if( vbi_proxy_client * vpc )
  *
  * Open a new connection to a VBI proxy to open a VBI device for the
  * given services.  On side of the proxy daemon, one of the regular
- * capture context creation functions (e.g. v4l2_new) is invoked. 
+ * capture context creation functions (e.g. v4l2_new) is invoked.
  * If the creation succeeds, and any of the requested services are
  * available, capturing is started and all captured data is forwarded
  * transparently to the client.
@@ -1885,7 +1885,7 @@ vbi_capture_proxy_new( struct vbi_proxy_client *p_proxy_client,
 void
 vbi_proxy_client_destroy( vbi_proxy_client * vpc )
 {
-   vpc = vpc;
+   (void) vpc;
 }
 
 /**

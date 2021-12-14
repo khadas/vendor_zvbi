@@ -1301,7 +1301,7 @@ parse_bsd(vbi_decoder *vbi, uint8_t *raw, int packet, int designation)
 				      + ((raw[12] >> 4) - 1) * 10
 				      + ((raw[12] & 15) - 1);
 
-			    	utc_h = ((raw[13] >> 4) - 1) * 10 + ((raw[13] & 15) - 1);
+				utc_h = ((raw[13] >> 4) - 1) * 10 + ((raw[13] & 15) - 1);
 				utc_m = ((raw[14] >> 4) - 1) * 10 + ((raw[14] & 15) - 1);
 				utc_s = ((raw[15] >> 4) - 1) * 10 + ((raw[15] & 15) - 1);
 
@@ -1451,7 +1451,7 @@ same_header(int cur_pgno, uint8_t *cur,
 	vbi_par (buf, 3);
 
 	for (i = 8; i < 32; cur++, ref++, i++) {
-		/* Skip page number */
+		/* Skip page number, may have subpage number, and also skip */
 		if (i < j
 		    && cur[0] == buf[0]
 		    && cur[1] == buf[1]
@@ -1471,7 +1471,6 @@ same_header(int cur_pgno, uint8_t *cur,
 
 	if (err < 0 || j >= (32 - 3 - VBI_FIRST_LINE_SKIP_SUBPAGE_COLUMNS)) /* parity error, rare */
 		return -2; /* inconclusive, useless */
-
 	*page_num_offsetp = j;
 
 	if (!neq)
@@ -1755,7 +1754,7 @@ parse_27(vbi_decoder *vbi, uint8_t *p,
 				+ ((t1 >> 11) & 0x0F0) + ((t1 >> 7) & 0x00F);
 			cvtp->data.unknown.link[designation * 6 + i].subno =
 				(t2 >> 3) & 0xFFFF;
-if(0)
+if (0)
  printf("X/27/%d link[%d] type %d page %03x subno %04x\n", designation, i,
 	cvtp->data.unknown.link[designation * 6 + i].function,
 	cvtp->data.unknown.link[designation * 6 + i].pgno,
@@ -2113,8 +2112,10 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 				curr = rvtp;
 				vtp = curr->page;
 
-				if ((vtp->pgno & 0xFF) == page)
-					break;
+				if ((vtp->pgno & 0xFF) == page) {
+					LOGI("vbi_decode_teletext vtp->pgno:%d page:%d\n",vtp->pgno, page);
+					//break;
+				}
 			}
 			switch (vtp->function) {
 			case PAGE_FUNCTION_DISCARD:
@@ -2755,7 +2756,7 @@ vbi_teletext_channel_switched(vbi_decoder *vbi)
 void
 vbi_teletext_destroy(vbi_decoder *vbi)
 {
-	vbi = vbi;
+	(void) vbi;
 }
 
 /**

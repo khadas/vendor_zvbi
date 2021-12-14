@@ -633,7 +633,7 @@ typedef __u64 v4l2_std_id;
 
 /* FIXME:
    Although std_id is 64 bits, there is an issue on PPC32 architecture that
-   makes switch(__u64) to break. So, there's a hack on v4l2-common.c rounding
+   makes switch (__u64) to break. So, there's a hack on v4l2-common.c rounding
    this value to 32 bits.
    As, currently, the max value is for V4L2_STD_ATSC_16_VSB (30 bits wide),
    it should work fine. However, if needed to add more than two standards,

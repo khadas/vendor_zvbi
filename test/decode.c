@@ -166,7 +166,7 @@ caption_command			(unsigned int		line,
 		unsigned int rrrr;
 
 		/* Preamble Address Codes -- 001 crrr  1ri bbbu */
-  
+
 		rrrr = a7 * 2 + ((c2 >> 5) & 1);
 
 		if (c2 & 0x10)
@@ -727,7 +727,7 @@ vps				(const uint8_t		buffer[13],
 			printf ("Error in VPS packet PDC data.\n");
 			return;
 		}
-		
+
 		printf ("VPS line=%3u ", line);
 
 		_vbi_program_id_dump (&pi, stdout);
@@ -761,7 +761,7 @@ vps				(const uint8_t		buffer[13],
 		label[i][l[i]] = _vbi_to_ascii (c);
 
 		l[i] = (l[i] + 1) % 16;
-		
+
 		printf ("VPS line=%3u bytes 3-10: "
 			"%02x %02x (%02x='%c') %02x %02x "
 			"%02x %02x %02x %02x (\"%s\")\n",
@@ -779,7 +779,7 @@ vps				(const uint8_t		buffer[13],
 static void
 wss_625				(const uint8_t		buffer[2])
 {
-	if (option_decode_wss) {  
+	if (option_decode_wss) {
 		vbi_aspect_ratio ar;
 
 		if (!vbi_decode_wss_625 (&ar, buffer)) {
@@ -814,7 +814,7 @@ decode_frame			(const vbi_sliced *	s,
 
 	if (option_dump_time || option_metronome_tick > 0.0) {
 		/* Sample time: When we captured the data, in
-		   		seconds since 1970-01-01 (gettimeofday()).
+				seconds since 1970-01-01 (gettimeofday()).
 		   Stream time: For ATSC/DVB the Presentation Time Stamp.
 				For analog the frame number multiplied by
 				the nominal frame period (1/25 or

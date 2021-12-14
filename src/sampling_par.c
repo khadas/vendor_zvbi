@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -32,6 +32,7 @@
 #include "sampling_par.h"
 #include "sliced.h"
 #include "version.h"
+#include <inttypes.h>
 
 #if 2 == VBI_VERSION_MINOR
 #  define vbi_pixfmt_bytes_per_pixel VBI_PIXFMT_BPP
@@ -83,7 +84,7 @@ range_check			(unsigned int		start,
 /**
  * @internal
  * @param sp Sampling parameters to verify.
- * 
+ *
  * @return
  * TRUE if the sampling parameters are valid (as far as we can tell).
  */
@@ -166,7 +167,7 @@ _vbi_sampling_par_valid_log	(const vbi_sampling_par *sp,
 	} else {
 	ambiguous:
 		info (log,
-			"Ambiguous videostd_set 0x%x.",
+			"Ambiguous videostd_set 0x%" PRIx64 ".",
 			videostd_set);
 		return FALSE;
 	}
@@ -241,8 +242,8 @@ _vbi_sampling_par_permit_service
 	if (0 == (par->videostd_set & videostd_set)) {
 		info (log,
 			"Service 0x%08x (%s) requires "
-			"videostd_set 0x%x, "
-			"have 0x%x.",
+			"videostd_set 0x%" PRIx64 ", "
+			"have 0x%" PRIx64 ".",
 			par->id, par->label,
 			par->videostd_set, videostd_set);
 		return FALSE;
@@ -386,7 +387,7 @@ _vbi_sampling_par_permit_service
 			   available for the service are actually used. */
 			continue;
 		}
-		
+
 		if (start > par->first[field]
 		    || end < par->last[field]) {
 			info (log,
@@ -457,7 +458,7 @@ _vbi_sampling_par_from_services_log
 		    || ((VBI_VIDEOSTD_SET_525_60 & videostd_set_req)
 			&& (VBI_VIDEOSTD_SET_625_50 & videostd_set_req))) {
 			warning (log,
-				 "Ambiguous videostd_set 0x%x.",
+				 "Ambiguous videostd_set 0x%" PRIx64 ".",
 				 videostd_set_req);
 			CLEAR (*sp);
 			return 0;
@@ -507,8 +508,8 @@ _vbi_sampling_par_from_services_log
 		if (0 == (par->videostd_set & videostd_set)) {
 			info (log,
 				"Service 0x%08x (%s) requires "
-				"videostd_set 0x%x, "
-				"have 0x%x.",
+				"videostd_set 0x%" PRIx64 ", "
+				"have 0x%" PRIx64 ".",
 				par->id, par->label,
 				par->videostd_set, videostd_set);
 			continue;
@@ -620,7 +621,7 @@ vbi_sampling_par_check_services
  * @c VBI_PIXFMT_Y8, offset and bytes_per_line will be set to
  * reasonable minimums. This function can be used to initialize hardware
  * prior to creating a vbi_raw_decoder object.
- * 
+ *
  * @return
  * Subset of @a services covered by the calculated sampling parameters.
  */
@@ -643,7 +644,7 @@ vbi_sampling_par_from_services	(vbi_sampling_par *	sp,
  *
  * Returns the name of a video standard like VBI_VIDEOSTD_PAL_B ->
  * "PAL_B". This is mainly intended for debugging.
- * 
+ *
  * @return
  * Static ASCII string, NULL if @a videostd is a custom standard
  * or invalid.
@@ -656,8 +657,8 @@ _vbi_videostd_name		(vbi_videostd		videostd)
 #undef CASE
 #define CASE(std) case VBI_VIDEOSTD_##std : return #std ;
 
-     	CASE (NONE)
-     	CASE (PAL_B)
+	CASE (NONE)
+	CASE (PAL_B)
 	CASE (PAL_B1)
 	CASE (PAL_G)
 	CASE (PAL_H)

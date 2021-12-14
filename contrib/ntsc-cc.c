@@ -1,4 +1,4 @@
-/* cc.c -- closed caption decoder 
+/* cc.c -- closed caption decoder
  * Mike Baker (mbm@linux.com)
  * (based on code by timecop@japan.co.jp)
  * Buffer overflow bugfix by Mark K. Kim (dev@cbreak.org), 2003.05.22
@@ -71,7 +71,7 @@ int x;
 #define CLEAR(var) memset (&(var), 0, sizeof (var))
 
 #ifndef _
-#  define _(x) x /* future l18n */ 
+#  define _(x) x /* future l18n */
 #endif
 
 static char *			my_name;
@@ -101,7 +101,7 @@ static FILE *			xds_fp;
 //ccdecode
 const char    *ratings[] = {"(NOT RATED)","TV-Y","TV-Y7","TV-G","TV-PG","TV-14","TV-MA","(NOT RATED)"};
 int     rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
-const char	*specialchar[] = {"®","°","½","¿","(TM)","¢","£","o/~ ","à"," ","è","â","ê","î","ô","û"};
+const char	*specialchar[] =  {"Â®","Â°","Â½","Â¿","(TM)","Â¢","Â£","o/~ ","Ã "," ","Ã¨","Ã¢","Ãª","Ã®","Ã´","Ã»"};
 const char	*modes[]={"current","future","channel","miscellaneous","public service","reserved","invalid","invalid","invalid","invalid"};
 int	lastcode;
 int	ccmode=1;		//cc1 or cc2
@@ -131,93 +131,93 @@ int inval;
 
 static int parityok(int n)	/* check parity for 2 bytes packed in n */
 {
-    int mask=0;
-    int j, k;
-    for (k = 1, j = 0; j < 7; j++) {
-	  if (n & (1<<j)) 
-	    k++;
+	int mask=0;
+	int j, k;
+	for (k = 1, j = 0; j < 7; j++) {
+		if (n & (1<<j))
+			k++;
 	}
-    if ((k & 1) == ((n>>7)&1))
-	  mask|=0x00FF;
-    for (k = 1, j = 8; j < 15; j++) {
-	  if (n & (1<<j)) 
-	    k++;
+	if ((k & 1) == ((n>>7)&1))
+		mask|=0x00FF;
+	for (k = 1, j = 8; j < 15; j++) {
+		if (n & (1<<j))
+			k++;
 	}
-    if ((k & 1) == ((n>>15)&1))
-	    mask|=0xFF00;
-   return mask;
+	if ((k & 1) == ((n>>15)&1))
+		mask|=0xFF00;
+	return mask;
 }
 
 static int decodebit(unsigned char *data, int threshold)
 {
-    int i, sum = 0;
-    for (i = 0; i < 23; i++)
-	  sum += data[i];
-    return (sum > threshold*23);
+	int i, sum = 0;
+	for (i = 0; i < 23; i++)
+		sum += data[i];
+	return (sum > threshold*23);
 }
 
 static int decode(unsigned char *vbiline)
 {
-    int max[7], min[7], val[7], i, clk, tmp, sample, packedbits = 0;
-    
-    for (clk=0; clk<7; clk++)
-	  max[clk] = min[clk] = val[clk] = -1;
-    clk = tmp = 0;
-    i=30;
+	int max[7], min[7], val[7], i, clk, tmp, sample, packedbits = 0;
 
-    while (i < 600 && clk < 7) {	/* find and lock all 7 clocks */
-	sample = vbiline[i];
-	if (max[clk] < 0) { /* find maximum value before drop */
-	    if (sample > 85 && sample > val[clk])
-		(val[clk] = sample, tmp = i);	/* mark new maximum found */
-	    else if (val[clk] - sample > 30)	/* far enough */
-		(max[clk] = tmp, i = tmp + 10);
-	} else { /* find minimum value after drop */
-	    if (sample < 85 && sample < val[clk])
-		(val[clk] = sample, tmp = i);	/* mark new minimum found */
-	    else if (sample - val[clk] > 30)	/* searched far enough */
-		(min[clk++] = tmp, i = tmp + 10);
+	for (clk=0; clk<7; clk++)
+	max[clk] = min[clk] = val[clk] = -1;
+	clk = tmp = 0;
+	i = 30;
+
+	while (i < 600 && clk < 7) {	/* find and lock all 7 clocks */
+		sample = vbiline[i];
+		if (max[clk] < 0) { /* find maximum value before drop */
+			if (sample > 85 && sample > val[clk])
+				(val[clk] = sample, tmp = i);	/* mark new maximum found */
+			else if (val[clk] - sample > 30)	/* far enough */
+				(max[clk] = tmp, i = tmp + 10);
+		} else { /* find minimum value after drop */
+			if (sample < 85 && sample < val[clk])
+				(val[clk] = sample, tmp = i);	/* mark new minimum found */
+			else if (sample - val[clk] > 30)	/* searched far enough */
+				(min[clk++] = tmp, i = tmp + 10);
+		}
+		i++;
 	}
-	i++;
-    } 
 
-   i=min[6]=min[5]-max[5]+max[6]; 
-   
-    if (clk != 7 || vbiline[max[3]] - vbiline[min[5]] < 45)		/* failure to locate clock lead-in */
-	return -1;
+	i=min[6]=min[5]-max[5]+max[6];
+
+	if (clk != 7 || vbiline[max[3]] - vbiline[min[5]] < 45)		/* failure to locate clock lead-in */
+		return -1;
 
 #ifndef X_DISPLAY_MISSING
-    if (debugwin) {
-      for (clk=0;clk<7;clk++)
-	{
-	  XDrawLine(dpy,Win,WinGC,min[clk]/2,0,min[clk]/2,128);
-	  XDrawLine(dpy,Win,WinGC1,max[clk]/2,0,max[clk]/2,128);
+	if (debugwin) {
+		for (clk=0;clk<7;clk++)
+		{
+			XDrawLine(dpy,Win,WinGC,min[clk]/2,0,min[clk]/2,128);
+			XDrawLine(dpy,Win,WinGC1,max[clk]/2,0,max[clk]/2,128);
+		}
+		XFlush(dpy);
 	}
-      XFlush(dpy);
-    }
 #endif
- 
-    
-    /* calculate threshold */
-    for (i=0,sample=0;i<7;i++)
-	    sample=(sample + vbiline[min[i]] + vbiline[max[i]])/3;
 
-    for(i=min[6];vbiline[i]<sample;i++);
+
+	/* calculate threshold */
+	for (i=0,sample=0;i<7;i++)
+		sample=(sample + vbiline[min[i]] + vbiline[max[i]])/3;
+
+	for (i=min[6]; vbiline[i]<sample; i++);
 
 #ifndef X_DISPLAY_MISSING
-    if (debugwin) {
-      for (clk=i;clk<i+57*18;clk+=57)
-	XDrawLine(dpy,Win,WinGC,clk/2,0,clk/2,128);
-      XFlush(dpy);
-    }
+	if (debugwin) {
+		for (clk=i; clk<i+57*18; clk+=57)
+			XDrawLine(dpy, Win, WinGC, clk/2, 0, clk/2, 128);
+		XFlush(dpy);
+	}
 #endif
- 
-    
-    tmp = i+57;
-    for (i = 0; i < 16; i++)
-	if(decodebit(&vbiline[tmp + i * 57], sample))
-	    packedbits |= 1<<i;
-    return packedbits&parityok(packedbits);
+
+
+	tmp = i+57;
+	for (i = 0; i < 16; i++)
+		if (decodebit(&vbiline[tmp + i * 57], sample))
+			packedbits |= 1<<i;
+	return packedbits&parityok(packedbits);
 } /* decode */
 
 static void
@@ -327,7 +327,7 @@ static int XDSdecode(int data)
 
 	if (data == -1)
 		return -1;
-	
+
 	b1 = data & 0x7F;
 	b2 = (data>>8) & 0x7F;
 
@@ -335,7 +335,7 @@ static int XDSdecode(int data)
 		/* Filler, discard. */
 		return -1;
 	}
-	else if (b1 < 15) // start packet 
+	else if (b1 < 15) // start packet
 	{
 		mode = b1;
 		type = b2;
@@ -369,9 +369,9 @@ static int XDSdecode(int data)
 		//don't bug the user with repeated data
 		//only parse it if it's different
 		if (info[field][mode][type].length != length
-		    || 0 != memcmp (info[field][mode][type].packet,
-				    newinfo[field][mode][type],
-				    length))
+				|| 0 != memcmp (info[field][mode][type].packet,
+						newinfo[field][mode][type],
+						length))
 		{
 			memcpy (info[field][mode][type].packet,
 				newinfo[field][mode][type], 32);
@@ -410,16 +410,16 @@ static int webtv_check(char * buf,int len)
 	unsigned short  csum=0;
 	char temp[9];
 	int nbytes=0;
-	
-	while (buf[0]!='<' && len > 6)  //search for the start
+
+	while (buf[0] != '<' && len > 6)  //search for the start
 	{
 		buf++; len--;
 	}
-	
+
 	if (len == 6) //failure to find start
 		return 0;
-				
-	
+
+
 	while (nbytes+6 <= len)
 	{
 		//look for end of object checksum, it's enclosed in []'s and there shouldn't be any [' after
@@ -430,7 +430,7 @@ static int webtv_check(char * buf,int len)
 	}
 	if (nbytes+6>len) //failure to find end
 		return 0;
-	
+
 	nwords = nbytes >> 1; sum = 0;
 
 	//add up all two byte words
@@ -442,13 +442,13 @@ static int webtv_check(char * buf,int len)
 		sum += *buf << 8;
 	}
 	csum = (unsigned short)(sum >> 16);
-	while(csum !=0) {
+	while (csum !=0) {
 		sum = csum + (sum & 0xffff);
 		csum = (unsigned short)(sum >> 16);
 	}
 	sprintf(temp,"%04X\n",(int)~sum&0xffff);
 	buf++;
-	if(!strncmp(buf,temp,4))
+	if (!strncmp(buf,temp,4))
 	{
 		buf[5]=0;
 		if (cur_ch[field] >= 0 && cc_fp[cur_ch[field]]) {
@@ -473,8 +473,8 @@ unicode				(int			c)
 	}
 
 	/* The standard character set has no upper case accented
-	   characters, so we convert to upper case if that appears
-	   to be intended. */
+		 characters, so we convert to upper case if that appears
+		 to be intended. */
 	return vbi_caption_unicode (c, (is_upper[cur_ch[field]] >= 3));
 }
 
@@ -563,7 +563,7 @@ static int CCdecode(int data)
 	}
 	b1 = data & 0x7f;
 	b2 = (data>>8) & 0x7f;
-	if(ccmode >= 3) ccmode = 0;
+	if (ccmode >= 3) ccmode = 0;
 
 	if (b1&0x60 && data != lastcode) // text
 	{
@@ -573,7 +573,7 @@ static int CCdecode(int data)
 		}
 		if ((b1 == ']' || b2 == ']') && usewebtv)
 			webtv_check(ccbuf[cur_ch[field]][ccmode],
-				    strlen (ccbuf[cur_ch[field]][ccmode]));
+						strlen (ccbuf[cur_ch[field]][ccmode]));
 	}
 	else if ((b1&0x10) && (b2>0x1F) && (data != lastcode)) //codes are always transmitted twice (apparently not, ignore the second occurance)
 	{
@@ -645,7 +645,7 @@ static int CCdecode(int data)
 								cc_ubuf[cur_ch[field]][ccmode][dlen - 1] = 0;
 							}
 							break;
-							
+
 						/* these codes are insignifigant if we're ignoring positioning */
 						case 0x25: //2 row caption
 						case 0x26: //3 row caption
@@ -654,16 +654,16 @@ static int CCdecode(int data)
 						case 0x2B: //resume text display
 						case 0x2C: //erase displayed memory
 							break;
-							
+
 						case 0x2D: //carriage return
-							if (ccmode==2)
+							if (ccmode == 2)
 								break;
 						case 0x2F: //end caption + swap memory
 						case 0x20: //resume caption (new caption)
 							if (!strlen(ccbuf[cur_ch[field]][ccmode]))
 									break;
-							for (n=0;n<strlen(ccbuf[cur_ch[field]][ccmode]);n++)
-								for (y=0;y<keywords;y++)
+							for (n=0; n<strlen(ccbuf[cur_ch[field]][ccmode]); n++)
+								for (y=0; y<keywords; y++)
 									if (!strncasecmp(keyword[y], ccbuf[cur_ch[field]][ccmode]+n, strlen(keyword[y])))
 										if (cc_fp[cur_ch[field]])
 											fprintf (cc_fp[cur_ch[field]], "\a");
@@ -671,10 +671,10 @@ static int CCdecode(int data)
 							append_char ('\n', '\n');
 							if (cc_fp[cur_ch[field]]) {
 							vbi_fputs_iconv_ucs2 (cc_fp[cur_ch[field]],
-									      vbi_locale_codeset (),
-									      cc_ubuf[cur_ch[field]][ccmode],
-									      VBI_NUL_TERMINATED,
-									      /* repl_char */ '?');
+												vbi_locale_codeset (),
+												cc_ubuf[cur_ch[field]][ccmode],
+												VBI_NUL_TERMINATED,
+												/* repl_char */ '?');
 							fflush (cc_fp[cur_ch[field]]);
 							}
 							/* FALL */
@@ -686,7 +686,7 @@ static int CCdecode(int data)
 					}
 					break;
 				case 0x07:	//misc (TAB)
-					for(x=0;x<(b2&0x03);x++) {
+					for (x=0; x<(b2&0x03); x++) {
 						append_char (' ', ' ');
 					}
 					break;
@@ -706,43 +706,43 @@ static int print_raw(int data)
 	// this is just null data with two parity bits
 	// 100000010000000 = 0x8080
 	if (data == 0x8080)
-	  return -1;
+		return -1;
 
 	b1 = data & 0x7f;
 	b2 = (data>>8) & 0x7f;
 
 	if (!semirawdata) {
-	  fprintf(stderr,"%c%c",b1,b2);
-	  fflush(stderr);
-	  return 0;
+		fprintf(stderr,"%c%c",b1,b2);
+		fflush(stderr);
+		return 0;
 	}
 
-	// semi-raw data output begins here... 
+	// semi-raw data output begins here...
 
 	// a control code.
 	if ( ( b1 >= 0x10 ) && ( b1 <= 0x1F ) ) {
-	  if ( ( b2 >= 0x20 ) && ( b2 <= 0x7F ) ) 
-	    fprintf(stderr,"[%02X-%02X]",b1,b2); 
-	    fflush(stderr);
-	  return 0;
+		if ( ( b2 >= 0x20 ) && ( b2 <= 0x7F ) )
+			fprintf(stderr,"[%02X-%02X]",b1,b2);
+			fflush(stderr);
+		return 0;
 	}
 
 	// next two rules:
 	// supposed to be one printable char
 	// and the other char to be discarded
 	if ( ( b1 >= 0x0 ) && ( b1 <= 0xF ) ) {
-	  fprintf(stderr,"(%02x)%c",b1,b2);
-	  //fprintf(stderr,"%c",b2);
-	  //fprintf(stderr,"%c%c",0,b2);
-	  fflush(stderr);
-	  return 0;
+		fprintf(stderr,"(%02x)%c",b1,b2);
+		//fprintf(stderr,"%c",b2);
+		//fprintf(stderr,"%c%c",0,b2);
+		fflush(stderr);
+		return 0;
 	}
 	if ( ( b2 >= 0x0 ) && ( b2 <= 0xF ) ) {
-	  fprintf(stderr,"%c{%02x}",b1,b2);
-	  //fprintf(stderr,"%c",b1);
-	  //fprintf(stderr,"%c%c",b1,1);
-	  fflush(stderr);
-	  return 0;
+		fprintf(stderr,"%c{%02x}",b1,b2);
+		//fprintf(stderr,"%c",b1);
+		//fprintf(stderr,"%c%c",b1,1);
+		fflush(stderr);
+		return 0;
 	}
 
 	// just classic two chars to print.
@@ -762,9 +762,9 @@ static int sentence(int data)
 	b1 = data & 0x7f;
 	b2 = (data>>8) & 0x7f;
 	inval++;
-	if (data==lastcode)
+	if (data == lastcode)
 	{
-		if (sen==1)
+		if (sen == 1)
 		{
 			fprintf (cc_fp[cur_ch[field]], " ");
 			fflush (cc_fp[cur_ch[field]]);
@@ -783,12 +783,12 @@ static int sentence(int data)
 	if (b1&96)
 	{
 		inval=0;
-		if (sen==2 && b1!='.' && b2!='.' && b1!='!' && b2!='!' && b1!='?' && b2!='?' && b1!=')' && b2!=')')
+		if (sen == 2 && b1 != '.' && b2 != '.' && b1 != '!' && b2 != '!' && b1 != '?' && b2 != '?' && b1 != ')' && b2 != ')')
 		{
 			fprintf (cc_fp[cur_ch[field]], "\n");
 			sen=1;
 		}
-		else if (b1=='.' || b2=='.' || b1=='!' || b2=='!' || b1=='?' || b2=='?' || b1==')' || b2==')')
+		else if (b1 == '.' || b2 == '.' || b1 == '!' || b2 == '!' || b1 == '?' || b2 == '?' || b1 == ')' || b2 == ')')
 			sen=2;
 		else
 			sen=1;
@@ -823,7 +823,7 @@ caption_filter			(unsigned int		c1,
 				 unsigned int		c2)
 {
 	unsigned int p;
-	
+
 	p = c1 + c2 * 256;
 	p ^= p >> 4;
 	p ^= p >> 2;
@@ -930,7 +930,7 @@ read_v4l2_sliced		(vbi_sliced *		sliced_out,
 static vbi_bool
 open_v4l2_sliced		(const char *		dev_name)
 {
-	struct stat st; 
+	struct stat st;
 	struct v4l2_capability cap;
 	struct v4l2_format fmt;
 
@@ -1100,7 +1100,7 @@ read_test_stream		(vbi_sliced *		sliced,
 		}
 
 		s->line = (fgetc (stdin)
-			   + 256 * fgetc (stdin)) & 0xFFF;
+				 + 256 * fgetc (stdin)) & 0xFFF;
 
 		if (index < 0) {
 			fprintf (stderr, "Bad index in test stream\n");
@@ -1113,23 +1113,23 @@ read_test_stream		(vbi_sliced *		sliced,
 			fread (s->data, 1, 42, stdin);
 			break;
 		case 1:
-			s->id = VBI_SLICED_CAPTION_625; 
+			s->id = VBI_SLICED_CAPTION_625;
 			fread (s->data, 1, 2, stdin);
-			break; 
+			break;
 		case 2:
 			s->id = VBI_SLICED_VPS;
 			fread (s->data, 1, 13, stdin);
 			break;
 		case 3:
-			s->id = VBI_SLICED_WSS_625; 
+			s->id = VBI_SLICED_WSS_625;
 			fread (s->data, 1, 2, stdin);
 			break;
 		case 4:
-			s->id = VBI_SLICED_WSS_CPR1204; 
+			s->id = VBI_SLICED_WSS_CPR1204;
 			fread (s->data, 1, 3, stdin);
 			break;
 		case 7:
-			s->id = VBI_SLICED_CAPTION_525; 
+			s->id = VBI_SLICED_CAPTION_525;
 			fread(s->data, 1, 2, stdin);
 			break;
 		default:
@@ -1155,7 +1155,7 @@ xds_filter_option		(const char *		optarg)
 	/* Attention: may be called repeatedly. */
 
 	if (NULL == optarg
-	    || 0 == strcasecmp (optarg, "all")) {
+			|| 0 == strcasecmp (optarg, "all")) {
 		unsigned int i;
 
 		for (i = 0; i < (N_ELEMENTS (info[0])
@@ -1231,18 +1231,18 @@ Usage: %s [options]\n\
 Options:\n\
 -? | -h | --help | --usage  Print this message and exit\n\
 -1 ... -4 | --cc1-file ... --cc4-file filename\n\
-                            Append caption channel CC1 ... CC4 to this file\n\
+														Append caption channel CC1 ... CC4 to this file\n\
 -b | --no-webtv             Do not print WebTV links\n\
 -c | --cc                   Print Closed Caption (includes WebTV)\n\
 -d | --device filename      VBI device [/dev/vbi]\n\
 -f | --filter type[,type]*  Select XDS info: all, call, desc, length,\n\
-                            network, rating, time, timecode, timezone,\n\
-                            title. Multiple -f options accumulate. [all]\n\
+														network, rating, time, timecode, timezone,\n\
+														title. Multiple -f options accumulate. [all]\n\
 -k | --keyword string       Break caption line at this word (broken?).\n\
-                            Multiple -k options accumulate.\n\
+														Multiple -k options accumulate.\n\
 -l | --channel number       Select caption channel 1 ... 4 [no filter]\n\
 -p | --plain-ascii          Print plain ASCII, else insert VT.100 color,\n\
-                            italic and underline control codes\n\
+														italic and underline control codes\n\
 -r | --raw line-number      Dump raw VBI data\n\
 -s | --sentences            Decode caption by sentences\n\
 -v | --verbose              Increase verbosity\n\
@@ -1306,7 +1306,7 @@ open_output_file		(const char *		name)
 	FILE *fp;
 
 	if (NULL == name
-	    || 0 == strcmp (name, "-")) {
+			|| 0 == strcmp (name, "-")) {
 		fp = stdout;
 	} else {
 		fp = fopen (name, "a");
@@ -1323,11 +1323,11 @@ open_output_file		(const char *		name)
 
 int main(int argc,char **argv)
 {
-   unsigned char buf[65536];
-   int arg;
-   int args=0;
-   fd_set rfds;
-   int x;
+	unsigned char buf[65536];
+	int arg;
+	int args=0;
+	fd_set rfds;
+	int x;
 	const char *device_file_name;
 	const char *cc_file_name[8];
 	const char *xds_file_name;
@@ -1339,18 +1339,18 @@ int main(int argc,char **argv)
 
 #ifdef HAVE_ZVBI
 
-   vbi_capture *cap;
-   char *errstr;
-   unsigned int services;
-   int scanning;
-   int strict;
-   int ignore_read_error;
-   vbi_raw_decoder *par;
-   unsigned int src_w;
-   unsigned int src_h;
-   uint8_t *raw;
-   vbi_sliced *sliced;
-   struct timeval timeout;
+	vbi_capture *cap;
+	char *errstr;
+	unsigned int services;
+	int scanning;
+	int strict;
+	int ignore_read_error;
+	vbi_raw_decoder *par;
+	unsigned int src_w;
+	unsigned int src_h;
+	uint8_t *raw;
+	vbi_sliced *sliced;
+	struct timeval timeout;
 
 #endif
 
@@ -1365,7 +1365,7 @@ int main(int argc,char **argv)
 	verbose = 0;
 	channels = 0;
 
-	have_xds_filter_option = FALSE;	
+	have_xds_filter_option = FALSE;
 	use_cc_filter = FALSE;
 
 	for (;;) {
@@ -1504,106 +1504,106 @@ int main(int argc,char **argv)
 
 #ifdef HAVE_ZVBI
 
-   errstr = NULL;
+	errstr = NULL;
 
-   /* What we want. */
-   services = VBI_SLICED_CAPTION_525;
+	/* What we want. */
+	services = VBI_SLICED_CAPTION_525;
 
-   /* This is a hint in case the device can't tell
-      the current video standard. */
-   scanning = 525;
+	/* This is a hint in case the device can't tell
+			the current video standard. */
+	scanning = 525;
 
-   /* Strict sampling parameter matching: 0, 1, 2 */
-   strict = 1;
+	/* Strict sampling parameter matching: 0, 1, 2 */
+	strict = 1;
 
-   ignore_read_error = 1;
+	ignore_read_error = 1;
 
-   do {
-      if (test) {
-	 break;
-      }
+	do {
+		if (test) {
+			break;
+		}
 
-      /* Linux */
+		/* Linux */
 
-      if (opt_v4l2_sliced) {
-	      if (open_v4l2_sliced (device_file_name)) {
-		      break;
-	      } else {
-		      opt_v4l2_sliced = FALSE;
-	      }
-      }
+		if (opt_v4l2_sliced) {
+			if (open_v4l2_sliced (device_file_name)) {
+				break;
+			} else {
+				opt_v4l2_sliced = FALSE;
+			}
+		}
 
-      /* DVB interface omitted, doesn't support NTSC/ATSC. */
+		/* DVB interface omitted, doesn't support NTSC/ATSC. */
 
-      cap = vbi_capture_v4l2_new (device_file_name,
-				  /* buffers */ 5,
-				  &services,
-				  strict,
-				  &errstr,
-				  !!verbose);
-      if (cap) {
-	 break;
-      }
+		cap = vbi_capture_v4l2_new (device_file_name,
+			/* buffers */ 5,
+			&services,
+			strict,
+			&errstr,
+			!!verbose);
+		if (cap) {
+			break;
+		}
 
-      fprintf (stderr, "Cannot capture vbi data with v4l2 interface:\n"
-	       "%s\nWill try v4l.\n", errstr);
+		fprintf (stderr, "Cannot capture vbi data with v4l2 interface:\n"
+			"%s\nWill try v4l.\n", errstr);
 
-      free (errstr);
+		free (errstr);
 
-      cap = vbi_capture_v4l_new (device_file_name,
-				 scanning,
-				 &services,
-				 strict,
-				 &errstr,
-				 !!verbose);
-      if (cap)
-	 break;
+		cap = vbi_capture_v4l_new (device_file_name,
+				scanning,
+				&services,
+				strict,
+				&errstr,
+				!!verbose);
+		if (cap)
+			break;
 
-      fprintf (stderr, "Cannot capture vbi data with v4l interface:\n"
-	       "%s\n", errstr);
+		fprintf (stderr, "Cannot capture vbi data with v4l interface:\n"
+			"%s\n", errstr);
 
-      /* FreeBSD to do */
+		/* FreeBSD to do */
 
-      free (errstr);
+		free (errstr);
 
-      exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 
-   } while (0);
+	} while (0);
 
-   if (test || opt_v4l2_sliced) {
-	   src_w = 1440;
-	   src_h = 50;
-   } else {
-	   par = vbi_capture_parameters (cap);
-	   assert (NULL != par);
+	if (test || opt_v4l2_sliced) {
+		src_w = 1440;
+		src_h = 50;
+	} else {
+		par = vbi_capture_parameters (cap);
+		assert (NULL != par);
 
-	   src_w = par->bytes_per_line / 1;
-	   src_h = par->count[0] + par->count[1];
+		src_w = par->bytes_per_line / 1;
+		src_h = par->count[0] + par->count[1];
 
-	   if (useraw && (unsigned int) rawline >= src_h) {
-		   fprintf (stderr, "-r must be in range 0 ... %u\n",
-			    src_h - 1);
-		   exit (EXIT_FAILURE);
-	   }
-   }
+		if (useraw && (unsigned int) rawline >= src_h) {
+			 fprintf (stderr, "-r must be in range 0 ... %u\n",
+					src_h - 1);
+			 exit (EXIT_FAILURE);
+		}
+	}
 
-   raw = calloc (1, src_w * src_h);
-   sliced = malloc (sizeof (vbi_sliced) * src_h);
+	raw = calloc (1, src_w * src_h);
+	sliced = malloc (sizeof (vbi_sliced) * src_h);
 
-   assert (NULL != raw);
-   assert (NULL != sliced);
+	assert (NULL != raw);
+	assert (NULL != sliced);
 
-   /* How long to wait for a frame. */
-   timeout.tv_sec = 2;
-   timeout.tv_usec = 0;
+	/* How long to wait for a frame. */
+	timeout.tv_sec = 2;
+	timeout.tv_usec = 0;
 
 #else
-   opt_v4l2_sliced = FALSE;
+	opt_v4l2_sliced = FALSE;
 
-   if ((vbifd = open(device_file_name, O_RDONLY)) < 0) {
-	perror(vbifile);
-	exit(1);
-   }
+	if ((vbifd = open(device_file_name, O_RDONLY)) < 0) {
+		perror(vbifile);
+		exit(1);
+	}
 
 #endif
 
@@ -1614,29 +1614,29 @@ int main(int argc,char **argv)
 		}
 	}
 
-   if (usexds)
-	   xds_fp = open_output_file (xds_file_name);
+	if (usexds)
+		xds_fp = open_output_file (xds_file_name);
 
-   for (x=0;x<keywords;x++)
+	for (x=0;x<keywords;x++)
 	printf("Keyword(%d): %s\n",x,keyword[x]);
 
 #ifndef X_DISPLAY_MISSING
-   if (debugwin) {
-     dpy=XOpenDisplay(dpyname);
-     Root=DefaultRootWindow(dpy);
-     Win = XCreateSimpleWindow(dpy, Root, 10, 10, 1024, 128,0,0,0);
-     WinGC = XCreateGC(dpy, Win, 0, NULL);
-     WinGC0 = XCreateGC(dpy, Win, 0, NULL);
-     WinGC1 = XCreateGC(dpy, Win, 0, NULL);
-     XSetForeground(dpy, WinGC, getColor("blue",1));
-     XSetForeground(dpy, WinGC0, getColor("green",1));
-     XSetForeground(dpy, WinGC1, getColor("red",1));
+	 if (debugwin) {
+		dpy=XOpenDisplay(dpyname);
+		Root=DefaultRootWindow(dpy);
+		Win = XCreateSimpleWindow(dpy, Root, 10, 10, 1024, 128,0,0,0);
+		WinGC = XCreateGC(dpy, Win, 0, NULL);
+		WinGC0 = XCreateGC(dpy, Win, 0, NULL);
+		WinGC1 = XCreateGC(dpy, Win, 0, NULL);
+		XSetForeground(dpy, WinGC, getColor("blue",1));
+		XSetForeground(dpy, WinGC0, getColor("green",1));
+		XSetForeground(dpy, WinGC1, getColor("red",1));
 
-     if (useraw)
-       XMapWindow(dpy, Win);
-   }
+		if (useraw)
+			XMapWindow(dpy, Win);
+	}
 #endif
-	
+
 #ifdef HAVE_ZVBI
 
 	for (;;) {
@@ -1651,7 +1651,7 @@ int main(int argc,char **argv)
 			r = read_test_stream (sliced, &n_lines, src_h);
 		} else {
 			r = vbi_capture_read (cap, raw, sliced,
-					      &n_lines, &timestamp, &timeout);
+								&n_lines, &timestamp, &timeout);
 		}
 
 		switch (r) {
@@ -1667,7 +1667,7 @@ int main(int argc,char **argv)
 				exit (EXIT_FAILURE);
 			}
 
-		case 0: 
+		case 0:
 			fprintf (stderr, "VBI read timeout%s\n",
 				 ignore_read_error ? " (ignored)" : "");
 			if (ignore_read_error) {
@@ -1688,66 +1688,66 @@ int main(int argc,char **argv)
 		if (useraw)
 		{
 #ifndef X_DISPLAY_MISSING
-		  if (debugwin) {
-		    XClearArea(dpy,Win,0,0,1024,128,0);
-		    XDrawLine(dpy,Win,WinGC1,0,128-85/2,1024,128-85/2);
-		    for (x=0;x<src_w/2;x++)
-		      if (raw[src_w * rawline+x*2]/2<128 && raw[src_w * rawline+x*2+2]/2 < 128)
-			XDrawLine(dpy,Win,WinGC0,x,128-raw[src_w * rawline+x*2]/2,
-				  x+1,128-raw[src_w * rawline+x*2+2]/2);
-		  }
+			if (debugwin) {
+				XClearArea(dpy,Win,0,0,1024,128,0);
+				XDrawLine(dpy,Win,WinGC1,0,128-85/2,1024,128-85/2);
+				for (x=0;x<src_w/2;x++)
+					if (raw[src_w * rawline+x*2]/2<128 && raw[src_w * rawline+x*2+2]/2 < 128)
+						XDrawLine(dpy,Win,WinGC0,x,128-raw[src_w * rawline+x*2]/2,
+					x+1,128-raw[src_w * rawline+x*2+2]/2);
+			}
 #endif
-		  for (i = 0; i < n_lines; ++i) {
-		     if (sliced[i].line == rawline) {
-			print_raw(sliced[i].data[0]
-				  + sliced[i].data[1] * 256);
-		     }
-		  }
+			for (i = 0; i < n_lines; ++i) {
+				 if (sliced[i].line == rawline) {
+					print_raw(sliced[i].data[0]
+					+ sliced[i].data[1] * 256);
+				}
+			}
 #ifndef X_DISPLAY_MISSING
-		  if (debugwin) {
-		    XFlush(dpy);
-		    usleep(100);
-		  }
+			if (debugwin) {
+				XFlush(dpy);
+				usleep(100);
+			}
 #endif
 		}
 
 		if (0 == n_lines && verbose > 2)
-		  fprintf (stderr, "No data in this frame\n");
+			fprintf (stderr, "No data in this frame\n");
 
 		for (i = 0; i < n_lines; ++i) {
-		   unsigned int c1, c2;
+			unsigned int c1, c2;
 
-		   c1 = sliced[i].data[0];
-		   c2 = sliced[i].data[1];
+			c1 = sliced[i].data[0];
+			c2 = sliced[i].data[1];
 
-		   if (verbose > 2)
-		     fprintf (stderr, "Line %3d %02x %02x\n",
-		    	      sliced[i].line, c1, c2);
-		   /* No need to check sliced[i].id because we
-		      requested only caption. */
-		   if (21 == sliced[i].line) {
-		      field = 0;
-		      caption_filter (c1, c2);
-		      if (!in_xds[field]) { /* fields swapped? */
-			 if (usecc)
-			   CCdecode(c1 + c2 * 256);
-		         if (usesen)
-			   sentence(c1 + c2 * 256);
-		      }
-		      if (usexds) /* fields swapped? */
-			 XDSdecode(c1 + c2 * 256);
-		   } else if (284 == sliced[i].line) {
-		      field = 1;
-		      caption_filter (c1, c2);
-		      if (!in_xds[field]) {
-		         if (usecc)
-			    CCdecode(c1 + c2 * 256);
-			 if (usesen)
-			    sentence(c1 + c2 * 256);
-		      }
-		      if (usexds)
-			 XDSdecode(c1 + c2 * 256);
-		   }
+			if (verbose > 2)
+				fprintf (stderr, "Line %3d %02x %02x\n",
+								sliced[i].line, c1, c2);
+			/* No need to check sliced[i].id because we
+					requested only caption. */
+			if (21 == sliced[i].line) {
+				field = 0;
+				caption_filter (c1, c2);
+				if (!in_xds[field]) { /* fields swapped? */
+					if (usecc)
+						CCdecode(c1 + c2 * 256);
+					if (usesen)
+						sentence(c1 + c2 * 256);
+				}
+				if (usexds) /* fields swapped? */
+					XDSdecode(c1 + c2 * 256);
+			} else if (284 == sliced[i].line) {
+				field = 1;
+				caption_filter (c1, c2);
+				if (!in_xds[field]) {
+					if (usecc)
+						CCdecode(c1 + c2 * 256);
+					if (usesen)
+						sentence(c1 + c2 * 256);
+				}
+				if (usexds)
+					XDSdecode(c1 + c2 * 256);
+			}
 		}
 #ifndef X_DISPLAY_MISSING
 		if (debugwin) {
@@ -1755,54 +1755,54 @@ int main(int argc,char **argv)
 			usleep(100);
 		}
 #endif
-   }
+	 }
 
 #else /* !HAVE_ZVBI */
 
-   //mainloop
-   while(1){
-	FD_ZERO(&rfds);
-	FD_SET(vbifd, &rfds);
-	select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
-	if (FD_ISSET(vbifd, &rfds)) {
-	    if (read(vbifd, buf , 65536)!=65536)
-		    printf("read error\n");
-		if (useraw)
-		{
+	//mainloop
+	while (1) {
+		FD_ZERO(&rfds);
+		FD_SET(vbifd, &rfds);
+		select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
+		if (FD_ISSET(vbifd, &rfds)) {
+				if (read(vbifd, buf , 65536) != 65536)
+					printf("read error\n");
+			if (useraw)
+			{
 #ifndef X_DISPLAY_MISSING
-		  if (debugwin) {
-		    XClearArea(dpy,Win,0,0,1024,128,0);
-		    XDrawLine(dpy,Win,WinGC1,0,128-85/2,1024,128-85/2);
-		    for (x=0;x<1024;x++)
-		      if (buf[2048 * rawline+x*2]/2<128 && buf[2048 * rawline+x*2+2]/2 < 128)
-			XDrawLine(dpy,Win,WinGC0,x,128-buf[2048 * rawline+x*2]/2,
-				  x+1,128-buf[2048 * rawline+x*2+2]/2);
-		  }
+				if (debugwin) {
+					XClearArea(dpy,Win,0,0,1024,128,0);
+					XDrawLine(dpy,Win,WinGC1,0,128-85/2,1024,128-85/2);
+					for (x=0;x<1024;x++)
+						if (buf[2048 * rawline+x*2]/2<128 && buf[2048 * rawline+x*2+2]/2 < 128)
+							XDrawLine(dpy,Win,WinGC0,x,128-buf[2048 * rawline+x*2]/2,
+					x+1,128-buf[2048 * rawline+x*2+2]/2);
+				}
 #endif
-		  print_raw(decode(&buf[2048 * rawline]));
+				print_raw(decode(&buf[2048 * rawline]));
 #ifndef X_DISPLAY_MISSING
-		  if (debugwin) {
-		    XFlush(dpy);
-		    usleep(100);
-		  }
+				if (debugwin) {
+					XFlush(dpy);
+					usleep(100);
+				}
+#endif
+			}
+			if (usexds)
+				XDSdecode(decode(&buf[2048 * 27]));
+			if (usecc)
+				CCdecode(decode(&buf[2048 * 11]));
+			if (usesen)
+				sentence(decode(&buf[2048 * 11]));
+#ifndef X_DISPLAY_MISSING
+			if (debugwin) {
+				XFlush(dpy);
+				usleep(100);
+			}
 #endif
 		}
-		if (usexds)
-			XDSdecode(decode(&buf[2048 * 27]));
-		if (usecc)
-			CCdecode(decode(&buf[2048 * 11]));
-		if (usesen)
-			sentence(decode(&buf[2048 * 11]));
-#ifndef X_DISPLAY_MISSING
-		if (debugwin) {
-			XFlush(dpy);
-			usleep(100);
-		}
-#endif
 	}
-   }
 
 #endif /* !HAVE_ZVBI */
 
-   return 0;
+	 return 0;
 }

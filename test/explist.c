@@ -91,7 +91,7 @@ do {									\
 		assert(oi->max.num > 0);				\
 		assert(oi->step.num == 1);				\
 	} else {							\
-	      	assert(oi->max.type >= oi->min.type);			\
+		assert(oi->max.type >= oi->min.type);			\
 		assert(oi->step.type > 0);				\
 		assert(oi->def.type >= oi->min.type			\
 		       && oi->def.type <= oi->max.type);		\

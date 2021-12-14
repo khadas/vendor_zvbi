@@ -89,13 +89,12 @@ export(vbi_export *e, vbi_page *pg)
 
 	/**/
 
-	if (!pg->vbi
-	    || !(vtp = vbi_cache_get(pg->vbi, pg->pgno, pg->subno, -1))) {
+	if (!pg->vbi || !(vtp = vbi_cache_get(pg->vbi, pg->pgno, pg->subno, -1))) {
 		vbi_export_error_printf(e, _("Page is not cached, sorry."));
 		return FALSE;
 	}
 
- 	memcpy(&page, vtp, vtp_size(vtp));
+	memcpy(&page, vtp, vtp_size(vtp));
 
 	/**/
 

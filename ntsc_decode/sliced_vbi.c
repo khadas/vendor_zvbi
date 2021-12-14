@@ -439,7 +439,7 @@ write_xml_sliced		(struct stream *	st,
 static void
 write_xml_raw			(struct stream *	st,
 				 const uint8_t *	raw,
-				 const vbi_sampling_par *sp)		 
+				 const vbi_sampling_par *sp)
 {
 	const char *format;
 	unsigned int n_samples;
@@ -780,7 +780,7 @@ read_more			(struct stream *	st)
 	printf("111read_more %d \n",sizeof (st->buffer));
 	if (s >= e)
 		s = st->buffer;
-	
+
 	//**********************************get buffer way***********
 	return TRUE;
 	//**********************************finish**********
@@ -789,7 +789,7 @@ read_more			(struct stream *	st)
         do {
                 ssize_t actual;
 				int saved_errno;
-				
+
                 actual = read (st->fd, s, e - s);
                 if (0 == actual)
 			return FALSE; /* EOF */
@@ -860,7 +860,7 @@ next_byte			(struct stream *	st,
 				 int *			c)
 {
 	do {
-	
+
 		if (st->bp < st->end) {
 			*c = *st->bp++;
 			printf("next_byte  %x\n",*c);
@@ -1049,7 +1049,7 @@ read_loop_old_sliced		(struct stream *	st)
 		vbi_bool success;
 		int n_lines;
 		int count;
-	
+
 		//*************temp cancel********
 		//if (!next_time_delta (st, &dt))
 		//	break; /* EOF */
@@ -1060,20 +1060,20 @@ read_loop_old_sliced		(struct stream *	st)
 			dt = -dt;
 
 		st->sample_time += dt;
-	
+
 		printf("st->sample_time = %lf\n", st->sample_time);
-		
+
 		n_lines = (st->end - st->bp) / 8;   //8 is hardware struct length
-		
-		
+
+
 		//if (!next_byte (st, &n_lines))
 		//	bad_format_exit ();
 		printf("n_lines = %d",n_lines);
 		if ((unsigned int) n_lines > N_ELEMENTS (st->sliced))
 			n_lines = N_ELEMENTS (st->sliced);   //bad_format_exit ();
-		if(n_lines == 0)
+		if (n_lines == 0)
 			break;
-		
+
 
 		s = st->sliced;
 		raw = NULL;
@@ -1084,22 +1084,22 @@ read_loop_old_sliced		(struct stream *	st)
 			int field_id;
 			int nbytes;
 			int line;
-			
-			
-			
+
+
+
 			if (!next_byte (st, &index))
 				premature_exit ();
-			
+
 			if (!next_byte (st, &field_id))
 				premature_exit ();
-				
+
 			if (!next_byte (st, &nbytes))
 				premature_exit ();
-			
+
 			if (!next_byte (st, &nbytes))
 				premature_exit ();
 			s->line += (line & 15) * 256;
-		
+
 			if (!next_byte (st, &line))
 				premature_exit ();
 			s->line = line;
@@ -1107,23 +1107,23 @@ read_loop_old_sliced		(struct stream *	st)
 			if (!next_byte (st, &line))
 				premature_exit ();
 			s->line += (line & 15) * 256;
-			
+
 			printf(" index= %d, field_id =%d ,nbytes =%d ,line = %d \n,",index,field_id,nbytes,s->line);
 			//****************************************change if 284 = 21  else ....
-			if(s->line == 284)
+			if (s->line == 284)
 				s->line = 21;
 			else
-			if(s->line == 21)
+			if (s->line == 21)
 				s->line = 284;
 			//****************************************finish **************
 			switch (index) {
-			
+
 			case 0:
 				s->id = VBI_SLICED_CAPTION_525;
-					next_block (st, s->data, 2);   
+					next_block (st, s->data, 2);
 					printf(" s->data[0] =%d ,s->data[1] = %d \n",s->data[0],s->data[1]);
-				break;		
-				
+				break;
+
 			case 1:
 				s->id = VBI_SLICED_TELETEXT_B;
 				next_block (st, s->data, 42);
@@ -1132,7 +1132,7 @@ read_loop_old_sliced		(struct stream *	st)
 			case 2:
 				s->id = VBI_SLICED_CAPTION_625;
 				next_block (st, s->data, 2);
-				break; 
+				break;
 
 			case 3:
 				s->id = VBI_SLICED_VPS;
@@ -1149,8 +1149,8 @@ read_loop_old_sliced		(struct stream *	st)
 				next_block (st, s->data, 3);
 				break;
 
-			
-				
+
+
 			case 255:
 				raw = next_raw_data (st, &sp);
 				st->raw_valid = TRUE;
@@ -1176,7 +1176,7 @@ read_loop_old_sliced		(struct stream *	st)
 						st->userdata);
 		} else {
 				printf("st->raw_valid && st->decode_raw isnot true\n");
-				
+
 			    success = st->callback (st->sliced, n_lines,
 						raw, &sp,
 						st->sample_time,
@@ -1324,8 +1324,8 @@ read_stream_new			(const char *		fbuffer,
 
 		st->close_fd = TRUE;
 	}*/
-	
-	
+
+
 
 	if (0 == file_format)
 		file_format = detect_file_format (st);
@@ -1374,9 +1374,9 @@ read_stream_new			(const char *		fbuffer,
 
 	st->bp			= st->buffer;
 	st->end			= st->buffer;
-	
+
 	printf("finish read_stream_new" );
-	
+
 	//***************************************add buffer*********
 	memset (st->buffer, 0,sizeof (st->buffer));
 	memcpy (st->buffer,fbuffer, length);
@@ -1424,7 +1424,7 @@ capture_loop			(struct stream *	st)
 			read_error_exit (/* msg: errno */ NULL);
 
 		case 0:
-			error_exit (_("Read timeout.")); 
+			error_exit (_("Read timeout."));
 
 		case 1:
 			break;

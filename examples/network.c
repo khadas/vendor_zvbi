@@ -142,7 +142,7 @@ mainloop			(void)
 			/* Could be ignored, esp. EIO with some drivers. */
 			exit(EXIT_FAILURE);
 
-		case 0: 
+		case 0:
 			fprintf (stderr, "VBI read timeout\n");
 			exit(EXIT_FAILURE);
 

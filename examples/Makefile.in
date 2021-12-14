@@ -274,13 +274,13 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-network$(EXEEXT): $(network_OBJECTS) $(network_DEPENDENCIES) 
+network$(EXEEXT): $(network_OBJECTS) $(network_DEPENDENCIES)
 	@rm -f network$(EXEEXT)
 	$(LINK) $(network_LDFLAGS) $(network_OBJECTS) $(network_LDADD) $(LIBS)
-rawout$(EXEEXT): $(rawout_OBJECTS) $(rawout_DEPENDENCIES) 
+rawout$(EXEEXT): $(rawout_OBJECTS) $(rawout_DEPENDENCIES)
 	@rm -f rawout$(EXEEXT)
 	$(LINK) $(rawout_LDFLAGS) $(rawout_OBJECTS) $(rawout_LDADD) $(LIBS)
-wss$(EXEEXT): $(wss_OBJECTS) $(wss_DEPENDENCIES) 
+wss$(EXEEXT): $(wss_OBJECTS) $(wss_DEPENDENCIES)
 	@rm -f wss$(EXEEXT)
 	$(LINK) $(wss_LDFLAGS) $(wss_OBJECTS) $(wss_LDADD) $(LIBS)
 

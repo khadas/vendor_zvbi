@@ -35,7 +35,14 @@
 #include "dtvcc.h"
 
 #ifdef ANDROID
-#include "am_debug.h"
+#include <android/log.h>
+#ifndef TAG_EXT
+#define TAG_EXT
+#endif
+
+#define log_print(...) __android_log_print(ANDROID_LOG_INFO, "ZVBI" TAG_EXT, __VA_ARGS__)
+#define AM_DEBUG(_level,_fmt...) \
+	log_print(_fmt)
 #else
 //for buildroot begin
 #undef AM_DEBUG
@@ -218,11 +225,10 @@ xasprintf			(const char *		templ,
 	va_start (ap, templ);
 
 	r = vasprintf (&s, templ, ap);
+	va_end (ap);
 	if (r < 0 || NULL == s) {
 		return NULL;
 	}
-
-	va_end (ap);
 
 	return s;
 }
@@ -433,7 +439,7 @@ cc_format_row			(struct cc_decoder *	cd,
 	struct vbi_char ac;
 	unsigned int i;
 
-	cd = cd; /* unused */
+	(void)cd; /* unused */
 
 	/* 47 CFR 15.119 (h)(1). EIA 608-B Section 6.4. */
 	CLEAR (ac);
@@ -672,9 +678,9 @@ cc_display_event		(struct cc_decoder *	cd,
 				 struct cc_channel *	ch,
 				 vbi_cc_page_flags	flags)
 {
-	cd = cd; /* unused */
-	ch = ch;
-	flags = flags;
+	(void)cd; /* unused */
+	(void)ch;
+	(void)flags;
 }
 
 /* This decoder is mainly designed to overlay caption onto live video,
@@ -2048,7 +2054,7 @@ static int webtv_check(struct caption_recorder *cr, char * buf,int len)
 	char temp[9];
 	int nbytes=0;
 
-	while (buf[0]!='<' && len > 6)  //search for the start
+	while (buf[0] != '<' && len > 6)  //search for the start
 	{
 		buf++; len--;
 	}
@@ -2079,7 +2085,7 @@ static int webtv_check(struct caption_recorder *cr, char * buf,int len)
 		sum += *buf << 8;
 	}
 	csum = (unsigned short)(sum >> 16);
-	while(csum !=0) {
+	while (csum !=0) {
 		sum = csum + (sum & 0xffff);
 		csum = (unsigned short)(sum >> 16);
 	}
@@ -2216,7 +2222,7 @@ dtvcc_map_color(dtvcc_color c)
 	vbi_color ret = VBI_BLACK;
 
 	c &= 0x2A;
-	switch(c){
+	switch (c) {
 		case 0:
 			ret = VBI_BLACK;
 			break;
@@ -2284,7 +2290,7 @@ dtvcc_unicode			(unsigned int		c)
 {
 	unsigned int uc = dtvcc_unicode_real(c);
 	if (uc == 0)
-		uc = ' ';
+		uc = '_';
 
 	return uc;
 }
@@ -2478,7 +2484,7 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	struct dtvcc_window *dw;
 	unsigned int row;
 	unsigned int column,i;
-	dc = dc; /* unused */
+	(void)dc; /* unused */
 
 	dw = ds->curr_window;
 	if (NULL == dw) {
@@ -2488,11 +2494,9 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	}
 	dw->latest_cmd_cr = 0;
 
-	if (dw->curr_pen.text_tag == TEXT_TAG_NOT_DISPLAYABLE ||
-		dw->curr_pen.text_tag == TEXT_TAG_EXPLETIVE)
-		return TRUE;
 	column = dw->curr_column;
 	row = dw->curr_row;
+	AM_DEBUG(AM_DEBUG_LEVEL, "debug-cc row:%d, column:%d, dw->column:%d, c:%x", row ,column, dw->column_count, c);
 
 	/* FIXME how should we handle TEXT_TAG_NOT_DISPLAYABLE? */
 	/* Add row column lock support */
@@ -2958,62 +2962,62 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 		{
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0
+			OPACITY_SOLID, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_TRANSPARENT, EDGE_NONE, 0
+			OPACITY_TRANSPARENT, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_CENTER, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0
+			OPACITY_SOLID, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0
+			OPACITY_SOLID, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_TRANSPARENT, EDGE_NONE, 0
+			OPACITY_TRANSPARENT, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_CENTER, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0
+			OPACITY_SOLID, EDGE_NONE, 0, 0
 		}, {
 			JUSTIFY_LEFT, DIR_TOP_BOTTOM, DIR_RIGHT_LEFT,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0
+			OPACITY_SOLID, EDGE_NONE, 0, 0
 		}
 	};
 	static const struct dtvcc_pen_style pen_styles [7] = {
 		{
 			PEN_SIZE_STANDARD, 0, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
-			0x00, OPACITY_SOLID, 0
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 1, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
-			0x00, OPACITY_SOLID, 0
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 2, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
-			0x00, OPACITY_SOLID, 0
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 3, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
-			0x00, OPACITY_SOLID, 0
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 4, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
-			0x00, OPACITY_SOLID, 0
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 3, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_UNIFORM, 0x3F, OPACITY_SOLID,
-			0, OPACITY_TRANSPARENT, 0x00
+			0, OPACITY_TRANSPARENT, 0x00, FALSE, FALSE
 		}, {
 			PEN_SIZE_STANDARD, 4, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_UNIFORM, 0x3F, OPACITY_SOLID,
-			0, OPACITY_TRANSPARENT, 0x00
+			0, OPACITY_TRANSPARENT, 0x00, FALSE, FALSE
 		}
 	};
 	struct dtvcc_window *dw;
@@ -3123,7 +3127,7 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 		return TRUE;
 
 	/* Has to be something, no? */
-	dw->curr_pen.text_tag = TEXT_TAG_DIALOG;//TEXT_TAG_NOT_DISPLAYABLE;
+	dw->curr_pen.text_tag = TEXT_TAG_NOT_DISPLAYABLE;
 
 	dw->curr_column = 0;
 	dw->curr_row = 0;
@@ -3375,7 +3379,7 @@ dtvcc_backspace			(struct dtvcc_decoder *	dc,
 	unsigned int column;
 	unsigned int mask;
 
-	dc = dc; /* unused */
+	(void)dc; /* unused */
 
 	dw = ds->curr_window;
 	if (NULL == dw) {
@@ -3433,7 +3437,7 @@ dtvcc_hor_carriage_return	(struct dtvcc_decoder *	dc,
 	unsigned int column;
 	unsigned int mask;
 
-	dc = dc; /* unused */
+	(void)dc; /* unused */
 
 	dw = ds->curr_window;
 	if (NULL == dw) {
@@ -3658,16 +3662,38 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 				 unsigned int		n_bytes)
 {
 	unsigned int c;
-	char* lang_korea;
-	lang_korea = strstr(dc->lang, "kor");
 
 	c = buf[0];
-	if (unlikely (c == 0x18) && lang_korea)
+	AM_DEBUG(AM_DEBUG_LEVEL, "debug-cc decode_se c:%x,n_bytes:%d", c, n_bytes);
+
+	/*fix no 0x18 byte pair*/
+	if (!dc->has_dtvstart_header) {
+		if (n_bytes > 1 && dc->first_valid_data &&  (c != 0) && (c!= 0x18) && (buf[1] != 0x18)) {
+			*se_length = 2;
+			c = buf[0]<<8|buf[1];
+			AM_DEBUG(0, "debug-cc warning!Adjust to c:%x", c);
+			dc->first_valid_data = FALSE;
+			return dtvcc_put_char (dc, ds, c);
+		}
+
+		/* fix only one byte char garbled*/
+		if (n_bytes == 1 && dc->first_valid_data) {
+			*se_length = 1;
+			dc->first_valid_data = FALSE;
+			AM_DEBUG(0, "debug-cc warning!Adjust one byte c:%x", c);
+			switch (c) {
+				case 0xdd:
+					c = 0xb9 << 8 | c;
+					return dtvcc_put_char (dc, ds, c);
+			}
+		}
+	}
+
+	if (unlikely (c == 0x18) /*&& lang_korea*/)
 	{
 		*se_length = 3;
 		c = buf[1]<<8|buf[2];
 		AM_DEBUG(0, "lang korea decode_se 0x%x", c);
-		//Conv
 
 		return dtvcc_put_char (dc, ds, c);
 	}
@@ -3675,6 +3701,11 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 	if (likely (0 != (c & 0x60))) {
 		/* G0/G1 character. */
 		*se_length = 1;
+
+		if (dc->has_q_tone_data) {
+			dc->q_tone[dc->index_q_tone++] = c;
+		}
+
 		return dtvcc_put_char (dc, ds, c);
 	}
 
@@ -3822,14 +3853,16 @@ dtvcc_decode_packet		(struct dtvcc_decoder *	dc,
 	/* sequence_number [2], packet_size_code [6],
 	   packet_data [n * 8] */
 #if 1
-	sequence_number = dc->packet[0]>>6;
-	if (dc->next_sequence_number >= 0
-	    && sequence_number != dc->next_sequence_number) {
-		dtvcc_reset (dc);
-		return;
+	if (dc->has_dtvstart_header) {
+		sequence_number = dc->packet[0]>>6;
+		if (dc->next_sequence_number >= 0
+			&& sequence_number != dc->next_sequence_number) {
+			dtvcc_reset (dc);
+			return;
+		}
+		dc->next_sequence_number = (sequence_number+1)&3;
 	}
 #endif
-	dc->next_sequence_number = (sequence_number+1)&3;
 	//AM_DEBUG(0, "sn %d nsn %d", sequence_number, dc->next_sequence_number);
 	packet_size_code = dc->packet[0] & 0x3F;
 	packet_size = 128;
@@ -4196,15 +4229,15 @@ static void dtvcc_window_to_page(vbi_decoder *vbi, struct dtvcc_window *dw, stru
 		{
 			memset(&ac, 0, sizeof(ac));
 			/*use the curr_pen to draw all the text, actually this isn't reasonable*/
-			if (dw->curr_pen.style.fg_opacity >= N_ELEMENTS(vbi_opacity_map)){
+			if (dw->curr_pen.style.fg_opacity >= N_ELEMENTS(vbi_opacity_map)) {
 				fg_opacity = VBI_OPAQUE;
-			}else{
+			} else {
 				fg_opacity = vbi_opacity_map[dw->curr_pen.style.fg_opacity];
 			}
 
-			if (dw->curr_pen.style.bg_opacity >= N_ELEMENTS(vbi_opacity_map)){
+			if (dw->curr_pen.style.bg_opacity >= N_ELEMENTS(vbi_opacity_map)) {
 				bg_opacity = VBI_OPAQUE;
-			}else{
+			} else {
 				bg_opacity = vbi_opacity_map[dw->curr_pen.style.bg_opacity];
 			}
 
@@ -4267,8 +4300,8 @@ static void dtvcc_get_visible_windows(struct dtvcc_service *ds, int *cnt, struct
 {
 	int i, j = 0;
 
-	for (i=0; i<N_ELEMENTS(ds->window); i++){
-		if (ds->window[i].visible && j < *cnt){
+	for (i=0; i<N_ELEMENTS(ds->window); i++) {
+		if (ds->window[i].visible && j < *cnt) {
 			windows[j++] = &ds->window[i];
 		}
 	}
@@ -4285,12 +4318,12 @@ void tvcc_fetch_page(struct tvcc_decoder *td, int pgno, int *sub_cnt, struct vbi
 	if (pgno < 1 || pgno > 14 || *sub_cnt <= 0)
 		goto fetch_done;
 
-	if (pgno <= 8){
-		if (vbi_fetch_cc_page(td->vbi, &sub_pages[0], pgno, 1)){
+	if (pgno <= 8) {
+		if (vbi_fetch_cc_page(td->vbi, &sub_pages[0], pgno, 1)) {
 			sub_pg = 1;
 			sub_pages[0].pgno = pgno;
 		}
-	}else{
+	} else {
 		int i;
 		struct dtvcc_service *ds = &td->dtvcc.service[pgno - 1 - 8];
 		struct dtvcc_window *dw;
@@ -4302,7 +4335,7 @@ void tvcc_fetch_page(struct tvcc_decoder *td, int pgno, int *sub_cnt, struct vbi
 
 		dtvcc_get_visible_windows(ds, &sub_pg, visible_windows);
 
-		for (i=0; i<sub_pg; i++){
+		for (i=0; i<sub_pg; i++) {
 			dw = visible_windows[i];
 
 			dtvcc_window_to_page(td->vbi, dw, &sub_pages[i]);
@@ -4414,7 +4447,7 @@ update_display (struct tvcc_decoder *td)
 		//if (ds->created == 0)
 		//		continue;
 
-		if (ds->update ) {
+		if (ds->update) {
 			struct vbi_event event;
 
 			event.type = VBI_EVENT_CAPTION;
@@ -4446,7 +4479,101 @@ notify_curr_data_pgno(struct tvcc_decoder *td, int pgno)
 	pthread_mutex_lock(&td->mutex);
 }
 
+/* vaild_byte_pair: 0xFE start header
+	return value: vaild_byte_pair + 1(0xFF 3 bytes)
+	*/
+static char
+calc_packet_code_byte(struct dtvcc_decoder *	dc, const uint8_t * buf, int cc_count)
+{
+	uint8_t vaild_byte_pair = 0;
+	char packet_code_byte;
+	for (int i = 0; i < cc_count; ++i) {
+		if (buf[3 + i * 3] == 0xfe) {
+			vaild_byte_pair++;
+		}
+	}
 
+	packet_code_byte = (vaild_byte_pair + 1);
+	AM_DEBUG(0, "debug-cc packet_code_byte:0x%x(%d)", packet_code_byte, packet_code_byte);
+	return packet_code_byte;
+}
+
+
+static char
+calc_block_size_byte(const uint8_t * buf, int cc_count)
+{
+	uint8_t valid_data_bytes = 0;
+	char block_byte;
+	/*fe xx xx, "xx xx" is one byte pair*/
+	int vaild_byte_pair = 0;
+	for (int i = 0; i < cc_count; ++i) {
+		if (buf[3 + i * 3] == 0xfe) {
+			vaild_byte_pair++;
+		}
+	}
+	valid_data_bytes = vaild_byte_pair * 2;
+
+	for (int i = cc_count -1; i >= 0; --i) {
+		if (buf[3 + i * 3] != 0xfe) {
+			continue;
+		}
+		if (buf[5 + i * 3] != 0x0) {
+			break;
+		}
+		valid_data_bytes--;
+
+		if (buf[4 + i * 3] != 0x0) {
+			break;
+		}
+		valid_data_bytes--;
+	}
+
+	block_byte = valid_data_bytes | 0x20; /*0x20: service number:1*/
+	AM_DEBUG(0, "debug-cc valid_data_byte:%d, block_byte:0x%x", valid_data_bytes, block_byte);
+	return block_byte;
+}
+
+static vbi_bool
+dtvcc_have_start_header(const uint8_t * buf, int cc_count)
+{
+	for (int i = 0; i < cc_count - 1; ++i) {/*last byte is 0xff, so minus 1*/
+		if (buf[3 + i * 3] == 0xff) {
+			AM_DEBUG(0, "debug-cc have dtvcc start header!");
+			return TRUE;
+		}
+	}
+	AM_DEBUG(0, "debug-cc not have dtvcc start header!");
+
+	return FALSE;
+}
+
+/*korean q-tone is timing signal for advertisment, it start with 0f byte following with
+  style data.so we detect one frame if include 0f byte to judge q-tone.*/
+static vbi_bool
+dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
+{
+	unsigned int b0;
+	unsigned int cc_data_1;
+	unsigned int cc_data_2;
+	vbi_bool has_q_tone_data = 0;
+	for (int i = 0; i < cc_count - 1; ++i) {/*last byte is 0xff, so minus 1*/
+		b0 = buf[3 + i * 3];
+		cc_data_1 = buf[4 + i * 3];
+		cc_data_2 = buf[5 + i * 3];
+		if (b0 == 0xfe && cc_data_2 == 0x0f) {//0f q-tone header
+			//AM_DEBUG(0, "debug-cccc have style header, continue!");
+			has_q_tone_data = TRUE;
+			break;
+		}
+	}
+	AM_DEBUG(0, "debug-cc has_q_tone_data:%d", has_q_tone_data);
+
+	return has_q_tone_data;
+}
+
+
+//#define KOREAN_CALC_708_CC_HEADER
+#define KOREAN_DETECT_Q_TONE_DATA
 /* Note pts may be < 0 if no PTS was received. */
 void
 tvcc_decode_data			(struct tvcc_decoder *td,
@@ -4461,8 +4588,10 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 	struct timeval now;
 	int pgno = -1;
 
+
 	if (buf[0] != 0x03)
 		return;
+	gettimeofday(&now, 0);
 	process_cc_data_flag = buf[1] & 0x40;
 	if (!process_cc_data_flag)
 	{
@@ -4500,6 +4629,10 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 
 		AM_DEBUG(4,"cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
 
+#ifdef KOREAN_DETECT_Q_TONE_DATA
+		td->dtvcc.has_q_tone_data = dtvcc_detect_q_tone_data(buf, cc_count);
+#endif
+
 		switch (cc_type) {
 		case NTSC_F1:
 		case NTSC_F2:
@@ -4525,6 +4658,23 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 			j = td->dtvcc.packet_size;
 			if (j <= 0) {
 				/* Missed packet start. */
+#ifdef KOREAN_CALC_708_CC_HEADER
+				if (cc_valid && b0 == 0xfe && !dtvcc && !dtvcc_have_start_header(buf, cc_count)) {
+					dtvcc = TRUE;
+					td->dtvcc.has_dtvstart_header = FALSE;
+					td->dtvcc.first_valid_data = TRUE;
+					td->dtvcc.packet[0] = calc_packet_code_byte(&td->dtvcc, buf, cc_count);//0xd1;
+					td->dtvcc.packet[1] = calc_block_size_byte(buf, cc_count);//0x3e;
+					td->dtvcc.packet_size = 2;
+					dtvcc_try_decode_packet(&td->dtvcc, &now, pts, &pgno);
+
+					j = 2;
+					td->dtvcc.packet[j] = cc_data_1;
+					td->dtvcc.packet[j + 1] = cc_data_2;
+					td->dtvcc.packet_size = j + 2;
+					dtvcc_try_decode_packet (&td->dtvcc, &now, pts, &pgno);
+				}
+#endif
 				break;
 			} else if (!cc_valid) {
 				/* End of DTVCC packet. */
@@ -4533,6 +4683,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 				dtvcc_reset (&td->dtvcc);
 				td->dtvcc.packet_size = 0;
 			} else {
+				td->dtvcc.first_valid_data = FALSE;
 				td->dtvcc.packet[j] = cc_data_1;
 				td->dtvcc.packet[j + 1] = cc_data_2;
 				td->dtvcc.packet_size = j + 2;
@@ -4553,6 +4704,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 				/* No new data. */
 				td->dtvcc.packet_size = 0;
 			} else {
+				td->dtvcc.has_dtvstart_header = TRUE;
 				td->dtvcc.packet[0] = cc_data_1;
 				td->dtvcc.packet[1] = cc_data_2;
 				td->dtvcc.packet_size = 2;
@@ -4592,7 +4744,7 @@ void tvcc_init(struct tvcc_decoder *td, char* lang, int lang_len, unsigned int d
 
 void tvcc_destroy(struct tvcc_decoder *td)
 {
-	if (td){
+	if (td) {
 		vbi_decoder_delete(td->vbi);
 		td->vbi = NULL;
 		pthread_mutex_destroy(&td->mutex);

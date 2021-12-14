@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -477,10 +477,10 @@ null_function			(vbi3_bit_slicer *	bs,
 				 unsigned int *		n_points,
 				 const uint8_t *	raw)
 {
-	buffer = buffer; /* unused */
-	points = points;
-	n_points = n_points;
-	raw = raw;
+	(void)buffer; /* unused */
+	(void)points;
+	(void)n_points;
+	(void)raw;
 
 	warning (&bs->log,
 		 "vbi3_bit_slicer_set_params() not called.");
@@ -504,7 +504,7 @@ null_function			(vbi3_bit_slicer *	bs,
  *   @a frc_bits and @a payload_bits given to vbi3_bit_slicer_new().
  * @param raw Input data. At least the number of pixels or samples
  *  given as @a samples_per_line to vbi3_bit_slicer_new().
- * 
+ *
  * Like vbi3_bit_slicer_slice() but additionally provides information
  * about where and how bits were sampled. This is mainly interesting
  * for debugging.
@@ -591,7 +591,7 @@ vbi3_bit_slicer_slice_with_points
  *   vbi3_bit_slicer_new().
  * @param raw Input data. At least the number of pixels or samples
  *  given as @a samples_per_line to vbi3_bit_slicer_new().
- * 
+ *
  * Decodes one scan line of raw vbi data. Note the bit slicer tries
  * to adapt to the average signal amplitude, you should avoid
  * using the same vbi3_bit_slicer object for data from different
@@ -670,7 +670,7 @@ vbi3_bit_slicer_slice		(vbi3_bit_slicer *	bs,
  * @param payload_rate Payload bit rate in Hz, the number of payload
  *   bits transmitted per second.
  * @param modulation Modulation of the payload, see vbi3_modulation.
- * 
+ *
  * Initializes a vbi3_bit_slicer object for use with
  * vbi3_bit_slicer_slice(). This is a low level function, see also
  * vbi3_raw_decoder_new().

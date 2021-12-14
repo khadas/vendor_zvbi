@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -140,7 +140,7 @@ text_options[] = {
 static vbi_option_info *
 option_enum(vbi_export *e, int index)
 {
-	e = e;
+	(void) e;
 
 	if (index < 0 || index >= (int) elements(text_options))
 		return NULL;
@@ -329,13 +329,13 @@ print_unicode(iconv_t cd, int endian, int unicode, char **p, int n)
  * @param row First source row, 0 ... pg->rows - 1.
  * @param width Number of columns to print, 1 ... pg->columns.
  * @param height Number of rows to print, 1 ... pg->rows.
- * 
+ *
  * Print a subsection of a Teletext or Closed Caption vbi_page,
  * rows separated by linefeeds "\n", in the desired format.
  * All character attributes and colors will be lost. Graphics
  * characters, DRCS and all characters not representable in the
  * target format will be replaced by spaces.
- * 
+ *
  * @return
  * Number of bytes written into @a buf, a value of zero when
  * some error occurred. In this case @a buf may contain incomplete
@@ -353,7 +353,7 @@ vbi_print_page_region(vbi_page *pg, char *buf, int size,
 	iconv_t cd;
 	char *p;
 
-	rtl = rtl;
+	(void) rtl;
 
 	if (1)
 		fprintf (stderr, "vbi_print_page_region '%s' "

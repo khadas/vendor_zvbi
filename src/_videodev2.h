@@ -25,13 +25,13 @@ fprintf (fp, " inputs=%ld "
 "minheight=%ld "
 "maxframerate=%ld "
 "flags=",
-(long) t->inputs, 
-(long) t->outputs, 
-(long) t->audios, 
-(long) t->maxwidth, 
-(long) t->maxheight, 
-(long) t->minwidth, 
-(long) t->minheight, 
+(long) t->inputs,
+(long) t->outputs,
+(long) t->audios,
+(long) t->maxwidth,
+(long) t->maxheight,
+(long) t->minwidth,
+(long) t->minheight,
 (long) t->maxframerate);
 fprint_symbolic (fp, 2, t->flags,
 (void *) 0);

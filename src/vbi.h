@@ -17,8 +17,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -113,7 +113,7 @@ typedef struct vbi_decoder vbi_decoder;
  *  BTT 0 -> 0x00 (VBI_NOPAGE)
  *  BTT 1 -> 0x70 (VBI_SUBTITLE_PAGE)
  *  BTT 2 ... 3 -> 0x7F (VBI_PROGR_INDEX)
- *  BTT 4 ... 5 -> 0xFA (VBI_TOP_BLOCK -> VBI_NORMAL_PAGE) 
+ *  BTT 4 ... 5 -> 0xFA (VBI_TOP_BLOCK -> VBI_NORMAL_PAGE)
  *  BTT 6 ... 7 -> 0xFB (VBI_TOP_GROUP -> VBI_NORMAL_PAGE)
  *  BTT 8 ... 11 -> 0x01 (VBI_NORMAL_PAGE)
  *  BTT 12 ... 15 -> 0xFF (VBI_UNKNOWN_PAGE)

@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -44,7 +44,7 @@ VBI_BEGIN_DECLS
  *   Unicode and the locale character set.
  * @{
  */
- 
+
 #define VBI_NUL_TERMINATED -1
 
 extern unsigned long

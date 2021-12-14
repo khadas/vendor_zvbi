@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -45,9 +45,9 @@ extern const int8_t		_vbi_hamm24_inv_par [3][256];
 
 /**
  * @param c Unsigned byte.
- * 
+ *
  * Reverses the bits of the argument.
- * 
+ *
  * @returns
  * Data bits 0 [msb] ... 7 [lsb].
  *
@@ -61,9 +61,9 @@ vbi_rev8			(unsigned int		c)
 
 /**
  * @param c Unsigned 16 bit word.
- * 
+ *
  * Reverses (or "reflects") the bits of the argument.
- * 
+ *
  * @returns
  * Data bits 0 [msb] ... 15 [lsb].
  *
@@ -79,9 +79,9 @@ vbi_rev16			(unsigned int		c)
 /**
  * @param p Pointer to a 16 bit word, last significant
  *   byte first.
- * 
+ *
  * Reverses (or "reflects") the bits of the argument.
- * 
+ *
  * @returns
  * Data bits 0 [msb] ... 15 [lsb].
  *
@@ -115,8 +115,8 @@ vbi_par8			(unsigned int		c)
 }
 
 /**
- * @param c Unsigned byte. 
- * 
+ * @param c Unsigned byte.
+ *
  * @returns
  * If the byte has odd parity (sum of bits modulo 2 is 1) the
  * byte AND 127, otherwise a negative value.
@@ -156,10 +156,10 @@ vbi_unpar			(uint8_t *		p,
 
 /**
  * @param c Integer between 0 ... 15.
- * 
+ *
  * Encodes a nibble with Hamming 8/4 protection
  * as specified in EN 300 706, Section 8.2.
- * 
+ *
  * @returns
  * Hamming encoded unsigned byte, lsb first transmitted.
  *
@@ -173,10 +173,10 @@ vbi_ham8			(unsigned int		c)
 
 /**
  * @param c Hamming 8/4 protected byte, lsb first transmitted.
- * 
+ *
  * Decodes a Hamming 8/4 protected byte
  * as specified in EN 300 706, Section 8.2.
- * 
+ *
  * @returns
  * Data bits (D4 [msb] ... D1 [lsb]) or a negative
  * value if the byte contained incorrectable errors.
@@ -192,10 +192,10 @@ vbi_unham8			(unsigned int		c)
 /**
  * @param p Pointer to a Hamming 8/4 protected 16 bit word,
  *   last significant byte first, lsb first transmitted.
- * 
+ *
  * Decodes a Hamming 8/4 protected byte pair
  * as specified in EN 300 706, Section 8.2.
- * 
+ *
  * @returns
  * Data bits D4 [msb] ... D1 of first byte and D4 ... D1 [lsb]
  * of second byte, or a negative value if any of the bytes

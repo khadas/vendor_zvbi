@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -173,7 +173,7 @@ typedef struct _vbi_xds_demux vbi_xds_demux;
  * @param xd XDS demultiplexer context allocated with vbi_xds_demux_new().
  * @param user_data User data pointer given to vbi_xds_demux_new().
  * @param xp Pointer to the received XDS data packet.
- * 
+ *
  * The XDS demux calls a function of this type when an XDS packet
  * has been completely received, all bytes have correct parity and the
  * packet checksum is correct. Other packets are discarded.

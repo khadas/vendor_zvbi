@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -136,7 +136,7 @@ _vbi_pfc_demux_decode		(vbi_pfc_demux *	dx,
 				dx->block.block_size = sh >> 5;
 
 				dx->bi = 0;
-				dx->left = dx->block.block_size; 
+				dx->left = dx->block.block_size;
 
 				continue;
 			} else {
@@ -291,7 +291,7 @@ vbi_pfc_demux_feed		(vbi_pfc_demux *	dx,
 
 	dx->packet = packet + 1; /* next packet expected */
 
-	/* Now the actual decoding. */	
+	/* Now the actual decoding. */
 
 	return _vbi_pfc_demux_decode (dx, buffer);
 
@@ -384,7 +384,7 @@ vbi_pfc_demux_delete		(vbi_pfc_demux *	dx)
 
 	_vbi_pfc_demux_destroy (dx);
 
-	vbi_free (dx);		
+	vbi_free (dx);
 }
 
 /**

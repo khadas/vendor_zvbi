@@ -15,8 +15,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -92,7 +92,7 @@ extern vbi_capture *	vbi_capture_v4l_new(const char *dev_name, int scanning,
 					    char **errorstr, vbi_bool trace);
 extern vbi_capture *	vbi_capture_v4l_sidecar_new(const char *dev_name, int given_fd,
 						    unsigned int *services,
-						    int strict, char **errorstr, 
+						    int strict, char **errorstr,
 						    vbi_bool trace);
 extern vbi_capture *	vbi_capture_bktr_new (const char *	dev_name,
 					      int		scanning,
@@ -122,7 +122,7 @@ vbi_capture_dvb_new2		(const char *		device_name,
 				 vbi_bool		trace);
 
 struct vbi_proxy_client;
- 
+
 extern vbi_capture *
 vbi_capture_proxy_new( struct vbi_proxy_client * vpc,
                         int buffers, int scanning,

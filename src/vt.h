@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -397,7 +397,7 @@ struct ttx_extension {
 	/**
 	 * Adding these values (0, 8, 16, 24) to character color
 	 * 0 ... 7 gives an index into color_map[] below.
-	 */ 
+	 */
 	unsigned int			foreground_clut;
 	unsigned int			background_clut;
 

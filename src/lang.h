@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -76,11 +76,11 @@ typedef enum {
  *
  * vbi_font_descriptors[], array of vbi_font_descr implements
  * the Teletext character set designation tables in ETS 300 706,
- * Section 15: Table 32, 33 and 34.  
+ * Section 15: Table 32, 33 and 34.
  */
 struct vbi_font_descr {
 	vbi_character_set	G0;
-	vbi_character_set	G2;	
+	vbi_character_set	G2;
 	vbi_national_subset	subset;		/* applies only to LATIN_G0 */
 	char *			label;		/* Latin-1 */
 };
@@ -100,7 +100,7 @@ typedef struct vbi_font_descr vbi_font_descr;
 /**
  * @ingroup Page
  * @param unicode Unicode as in vbi_char.
- * 
+ *
  * @return
  * @c TRUE if @a unicode represents a Teletext or Closed Caption
  * printable character. This excludes Teletext Arabic characters (which
@@ -119,7 +119,7 @@ vbi_is_print(unsigned int unicode)
 /**
  * @ingroup Page
  * @param unicode Unicode as in vbi_char.
- * 
+ *
  * @return
  * @c TRUE if @a unicode represents a Teletext G1 Block Mosaic or G3 Smooth
  * Mosaics and Line Drawing Set, that is a code in range U+EE00 ... U+EFFF.
@@ -133,7 +133,7 @@ vbi_is_gfx(unsigned int unicode)
 /**
  * @ingroup Page
  * @param unicode Unicode as in vbi_char.
- * 
+ *
  * @return
  * @c TRUE if @a unicode represents a Teletext DRCS (Dynamically
  * Redefinable Character), that is a code in range U+F000 ... U+F7FF.

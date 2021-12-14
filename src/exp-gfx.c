@@ -574,17 +574,17 @@ vbi_draw_cc_page_region(vbi_page *pg,
 
 				if (bg_opacity == VBI_TRANSPARENT_SPACE) {
 					pen.rgba[0] = 0;
-				}else if (bg_opacity == VBI_SEMI_TRANSPARENT){
+				} else if (bg_opacity == VBI_SEMI_TRANSPARENT) {
 					pen.rgba[0] = pg->color_map[ac->background] & 0x80000000;
-				}else{
+				} else {
 					pen.rgba[0] = pg->color_map[ac->background];
 				}
 
 				if (fg_opacity == VBI_TRANSPARENT_SPACE) {
 					pen.rgba[1] = 0;
-				}else if (fg_opacity == VBI_SEMI_TRANSPARENT){
+				} else if (fg_opacity == VBI_SEMI_TRANSPARENT) {
 					pen.rgba[1] = pg->color_map[ac->foreground] & 0x80000000;
-				}else{
+				} else {
 					pen.rgba[1] = pg->color_map[ac->foreground];
 				}
 			}
@@ -670,7 +670,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	}
 
 	snprintf (page_no_buf, sizeof (page_no_buf),
-		  "P%x     ", pg->pgno);
+		  "P%x    ", pg->pgno);
 
 	if (0) {
 		int i, j;
@@ -756,7 +756,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 				transparent = 0;
 			} else
 			if (subtitle == 1) {
-				if (vbi_is_drcs(unicode) || unicode==0x0020)
+				if (vbi_is_drcs(unicode) || unicode == 0x0020)
 					transparent = 1;
 				else
 					transparent = 0;
@@ -765,7 +765,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 			{
 
 #if 0
-				else if (subtitle && (vbi_is_drcs(unicode) || unicode==0x0020)) {
+				else if (subtitle && (vbi_is_drcs(unicode) || unicode == 0x0020)) {
 					vbi_char *tc;
 					int n, uc;
 					int left, right;
@@ -778,7 +778,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 						else
 							uc = tc->unicode;
 
-						if(!vbi_is_drcs(uc) && uc!=0x0020) {
+						if (!vbi_is_drcs(uc) && uc != 0x0020) {
 							left = 1;
 							break;
 						}
@@ -790,7 +790,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 						else
 							uc = tc->unicode;
 
-						if(!vbi_is_drcs(uc) && uc!=0x0020) {
+						if (!vbi_is_drcs(uc) && uc != 0x0020) {
 							right = 1;
 							break;
 						}
@@ -1881,7 +1881,7 @@ xpm_export			(vbi_export *		e,
 		}
 
 		if (unlikely (!_vbi_export_grow_buffer_space (e, needed)))
-			return FALSE;
+			goto failed;
 	}
 
 	if (!xpm_write_header (e, pg, image_width, image_height,

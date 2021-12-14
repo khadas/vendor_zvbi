@@ -56,7 +56,7 @@ extern const char _zvbi_intl_domainname[];
 #include "intl-priv.h"
 
 #define LOG_TAG    "ZVBI"
-#ifdef ANDORID
+#ifdef ANDROID
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #else
 #define LOGI(...) printf(__VA_ARGS__)
@@ -112,9 +112,11 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 {
 	vbi_char ac;
 	vbi_char bc;
+	vbi_char cc;
 	int n, i, ii, iii;
 	memset(&bc, 0, sizeof(bc));
 	memset(&ac, 0, sizeof(ac));
+	memset(&cc, 0, sizeof(cc));
 	ac.foreground	= VBI_WHITE;
 	ac.background	= VBI_MAGENTA;
 	ac.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
@@ -125,6 +127,11 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 	bc.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
 	bc.unicode	= 0x0020;
 
+	cc.foreground	= VBI_WHITE;
+	cc.background	= VBI_MAGENTA;
+	cc.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
+	cc.unicode	= 0x0020;
+
 	for (i = 0; i < EXT_COLUMNS; i++) {
 		pg->text[LAST_LAST_ROW + i] = bc;
 	}
@@ -132,17 +139,36 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 		if (vbi->vt.current_subno == vtp->data.lop.link[i].subno) {
 			bc.background = VBI_RED;
 			ac.background = VBI_RED;
+			cc.background = VBI_RED;
 		} else {
 			bc.background = VBI_MAGENTA;
 			ac.background = VBI_MAGENTA;
+			cc.background = VBI_MAGENTA;
 		}
-		iii = i*3 + 3;
+		if ((vtp->data.lop.link[i].subno >=0 ) && (vtp->data.lop.link[i].subno < 256)) {
+			iii = i*3 + 3;
+		} else {
+			iii = i*3+4;
+			}
 		if (vtp->data.lop.link[i].subno < 10 ) {
-		n = vtp->data.lop.link[i].subno + '0';
-		if (n > '9')
-			n += 'A' - '9';
-		bc.unicode = n;
-		ac.unicode = 0x0030;
+			n = vtp->data.lop.link[i].subno + '0';
+			if (n > '9')
+				n += 'A' - '9';
+			bc.unicode = n;
+			ac.unicode = 0x0030;
+		}else if(vtp->data.lop.link[i].subno >= 256){
+			n = vtp->data.lop.link[i].subno%SUBPAGE_NUMBER_FORMATE + '0';
+			if (n > '9')
+				n += 'A' - '9';
+			cc.unicode = n;
+			n = (vtp->data.lop.link[i].subno/SUBPAGE_NUMBER_FORMATE)%SUBPAGE_NUMBER_FORMATE + '0';
+			if (n > '9')
+				n += 'A' - '9';
+			bc.unicode = n;
+			n = (vtp->data.lop.link[i].subno/(SUBPAGE_NUMBER_FORMATE*SUBPAGE_NUMBER_FORMATE))%SUBPAGE_NUMBER_FORMATE + '0';
+			if (n > '9')
+				n += 'A' - '9';
+			ac.unicode = n;
 		} else {
 			n = vtp->data.lop.link[i].subno%SUBPAGE_NUMBER_FORMATE + '0';
 			if (n > '9')
@@ -153,12 +179,22 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 				n += 'A' - '9';
 			ac.unicode = n;
 		}
-		ac.foreground = VBI_BLACK;
-		bc.foreground = VBI_BLACK;
-		pg->text[LAST_LAST_ROW + iii -1] = ac;
-		pg->text[LAST_LAST_ROW + iii ] = bc;
+		if (vtp->data.lop.link[i].subno <  256) {
+			ac.foreground = VBI_BLACK;
+			bc.foreground = VBI_BLACK;
+			pg->text[LAST_LAST_ROW + iii -1] = ac;
+			pg->text[LAST_LAST_ROW + iii ] = bc;
+		} else {
+			ac.foreground = VBI_BLACK;
+			bc.foreground = VBI_BLACK;
+			cc.foreground = VBI_BLACK;
+			pg->text[LAST_LAST_ROW + iii -2] = ac;
+			pg->text[LAST_LAST_ROW + iii - 1] = bc;
+			pg->text[LAST_LAST_ROW + iii ] = cc;
+		}
 	}
 }
+
 static inline void array_sort(int *a, int len)
 {
 	int i, j, tmp;
@@ -277,8 +313,6 @@ static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page 
             }
             flof_subpage_bar(vbi, pg, vtp);
             }
-        } else {
-            flof_clear_subpage_bar(vbi, pg, vtp);
         }
     }
 }
@@ -1061,6 +1095,7 @@ void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_boo
 	vbi->vt.use_subtitleserver = useSubtitleserver;
 }
 
+
 vbi_bool
 vbi_get_sub_info(vbi_decoder *vbi, vbi_pgno pgno, int *subs, int *len)
 {
@@ -1274,16 +1309,23 @@ character_set_designation(struct vbi_font_descr **font,
 
 	for (i = 0; i < 2; i++) {
 		int charset_code = ext->charset_code[i];
+		LOGI("i:%d charset_code:%d",i,charset_code);
 
-		if (VALID_CHARACTER_SET(charset_code))
+		if (VALID_CHARACTER_SET(charset_code)) {
+			LOGI("VALID_CHARACTER_SET 1 i:%d charset_code:%d",i,charset_code);
+			if (0x10 == charset_code) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
+		}
 
 		charset_code = (charset_code & ~7) + vtp->national;
 
-		if (VALID_CHARACTER_SET(charset_code))
+		if (VALID_CHARACTER_SET(charset_code)) {
+			LOGI("VALID_CHARACTER_SET 2 i:%d charset_code:%d",i,charset_code);
+			if ( 0x14 == charset_code ) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
-		LOGI("pgno %x font %d charset_code %d national %d final %d",
-			vtp->pgno, i, ext->charset_code[i], vtp->national, charset_code);
+			LOGI("pgno %x font %d charset_code %d national %d final %d",
+				vtp->pgno, i, ext->charset_code[i], vtp->national, charset_code);
+		}
 	}
 #endif
 }
@@ -1844,16 +1886,9 @@ enhance(vbi_decoder *vbi,
 						pgno = vtp->data.lop.link[24].pgno;
 
 						if (NO_PAGE(pgno)) {
-							if (vbi->vt.use_subtitleserver) {
-								if (max_level < VBI_WST_LEVEL_3p5
-									|| NO_PAGE(pgno = mag->pop_link[1][0].pgno))
-									pgno = mag->pop_link[0][0].pgno;
-							} else {
-								if (max_level < VBI_WST_LEVEL_3p5
-									|| NO_PAGE(pgno = mag->pop_link[0][8].pgno))
-									pgno = mag->pop_link[0][0].pgno;
-							}
-
+							if (max_level < VBI_WST_LEVEL_3p5
+							    || NO_PAGE(pgno = mag->pop_link[1][0].pgno))
+								pgno = mag->pop_link[0][0].pgno;
 						} else
 							printv("... X/27/4 GPOP overrides MOT\n");
 					} else {
@@ -2164,16 +2199,9 @@ enhance(vbi_decoder *vbi,
 						pgno = vtp->data.lop.link[26].pgno;
 
 						if (NO_PAGE(pgno)) {
-							if (vbi->vt.use_subtitleserver) {
-								if (max_level < VBI_WST_LEVEL_3p5
-									|| NO_PAGE(pgno = mag->drcs_link[1][0]))
-									pgno = mag->drcs_link[0][0];
-							} else {
-								if (max_level < VBI_WST_LEVEL_3p5
-									|| NO_PAGE(pgno = mag->drcs_link[0][8]))
-									pgno = mag->drcs_link[0][0];
-							}
-
+							if (max_level < VBI_WST_LEVEL_3p5
+							    || NO_PAGE(pgno = mag->drcs_link[1][0]))
+								pgno = mag->drcs_link[0][0];
 						} else
 							printv("... X/27/4 GDRCS overrides MOT\n");
 					} else {
@@ -2636,6 +2664,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	pg->subtitleMode = VBI_TELETEXT_NON_BITMAP_SUBTITLE;
 	pg->have_flof = vtp->data.lop.have_flof;
+
 	mag = (max_level <= VBI_WST_LEVEL_1p5) ?
 		&vbi->vt.default_magazine
 		: cache_network_magazine (vbi->cn, vtp->pgno);
@@ -2692,7 +2721,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	//snprintf (buf, sizeof (buf),
 	if (vbi->vt.use_subtitleserver) {
 		if ((vbi->vt.goto_page >0x99) && (vbi->vt.goto_page <0x900)) {
-			snprintf (buf, sizeof (buf), "P%x	  ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%x	   ", vbi->vt.goto_page);
 		} else	if((vbi->vt.goto_page >0) && (vbi->vt.goto_page <0x10)){
 			snprintf (buf, sizeof (buf), "P%x--    ", vbi->vt.goto_page);
 		} else	if(vbi->vt.goto_page == 0){
@@ -2705,7 +2734,6 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		snprintf (buf, sizeof (buf),
 			"P%x	   ", vtp->pgno);
 	}
-
 	/* Level 1 formatting */
 
 	i = 0;
@@ -2802,9 +2830,14 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				if (mosaic && (raw & 0x20)) {
 					held_mosaic_unicode = mosaic_unicodes + raw - 0x20;
 					ac.unicode = held_mosaic_unicode;
-				} else
-					ac.unicode = vbi_teletext_unicode(font->G0,
-									  font->subset, raw);
+				} else {
+					if (row == 0 && column < 1) {
+						ac.unicode = 0x50;
+						LOGI("raw:%0x mosaic:%d\n", raw,mosaic);
+					} else {
+						ac.unicode = vbi_teletext_unicode(font->G0,font->subset, raw);
+					}
+				}
 			}
 
 			if ((vtp->flags & C10_INHIBIT_DISPLAY) && row != 0)
@@ -3033,7 +3066,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				}
 				//only afer display page then display subpage bar
 				//search state not display
-								draw_subpage_line (vbi, pg, vtp);
+				draw_subpage_line (vbi, pg, vtp);
 
 			    }
 

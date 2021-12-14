@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -155,7 +155,7 @@ _vbi_iconv_ucs2			(vbi_iconv_t *		cd,
 		s_left = src_length * 2;
 
 		d_left = dst_size;
-		
+
 		r = iconv_ucs2 (cd, dst, &d_left, &s, &s_left);
 
 		return ((size_t) -1 != r && 0 == s_left);
@@ -670,7 +670,7 @@ strndup_ucs2_eia608		(unsigned long *	out_size,
 
 			break;
 
-		case 0x20 ... 0x7F:			
+		case 0x20 ... 0x7F:
 			*d16++ = vbi_caption_unicode (c, to_upper);
 			break;
 
@@ -685,7 +685,7 @@ strndup_ucs2_eia608		(unsigned long *	out_size,
 	*d16 = 0;
 
 	return buffer;
-	
+
 ilseq:
 	vbi_free (buffer);
 	buffer = NULL;
@@ -786,7 +786,7 @@ strndup_iconv_to_ucs2		(unsigned long *	out_size,
 
 			/* Ignore compiler warnings if second argument
 			   is declared as char** instead of const char**. */
-			r = iconv (cd->icd, &s, &s_left, &d, &d_left);
+			r = iconv (cd->icd, (char **)&s, &s_left, &d, &d_left);
 
 			_vbi_iconv_close (cd);
 			cd = NULL;
@@ -1039,7 +1039,7 @@ strndup_ucs2_teletext		(unsigned long *	out_size,
 	d16 = (uint16_t *) buffer;
 
 	for (i = 0; i < src_length; ++i) {
-		unsigned int c = src[i] & 0x7F;		
+		unsigned int c = src[i] & 0x7F;
 
 		if (c >= 0x20) {
 			*d16++ = vbi_teletext_unicode (cs->g0, cs->subset, c);

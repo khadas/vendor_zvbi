@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -86,7 +86,7 @@ typedef struct _vbi_idl_demux vbi_idl_demux;
  *   the decoded packet did not contain user data.
  * @param flags @c VBI_IDL_DATA_LOST, @c VBI_IDL_DEPENDENT.
  * @param user_data User pointer passed to vbi_idl_demux_new().
- * 
+ *
  * The vbi_idl_demux_feed() function calls a function of this type
  * after successfully decoding an IDL packet.
  *

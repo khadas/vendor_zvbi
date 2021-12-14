@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: ZVBI 
+Name: ZVBI
 Description: VBI Capturing and Decoding Library
-Requires: 
+Requires:
 Version: @VERSION@
 Libs: -L${libdir} -lzvbi -lm @LIBS@
 Cflags: -I${includedir}

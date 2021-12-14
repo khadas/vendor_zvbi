@@ -18,8 +18,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -326,10 +326,10 @@ eia608_program_type[96] =
 /**
  * @param auth From vbi_program_info.rating_auth.
  * @param id From vbi_program_info.rating_id.
- * 
+ *
  * Translate a vbi_program_info program rating code into a
  * Latin-1 string, native language.
- * 
+ *
  * @a return
  * Static pointer to the string (don't free()), or @c NULL if
  * this code is undefined.
@@ -368,11 +368,11 @@ vbi_rating_string(vbi_rating_auth auth, int id)
 /**
  * @param classf From vbi_program_info.type_classf.
  * @param id From vbi_program_info.type_id.
- * 
+ *
  * Translate a vbi_program_info program type code into a
  * Latin-1 string, currently English only.
- * 
- * @return 
+ *
+ * @return
  * Static pointer to the string (don't free()), or @c NULL if
  * this code is undefined.
  */

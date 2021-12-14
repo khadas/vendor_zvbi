@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -35,7 +35,7 @@
  *
  * @param p Array of unsigned bytes.
  * @param n Size of array.
- * 
+ *
  * Of each byte of the array, changes the most significant
  * bit to make the number of set bits odd.
  *
@@ -57,7 +57,7 @@ vbi_par				(uint8_t *		p,
  * @ingroup Error
  * @param p Array of unsigned bytes.
  * @param n Size of array.
- * 
+ *
  * Tests the parity and clears the most significant bit of
  * each byte of the array.
  *
@@ -91,7 +91,7 @@ vbi_unpar			(uint8_t *		p,
  * @param p A Hamming 24/18 protected 24 bit word will be stored here,
  *   last significant byte first, lsb first transmitted.
  * @param c Integer between 0 ... 1 << 18 - 1.
- * 
+ *
  * Encodes an 18 bit word with Hamming 24/18 protection
  * as specified in ETS 300 706, Section 8.3.
  *
@@ -126,10 +126,10 @@ vbi_ham24p			(uint8_t *		p,
  * @ingroup Error
  * @param p Pointer to a Hamming 24/18 protected 24 bit word,
  *   last significant byte first, lsb first transmitted.
- * 
+ *
  * Decodes a Hamming 24/18 protected byte triplet
  * as specified in ETS 300 706, Section 8.3.
- * 
+ *
  * @return
  * Triplet data bits D18 [msb] ... D1 [lsb] or a negative value
  * if the triplet contained incorrectable errors.

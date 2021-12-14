@@ -508,7 +508,7 @@ add_network			(vbi_cache *		ca,
 	cache_network *cn;
 
 #if 2 == VBI_VERSION_MINOR || defined ZAPPING8
-	videostd_set = videostd_set; /* unused, no warning please */
+	(void) videostd_set; /* unused, no warning please */
 #endif
 
 	if (nk && (cn = network_by_id (ca, nk))) {
@@ -1280,7 +1280,7 @@ vbi_unref_page			(vbi_page *		pg)
 
 	/* Nothing to do. */
 
-	pg = pg;
+	(void) pg;
 }
 
 #endif
@@ -1367,17 +1367,17 @@ _vbi_cache_find_next_page       (vbi_cache * ca,
 
 	FOR_ALL_NODES (cp, cp1, hash_list, hash_node) {
 		if (cp->pgno == pgno) {
-			if(dir > 0){
-				if((cp->subno > subno) && (!ret || (ret->subno > cp->subno)))
+			if (dir > 0) {
+				if ((cp->subno > subno) && (!ret || (ret->subno > cp->subno)))
 					ret = cp;
-			}else if(dir < 0){
-				if((cp->subno < subno) && (!ret || (ret->subno < cp->subno)))
+			} else if (dir < 0) {
+				if ((cp->subno < subno) && (!ret || (ret->subno < cp->subno)))
 					ret = cp;
 			}
 		}
 	}
 
-	if(ret){
+	if (ret) {
 		return cache_page_ref(ret);
 	}
 
@@ -1402,14 +1402,14 @@ _vbi_cache_find_next_page_2       (vbi_cache * ca,
 		return NULL;
 	}
 
-	for(i = 0; i < HASH_SIZE; i++){
+	for (i = 0; i < HASH_SIZE; i++) {
 		hash_list = ca->hash + hash (i);
 		FOR_ALL_NODES (cp, cp1, hash_list, hash_node) {
-			if(dir > 0){
-				if((cp->pgno > pgno) && (!ret || (ret->pgno > cp->pgno)))
+			if (dir > 0) {
+				if ((cp->pgno > pgno) && (!ret || (ret->pgno > cp->pgno)))
 					ret = cp;
-			}else if(dir < 0){
-				if((cp->pgno < pgno) && (!ret || (ret->pgno < cp->pgno)))
+			} else if (dir < 0) {
+				if ((cp->pgno < pgno) && (!ret || (ret->pgno < cp->pgno)))
 					ret = cp;
 			}
 
@@ -1456,7 +1456,7 @@ _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len)
 	hash_list = ca->hash + hash (pgno);
 
 	FOR_ALL_NODES (cp, cp1, hash_list, hash_node) {
-		if((cp->pgno == pgno) && (left > 0)){
+		if ((cp->pgno == pgno) && (left > 0)) {
 			subs[cnt++] = cp->subno;
 			left--;
 		}
@@ -1487,17 +1487,17 @@ _vbi_cache_find_page            (vbi_cache * ca,
 
 	FOR_ALL_NODES (cp, cp1, hash_list, hash_node) {
 		if (cp->pgno == pgno) {
-			if(dir > 0){
-				if(!ret || (ret->subno > cp->subno))
+			if (dir > 0) {
+				if (!ret || (ret->subno > cp->subno))
 					ret = cp;
-			}else if(dir < 0){
-				if(!ret || (ret->subno < cp->subno))
+			} else if (dir < 0) {
+				if (!ret || (ret->subno < cp->subno))
 					ret = cp;
 			}
 		}
 	}
 
-	if(ret){
+	if (ret) {
 		return cache_page_ref(ret);
 	}
 

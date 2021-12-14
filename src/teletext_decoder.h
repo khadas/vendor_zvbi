@@ -57,6 +57,7 @@ typedef enum {
     VBI_TELETEXT_NON_BITMAP_SUB = -1,     /** NON bitmap subtitle*/
     VBI_TELETEXT_BITMAP_SUB     = 1,      /**< ttx bitmap subtitle*/
 }vbi_submode;
+
 /* Private */
 
 struct teletext {

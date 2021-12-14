@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -31,6 +31,7 @@
 #include "hamm.h"		/* vbi_ipar8() */
 #include "tables.h"		/* vbi_rating/prog_type_string() */
 #include "xds_demux.h"
+#include <inttypes.h>
 
 /**
  * @addtogroup XDSDemux Extended Data Service (XDS) demultiplexer
@@ -244,7 +245,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 
 			fputs ("rating)", fp);
 			xdump (xp, fp);
-			
+
 			if (2 != xp->buffer_size)
 				goto invalid;
 			printf("xp->buffer[0] = %d,xp->buffer[1] = %d\n ",xp->buffer[0] ,xp->buffer[1] );
@@ -259,7 +260,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 			}
 			if (xp->buffer[0] & 0x10) {
 				const char *s;
-			
+
 				if (xp->buffer[0] & 0x20)
 					s = vbi_rating_string
 						(VBI_RATING_AUTH_TV_CA_FR, g);
@@ -587,7 +588,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 		case VBI_XDS_IMPULSE_CAPTURE_ID:
 			fputs ("capture id)", fp);
 			xdump (xp, fp);
-			
+
 			if (6 != xp->buffer_size)
 				goto invalid;
 
@@ -638,7 +639,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 		case VBI_XDS_LOCAL_TIME_ZONE:
 			fputs ("time zone)", fp);
 			xdump (xp, fp);
-			
+
 			if (1 != xp->buffer_size)
 				goto invalid;
 
@@ -866,13 +867,13 @@ vbi_xds_demux_feed		(vbi_xds_demux *	xd,
 
 	log ("XDS demux %02x %02x\n", buffer[0], buffer[1]);
 	printf("XDS demux %02x %02x\n", buffer[0], buffer[1]);
-	
+
 	c1 = buffer[0] ;//c1 = vbi_unpar8 (buffer[0]);
 	c2 = buffer[1] ;//c2 = vbi_unpar8 (buffer[1]);
 	printf("XDS demux %02x %02x\n", c1, c2);
-	if(0){	//if ((c1 | c2) < 0) {
+	if (0) {	//if ((c1 | c2) < 0) {
 		printf ("XDS tx error, discard current packet\n");
- 
+
 		if (sp) {
 			sp->count = 0;
 			sp->checksum = 0;
@@ -896,17 +897,17 @@ vbi_xds_demux_feed		(vbi_xds_demux *	xd,
 		unsigned int i;
 
 		/* Packet header. */
-		
+
 		xds_class = (c1 - 1) >> 1;
 		xds_subclass = c2;
 		printf("xds_class = %d  xds_subclass = %d\n",xds_class,xds_subclass);
 		i = xds_subclass;
-	
+
 		/* MISC subclass 0x4n */
 		if (i >= 0x40)
 			i += 0x10 - 0x40;
 
-		printf(" %d   %d   %d   %d  \n",xds_class,VBI_XDS_CLASS_MISC,i,N_ELEMENTS (xd->subpacket[0]));
+		printf(" %d   %d   %d   %" PRIdFAST32 "  \n",xds_class,VBI_XDS_CLASS_MISC,i,N_ELEMENTS (xd->subpacket[0]));
 		if (xds_class > VBI_XDS_CLASS_MISC
 		    || i > N_ELEMENTS (xd->subpacket[0])) {
 			printf ("XDS ignore packet 0x%x/0x%02x, "
@@ -962,12 +963,12 @@ vbi_xds_demux_feed		(vbi_xds_demux *	xd,
 			memcpy (xd->curr.buffer, sp->buffer, 32);
 			printf("sp->count = %d\n",sp->count);
 			int iiiii = 0;
-			for(iiiii = 0 ; iiiii < 20;iiiii++){
+			for (iiiii = 0 ; iiiii < 20;iiiii++) {
 				printf("sp->buffer = %d\n",sp->buffer[iiiii]);
 			}
 			xd->curr.buffer_size = sp->count - 2;
 			xd->curr.buffer[sp->count - 2] = 0;
-			
+
 			if (XDS_DEMUX_LOG)
 				_vbi_xds_packet_dump (&xd->curr, stderr);
 			printf("***************xds callback***********\n");
@@ -999,7 +1000,7 @@ vbi_xds_demux_feed		(vbi_xds_demux *	xd,
 			break;
 		}
 
-		if (sp->count >= sizeof (sp->buffer) + 2) {
+		if (sp->count >= sizeof (sp->buffer)) {
 			log ("XDS discard packet 0x%x/0x%02x, "
 			     "buffer overflow\n",
 			     xd->curr.xds_class, xd->curr.xds_subclass);
@@ -1129,7 +1130,7 @@ vbi_xds_demux_delete		(vbi_xds_demux *	xd)
 
 	_vbi_xds_demux_destroy (xd);
 
-	free (xd);		
+	free (xd);
 }
 
 /**

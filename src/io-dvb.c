@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -37,8 +37,10 @@
 #ifndef HAVE_S64_U64
   /* Linux 2.6.x asm/types.h defines __s64 and __u64 only
      if __GNUC__ is defined. */
+#ifndef __LP64__
 typedef int64_t __s64;
 typedef uint64_t __u64;
+#endif
 #endif
 #include "dvb/dmx.h"
 
@@ -453,7 +455,7 @@ open_device			(vbi_capture_dvb *	dvb,
 	asprintf (errstr, _("Cannot open '%s': %s."),
 		  device_name, strerror (saved_errno));
 
-	/* fall through */	
+	/* fall through */
 
  failed:
 	dvb->fd = -1;
@@ -653,7 +655,7 @@ vbi_capture_dvb_filter		(vbi_capture *		cap,
  * @param trace If @c TRUE print progress and warning messages on stderr.
  *
  * Initializes a vbi_capture context reading from a Linux DVB device.
- * 
+ *
  * @returns
  * Initialized vbi_capture context, @c NULL on failure.
  *
@@ -683,7 +685,7 @@ vbi_capture_dvb_new2		(const char *		device_name,
  * @param errstr If not @c NULL the function stores a pointer to an error
  *   description here. You must free() this string when no longer needed.
  * @param trace If @c TRUE print progress and warning messages on stderr.
- * 
+ *
  * @deprecated
  * This function is deprecated. Use vbi_capture_dvb_new2() instead.
  *

@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
-#include<unistd.h> 
+#include<unistd.h>
 
 
 typedef void (* NTSC_XDS_status_cb)(int what, int arg);

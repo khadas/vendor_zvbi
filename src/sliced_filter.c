@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -423,7 +423,7 @@ decode_teletext			(vbi_sliced_filter *	sf,
 	unsigned int packet;
 	unsigned int keep_mag_set;
 
-	line = line;
+	(void)line;
 
 	keep_mag_set = sf->keep_mag_set_next;
 
@@ -675,7 +675,7 @@ vbi_sliced_filter_delete	(vbi_sliced_filter *	sf)
 
 	CLEAR (*sf);
 
-	vbi_free (sf);		
+	vbi_free (sf);
 }
 
 vbi_sliced_filter *

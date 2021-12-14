@@ -31,9 +31,9 @@ fprintf (fp, "left=%ld "
 "top=%ld "
 "width=%ld "
 "height=%ld ",
-(long) t->left, 
-(long) t->top, 
-(long) t->width, 
+(long) t->left,
+(long) t->top,
+(long) t->width,
 (long) t->height);
 }
 
@@ -61,7 +61,7 @@ fprint_symbolic (fp, 2, t->flags,
 fprintf (fp, " description=\"%.*s\" "
 "pixelformat=\"%.4s\"=0x%lx "
 "reserved[] ",
-32, (const char *) t->description, 
+32, (const char *) t->description,
 (const char *) & t->pixelformat, (unsigned long) t->pixelformat);
 }
 
@@ -119,7 +119,7 @@ fprint_struct_v4l2_tuner (FILE *fp, int rw __attribute__ ((unused)), const struc
 fprintf (fp, "index=%lu "
 "name=\"%.*s\" "
 "type=",
-(unsigned long) t->index, 
+(unsigned long) t->index,
 32, (const char *) t->name);
 fprint_enum_v4l2_tuner_type (fp, rw, t->type);
 fputs (" capability=", fp);
@@ -127,7 +127,7 @@ fprint_symbol_v4l2_tuner_cap_ (fp, rw, t->capability);
 fprintf (fp, " rangelow=%lu "
 "rangehigh=%lu "
 "rxsubchans=",
-(unsigned long) t->rangelow, 
+(unsigned long) t->rangelow,
 (unsigned long) t->rangehigh);
 fprint_symbol_v4l2_tuner_sub_ (fp, rw, t->rxsubchans);
 fputs (" audmode=", fp);
@@ -135,7 +135,7 @@ fprint_symbol_v4l2_tuner_mode_ (fp, rw, t->audmode);
 fprintf (fp, " signal=%ld "
 "afc=%ld "
 "reserved[] ",
-(long) t->signal, 
+(long) t->signal,
 (long) t->afc);
 }
 
@@ -171,9 +171,9 @@ fprintf (fp, "driver=\"%.*s\" "
 "bus_info=\"%.*s\" "
 "version=0x%lx "
 "capabilities=",
-16, (const char *) t->driver, 
-32, (const char *) t->card, 
-32, (const char *) t->bus_info, 
+16, (const char *) t->driver,
+32, (const char *) t->card,
+32, (const char *) t->bus_info,
 (unsigned long) t->version);
 fprint_symbol_v4l2_cap_ (fp, rw, t->capabilities);
 fputs (" reserved[] ", fp);
@@ -300,10 +300,10 @@ fprintf (fp, " name=\"%.*s\" "
 "step=%ld "
 "default_value=%ld "
 "flags=",
-32, (const char *) t->name, 
-(long) t->minimum, 
-(long) t->maximum, 
-(long) t->step, 
+32, (const char *) t->name,
+(long) t->minimum,
+(long) t->maximum,
+(long) t->step,
 (long) t->default_value);
 fprint_symbol_v4l2_ctrl_flag_ (fp, rw, t->flags);
 fputs (" reserved[] ", fp);
@@ -315,13 +315,13 @@ fprint_struct_v4l2_modulator (FILE *fp, int rw __attribute__ ((unused)), const s
 fprintf (fp, "index=%lu "
 "name=\"%.*s\" "
 "capability=",
-(unsigned long) t->index, 
+(unsigned long) t->index,
 32, (const char *) t->name);
 fprint_symbol_v4l2_tuner_cap_ (fp, rw, t->capability);
 fprintf (fp, " rangelow=%lu "
 "rangehigh=%lu "
 "txsubchans=",
-(unsigned long) t->rangelow, 
+(unsigned long) t->rangelow,
 (unsigned long) t->rangehigh);
 fprint_symbol_v4l2_tuner_sub_ (fp, rw, t->txsubchans);
 fputs (" reserved[] ", fp);
@@ -330,7 +330,7 @@ fputs (" reserved[] ", fp);
 static void
 fprint_struct_v4l2_fract (FILE *fp, int rw __attribute__ ((unused)), const struct v4l2_fract *t)
 {
- fprintf (fp, "%u/%u", t->numerator, t->denominator); 
+ fprintf (fp, "%u/%u", t->numerator, t->denominator);
 }
 
 static void
@@ -353,10 +353,10 @@ fprintf (fp, "index=%lu "
 "width=%lu "
 "height=%lu "
 "type=%lu ",
-(unsigned long) t->index, 
-(unsigned long) t->pixel_format, 
-(unsigned long) t->width, 
-(unsigned long) t->height, 
+(unsigned long) t->index,
+(unsigned long) t->pixel_format,
+(unsigned long) t->width,
+(unsigned long) t->height,
 (unsigned long) t->type);
 fputs ("u={discrete={", fp);
 fprint_struct_v4l2_fract (fp, rw, &t->u.discrete);
@@ -438,7 +438,7 @@ fprint_struct_v4l2_input (FILE *fp, int rw __attribute__ ((unused)), const struc
 fprintf (fp, "index=%lu "
 "name=\"%.*s\" "
 "type=",
-(unsigned long) t->index, 
+(unsigned long) t->index,
 32, (const char *) t->name);
 fprint_symbolic (fp, 0, t->type,
 "TUNER", (unsigned long) V4L2_INPUT_TYPE_TUNER,
@@ -447,7 +447,7 @@ fprint_symbolic (fp, 0, t->type,
 fprintf (fp, " audioset=%lu "
 "tuner=%lu "
 "std=",
-(unsigned long) t->audioset, 
+(unsigned long) t->audioset,
 (unsigned long) t->tuner);
 fprint_symbol_v4l2_std_ (fp, rw, t->std);
 fputs (" status=", fp);
@@ -462,9 +462,9 @@ fprintf (fp, "match_type=%lu "
 "match_chip=%lu "
 "ident=%lu "
 "revision=%lu ",
-(unsigned long) t->match_type, 
-(unsigned long) t->match_chip, 
-(unsigned long) t->ident, 
+(unsigned long) t->match_type,
+(unsigned long) t->match_chip,
+(unsigned long) t->ident,
 (unsigned long) t->revision);
 }
 
@@ -558,7 +558,7 @@ fprint_struct_v4l2_pix_format (FILE *fp, int rw __attribute__ ((unused)), const 
 fprintf (fp, "width=%lu "
 "height=%lu "
 "pixelformat=",
-(unsigned long) t->width, 
+(unsigned long) t->width,
 (unsigned long) t->height);
 fprint_symbol_v4l2_pix_fmt_ (fp, rw, t->pixelformat);
 fputs (" field=", fp);
@@ -566,14 +566,14 @@ fprint_enum_v4l2_field (fp, rw, t->field);
 fprintf (fp, " bytesperline=%lu "
 "sizeimage=%lu "
 "colorspace=",
-(unsigned long) t->bytesperline, 
+(unsigned long) t->bytesperline,
 (unsigned long) t->sizeimage);
 fprint_enum_v4l2_colorspace (fp, rw, t->colorspace);
 fprintf (fp, " priv=%lu "
 "left=%lu "
 "top=%lu ",
-(unsigned long) t->priv, 
-(unsigned long) t->left, 
+(unsigned long) t->priv,
+(unsigned long) t->left,
 (unsigned long) t->top);
 }
 
@@ -589,10 +589,10 @@ fprintf (fp, " chromakey=%lu "
 "clipcount=%lu "
 "bitmap=%p "
 "global_alpha=%lu ",
-(unsigned long) t->chromakey, 
-(const void *) t->clips, 
-(unsigned long) t->clipcount, 
-(const void *) t->bitmap, 
+(unsigned long) t->chromakey,
+(const void *) t->clips,
+(unsigned long) t->clipcount,
+(const void *) t->bitmap,
 (unsigned long) t->global_alpha);
 }
 
@@ -603,8 +603,8 @@ fprintf (fp, "sampling_rate=%lu "
 "offset=%lu "
 "samples_per_line=%lu "
 "sample_format=",
-(unsigned long) t->sampling_rate, 
-(unsigned long) t->offset, 
+(unsigned long) t->sampling_rate,
+(unsigned long) t->offset,
 (unsigned long) t->samples_per_line);
 fprint_symbol_v4l2_pix_fmt_ (fp, rw, t->sample_format);
 fputs (" start[]=? "
@@ -623,7 +623,7 @@ fprint_struct_v4l2_sliced_vbi_format (FILE *fp, int rw __attribute__ ((unused)),
 fprintf (fp, "service_set=%lu "
 "io_size=%lu "
 "reserved[] ",
-(unsigned long) t->service_set, 
+(unsigned long) t->service_set,
 (unsigned long) t->io_size);
 }
 
@@ -697,9 +697,9 @@ fprintf (fp, " frames=%lu "
 "minutes=%lu "
 "hours=%lu "
 "userbits[]=? ",
-(unsigned long) t->frames, 
-(unsigned long) t->seconds, 
-(unsigned long) t->minutes, 
+(unsigned long) t->frames,
+(unsigned long) t->seconds,
+(unsigned long) t->minutes,
 (unsigned long) t->hours);
 }
 
@@ -745,7 +745,7 @@ fprintf (fp, "userptr=%lu ",
 fprintf (fp, "} length=%lu "
 "input=%lu "
 "reserved ",
-(unsigned long) t->length, 
+(unsigned long) t->length,
 (unsigned long) t->input);
 }
 
@@ -763,7 +763,7 @@ fprint_struct_v4l2_frmsize_discrete (FILE *fp, int rw __attribute__ ((unused)), 
 {
 fprintf (fp, "width=%lu "
 "height=%lu ",
-(unsigned long) t->width, 
+(unsigned long) t->width,
 (unsigned long) t->height);
 }
 
@@ -776,11 +776,11 @@ fprintf (fp, "min_width=%lu "
 "min_height=%lu "
 "max_height=%lu "
 "step_height=%lu ",
-(unsigned long) t->min_width, 
-(unsigned long) t->max_width, 
-(unsigned long) t->step_width, 
-(unsigned long) t->min_height, 
-(unsigned long) t->max_height, 
+(unsigned long) t->min_width,
+(unsigned long) t->max_width,
+(unsigned long) t->step_width,
+(unsigned long) t->min_height,
+(unsigned long) t->max_height,
 (unsigned long) t->step_height);
 }
 
@@ -790,8 +790,8 @@ fprint_struct_v4l2_frmsizeenum (FILE *fp, int rw __attribute__ ((unused)), const
 fprintf (fp, "index=%lu "
 "pixel_format=%lu "
 "type=%lu ",
-(unsigned long) t->index, 
-(unsigned long) t->pixel_format, 
+(unsigned long) t->index,
+(unsigned long) t->pixel_format,
 (unsigned long) t->type);
 fputs ("u={discrete={", fp);
 fprint_struct_v4l2_frmsize_discrete (fp, rw, &t->u.discrete);
@@ -815,7 +815,7 @@ fprint_struct_v4l2_fract (fp, rw, &t->timeperframe);
 fprintf (fp, "} extendedmode=%lu "
 "readbuffers=%lu "
 "reserved[] ",
-(unsigned long) t->extendedmode, 
+(unsigned long) t->extendedmode,
 (unsigned long) t->readbuffers);
 }
 
@@ -825,13 +825,13 @@ fprint_struct_v4l2_outputparm (FILE *fp, int rw __attribute__ ((unused)), const 
 fprintf (fp, "capability=%lu "
 "outputmode=%lu "
 "timeperframe={",
-(unsigned long) t->capability, 
+(unsigned long) t->capability,
 (unsigned long) t->outputmode);
 fprint_struct_v4l2_fract (fp, rw, &t->timeperframe);
 fprintf (fp, "} extendedmode=%lu "
 "writebuffers=%lu "
 "reserved[] ",
-(unsigned long) t->extendedmode, 
+(unsigned long) t->extendedmode,
 (unsigned long) t->writebuffers);
 }
 
@@ -895,11 +895,11 @@ fprintf (fp, "quality=%ld "
 "COM_len=%ld "
 "COM_data=\"%.*s\" "
 "jpeg_markers=",
-(long) t->quality, 
-(long) t->APPn, 
-(long) t->APP_len, 
-60, (const char *) t->APP_data, 
-(long) t->COM_len, 
+(long) t->quality,
+(long) t->APPn,
+(long) t->APP_len,
+60, (const char *) t->APP_data,
+(long) t->COM_len,
 60, (const char *) t->COM_data);
 fprint_symbol_v4l2_jpeg_marker_ (fp, rw, t->jpeg_markers);
 fputs (" ", fp);
@@ -913,9 +913,9 @@ fprintf (fp, "index=%lu "
 "capability=%lu "
 "mode=%lu "
 "reserved[] ",
-(unsigned long) t->index, 
-32, (const char *) t->name, 
-(unsigned long) t->capability, 
+(unsigned long) t->index,
+32, (const char *) t->name,
+(unsigned long) t->capability,
 (unsigned long) t->mode);
 }
 
@@ -938,7 +938,7 @@ fprintf (fp, "entries=%lu "
 "entries_cap=%lu "
 "reserved[] "
 "entry[]=? ",
-(unsigned long) t->entries, 
+(unsigned long) t->entries,
 (unsigned long) t->entries_cap);
 }
 
@@ -949,9 +949,9 @@ fprintf (fp, "match_type=%lu "
 "match_chip=%lu "
 "reg=%lu "
 "val=%lu ",
-(unsigned long) t->match_type, 
-(unsigned long) t->match_chip, 
-(unsigned long) t->reg, 
+(unsigned long) t->match_type,
+(unsigned long) t->match_chip,
+(unsigned long) t->reg,
 (unsigned long) t->val);
 }
 
@@ -975,7 +975,7 @@ fprint_struct_v4l2_audio (FILE *fp, int rw __attribute__ ((unused)), const struc
 fprintf (fp, "index=%lu "
 "name=\"%.*s\" "
 "capability=",
-(unsigned long) t->index, 
+(unsigned long) t->index,
 32, (const char *) t->name);
 fprint_symbolic (fp, 0, t->capability,
 "STEREO", (unsigned long) V4L2_AUDCAP_STEREO,
@@ -993,7 +993,7 @@ fprint_struct_v4l2_encoder_cmd (FILE *fp, int rw __attribute__ ((unused)), const
 {
 fprintf (fp, "cmd=%lu "
 "flags=0x%lx ",
-(unsigned long) t->cmd, 
+(unsigned long) t->cmd,
 (unsigned long) t->flags);
 fputs ("? ", fp);
 }
@@ -1004,7 +1004,7 @@ fprint_struct_v4l2_output (FILE *fp, int rw __attribute__ ((unused)), const stru
 fprintf (fp, "index=%lu "
 "name=\"%.*s\" "
 "type=",
-(unsigned long) t->index, 
+(unsigned long) t->index,
 32, (const char *) t->name);
 fprint_symbolic (fp, 0, t->type,
 "MODULATOR", (unsigned long) V4L2_OUTPUT_TYPE_MODULATOR,
@@ -1014,7 +1014,7 @@ fprint_symbolic (fp, 0, t->type,
 fprintf (fp, " audioset=%lu "
 "modulator=%lu "
 "std=",
-(unsigned long) t->audioset, 
+(unsigned long) t->audioset,
 (unsigned long) t->modulator);
 fprint_symbol_v4l2_std_ (fp, rw, t->std);
 fputs (" reserved[] ", fp);

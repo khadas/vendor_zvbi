@@ -129,7 +129,7 @@ draw_row			(ushort *		canvas,
 
 		if (num_tspaces > 0) {
 			draw_blank(i - num_tspaces, num_tspaces);
-			num_tspaces = 0; 
+			num_tspaces = 0;
 		}
 
 		vbi_draw_cc_page_region (pg, VBI_PIXFMT_RGBA32_LE,
@@ -370,7 +370,7 @@ init_window			(int			ac,
 
 	screen = DefaultScreen (display);
 	cmap = DefaultColormap (display, screen);
- 
+
 	window = XCreateSimpleWindow (display,
 				      RootWindow (display, screen),
 				      /* x, y */ 0, 0,
@@ -383,7 +383,7 @@ init_window			(int			ac,
 	}
 
 	XGetWindowAttributes (display, window, &wa);
-			
+
 	if (16 != wa.depth) {
 		fprintf (stderr, "Can only run at "
 			 "color depth 16 (5:6:5) LE\n");
@@ -419,7 +419,7 @@ init_window			(int			ac,
 	gc = XCreateGC (display, window, 0, NULL);
 
 	XMapWindow (display, window);
-	       
+
 	XSync (display, False);
 
 	XPutImage (display, window, gc, ximage,
@@ -616,7 +616,7 @@ hello_world			(void)
 	prints ("He betrayed and murdered your"); CR; PAUSE (20);
 	prints ("father. Now the Jedi are all"); CR; PAUSE (20);
 	prints ("but extinct. Vader was seduced"); CR; PAUSE (20);
-	prints ("by the dark side of the Force."); CR; PAUSE (20);                        
+	prints ("by the dark side of the Force."); CR; PAUSE (20);
 	prints (">> The Force?"); CR; PAUSE (20);
 	prints (">> Well, the Force is what gives"); CR; PAUSE (20);
 	prints ("a Jedi his power. It's an energy"); CR; PAUSE (20);

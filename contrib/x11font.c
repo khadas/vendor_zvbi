@@ -66,10 +66,10 @@ print_font(const char *filename,
 	    fprintf(stderr,"open %s: %s\n",filename,strerror(errno));
 	fprintf(stderr,"writing %s\n",filename);
     }
-    
+
     print_head(fp, foundry, name, italic ? "i" : "r", cw, ch);
     fprintf(fp,"CHARS %d\n", count);
-    
+
     for (i = 0; i < 0xffff; i++) {
 	c = map(i, italic);
 	if (invalid == c)
@@ -108,7 +108,7 @@ print_font(const char *filename,
 	fclose(fp);
 }
 
-int 
+int
 main ()
 {
     print_font("teletext.bdf","ets","teletext",0,(uint8_t *) wstfont2_bits,

@@ -338,7 +338,7 @@ init_device			(void)
 	   width must be at least 320 pixels. */
 
 	fmt.type		= V4L2_BUF_TYPE_VIDEO_CAPTURE;
-	fmt.fmt.pix.width	= 768; 
+	fmt.fmt.pix.width	= 768;
 	fmt.fmt.pix.height	= 576;
 	fmt.fmt.pix.pixelformat	= V4L2_PIX_FMT_YUYV;
 	fmt.fmt.pix.field	= V4L2_FIELD_INTERLACED;
@@ -406,7 +406,7 @@ init_device			(void)
 static void
 open_device			(void)
 {
-	struct stat st;	
+	struct stat st;
 
 	if (-1 == stat (dev_name, &st)) {
 		fprintf (stderr, "Cannot identify '%s': %d, %s\n",
@@ -460,7 +460,7 @@ main				(int			argc,
 	fprintf (stderr, "Sorry, V4L2 only. Patches welcome.\n");
 
 	exit (EXIT_FAILURE);
-	
+
 	return 0;
 }
 

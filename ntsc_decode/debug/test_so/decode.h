@@ -7,7 +7,7 @@
  *  Author: kui zhang
  *
  *******************************************************************/
- 
+
 #ifndef _DECODE_H_
 #define _DECODE_H_
 
@@ -19,7 +19,7 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 
 #include <unistd.h>

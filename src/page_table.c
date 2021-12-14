@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -111,7 +111,7 @@ contains_all_subpages		(const vbi_page_table *pt,
  *   Teletext page number.
  *
  * The function returns @c TRUE if the page @a pgno and all its
- * subpages have been added to the page table. 
+ * subpages have been added to the page table.
  */
 vbi_bool
 vbi_page_table_contains_all_subpages
@@ -204,7 +204,7 @@ vbi_page_table_contains_subpage	(const vbi_page_table *pt,
  * // Iterate over the subpages of all pages.
  * while (!vbi_page_table_next_subpage (pt, &pgno, &subno) {
  *     // Do things on page pgno, subno.
- *     // subno is in range 0 to 0x3F7E inclusive, or VBI_ANY_SUBNO. 
+ *     // subno is in range 0 to 0x3F7E inclusive, or VBI_ANY_SUBNO.
  * }
  * @endcode
  */
@@ -866,7 +866,7 @@ vbi_page_table_add_all_displayable_pages
 	assert (NULL != pt);
 
 	for (pgno = 0x100; pgno < 0x900; pgno += 0x100 - 0xA0) {
-		vbi_pgno end_pgno = pgno + 0xA0; 
+		vbi_pgno end_pgno = pgno + 0xA0;
 
 		do {
 			uint32_t mask;
@@ -921,7 +921,7 @@ vbi_page_table_delete		(vbi_page_table *	pt)
 
 	CLEAR (*pt);
 
-	vbi_free (pt);		
+	vbi_free (pt);
 }
 
 /**

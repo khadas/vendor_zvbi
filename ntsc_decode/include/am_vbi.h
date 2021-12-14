@@ -22,8 +22,8 @@
 #include "hamm.h"
 #include "tables.h"
 #include "vbi.h"
-#include <android/log.h>    
-#include <am_xds.h>    
+#include <android/log.h>
+#include <am_xds.h>
 #include "vbi_dmx.h"
 #ifdef __cplusplus
 extern "C"

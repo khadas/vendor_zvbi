@@ -304,12 +304,12 @@ AM_CPPFLAGS = \
 	-D_REENTRANT \
 	-D_GNU_SOURCE
 
-@ENABLE_PROXY_FALSE@proxy_sources = 
+@ENABLE_PROXY_FALSE@proxy_sources =
 @ENABLE_PROXY_TRUE@proxy_sources = \
 @ENABLE_PROXY_TRUE@	proxy-msg.c \
 @ENABLE_PROXY_TRUE@	proxy-msg.h
 
-@ENABLE_PROXY_FALSE@proxy_libs = 
+@ENABLE_PROXY_FALSE@proxy_libs =
 @ENABLE_PROXY_TRUE@proxy_libs = \
 @ENABLE_PROXY_TRUE@	libzvbi-chains.la
 
@@ -491,11 +491,11 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libzvbi-chains.la: $(libzvbi_chains_la_OBJECTS) $(libzvbi_chains_la_DEPENDENCIES) 
+libzvbi-chains.la: $(libzvbi_chains_la_OBJECTS) $(libzvbi_chains_la_DEPENDENCIES)
 	$(LINK) $(am_libzvbi_chains_la_rpath) $(libzvbi_chains_la_LDFLAGS) $(libzvbi_chains_la_OBJECTS) $(libzvbi_chains_la_LIBADD) $(LIBS)
-libzvbi.la: $(libzvbi_la_OBJECTS) $(libzvbi_la_DEPENDENCIES) 
+libzvbi.la: $(libzvbi_la_OBJECTS) $(libzvbi_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libzvbi_la_LDFLAGS) $(libzvbi_la_OBJECTS) $(libzvbi_la_LIBADD) $(LIBS)
-libzvbiinline.la: $(libzvbiinline_la_OBJECTS) $(libzvbiinline_la_DEPENDENCIES) 
+libzvbiinline.la: $(libzvbiinline_la_OBJECTS) $(libzvbiinline_la_DEPENDENCIES)
 	$(LINK)  $(libzvbiinline_la_LDFLAGS) $(libzvbiinline_la_OBJECTS) $(libzvbiinline_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:

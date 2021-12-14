@@ -317,7 +317,7 @@ cc_test				(const vbi_sliced *	sliced,
 	}
 
 	++frame_count;
- 
+
 	if (option_raw_output != (0 != error_set)) {
 		option_sliced_output = (0 != error_set);
 
@@ -381,7 +381,7 @@ decode_frame			(const vbi_sliced *	sliced,
 		if (++next_frame >= N_ELEMENTS (frame_buffers))
 			next_frame = 0;
 
-		++n_frames_buffered;	
+		++n_frames_buffered;
 
 		if (!cc_test (sliced, n_lines))
 			return FALSE;
@@ -826,5 +826,5 @@ main				(int			argc,
 	stream_delete (cst);
 	cst = NULL;
 
-	exit(EXIT_SUCCESS);	
+	exit(EXIT_SUCCESS);
 }

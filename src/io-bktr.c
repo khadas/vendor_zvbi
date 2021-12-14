@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -360,11 +360,11 @@ io_error:
  * @param errstr If not @c NULL this function stores a pointer to an error
  *   description here. You must free() this string when no longer needed.
  * @param trace If @c TRUE print progress messages on stderr.
- * 
+ *
  * @bug You must enable continuous video capturing to read VBI data from
  * the bktr driver, using an RGB video format, and the VBI device must be
  * opened before video capturing starts (METEORCAPTUR).
- * 
+ *
  * @return
  * Initialized vbi_capture context, @c NULL on failure.
  */

@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -76,7 +76,7 @@ typedef struct _vbi_pfc_demux vbi_pfc_demux;
  *   vbi_pfx_demux_new() and given to vbi_pfc_demux_feed().
  * @param user_data User pointer given to vbi_pfc_demux_new().
  * @param block Structure describing the received data block.
- * 
+ *
  * Function called by vbi_pfc_demux_feed() when a
  * new data block is available.
  *

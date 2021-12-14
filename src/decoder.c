@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -136,7 +136,7 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 		for (j = OVERSAMPLING; j > 0; j--) {
 			b = ((t + (OVERSAMPLING / 2)) / OVERSAMPLING >= tr);
 
-    			if (b ^ b1) {
+			if (b ^ b1) {
 				cl = d->oversampling_rate >> 1;
 			} else {
 				cl += d->cri_rate;
@@ -153,7 +153,7 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 
 						for (j = d->frc_bits; j > 0; j--) {
 							c = c * 2 + (sample(raw, i, bpp, endian) >= tr);
-    							i += d->step;
+							i += d->step;
 						}
 
 						if (c ^= d->frc)
@@ -161,17 +161,17 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 
 						/* CRI/FRC found, now get the
 						   payload and exit */
-						
+
 						switch (d->endian) {
 						case 3:
 							for (j = 0; j < (unsigned int) d->payload; j++) {
-					    			c >>= 1;
+								c >>= 1;
 								c += (sample(raw, i, bpp, endian) >= tr) << 7;
-			    					i += d->step;
+								i += d->step;
 
 								if ((j & 7) == 7)
 									*buf++ = c;
-					    		}
+							}
 
 							*buf = c >> ((8 - d->payload) & 7);
 							break;
@@ -179,11 +179,11 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 						case 2:
 							for (j = 0; j < (unsigned int) d->payload; j++) {
 								c = c * 2 + (sample(raw, i, bpp, endian) >= tr);
-			    					i += d->step;
+								i += d->step;
 
 								if ((j & 7) == 7)
 									*buf++ = c;
-					    		}
+							}
 
 							*buf = c & ((1 << (d->payload & 7)) - 1);
 							break;
@@ -191,13 +191,13 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 						case 1:
 							for (j = d->payload; j > 0; j--) {
 								for (k = 0; k < 8; k++) {
-						    			c >>= 1;
+									c >>= 1;
 									c += (sample(raw, i, bpp, endian) >= tr) << 7;
-			    						i += d->step;
+									i += d->step;
 								}
 
 								*buf++ = c;
-					    		}
+							}
 
 							break;
 
@@ -205,16 +205,16 @@ bit_slicer_tmpl(vbi_bit_slicer *d, uint8_t *raw,
 							for (j = d->payload; j > 0; j--) {
 								for (k = 0; k < 8; k++) {
 									c = c * 2 + (sample(raw, i, bpp, endian) >= tr);
-			    						i += d->step;
+									i += d->step;
 								}
 
 								*buf++ = c;
-					    		}
+							}
 
 							break;
 						}
 
-			    			return TRUE;
+						return TRUE;
 					}
 				}
 			}
@@ -299,12 +299,12 @@ bit_slicer_565_be(vbi_bit_slicer *d, uint8_t *raw, uint8_t *buf)
 }
 
 /**
- * @param slicer Pointer to vbi_bit_slicer object to be initialized. 
+ * @param slicer Pointer to vbi_bit_slicer object to be initialized.
  * @param raw_samples Number of samples or pixels in one raw vbi line
  *   later passed to vbi_bit_slice(). This limits the number of
  *   bytes read from the sample buffer.
  * @param sampling_rate Raw vbi sampling rate in Hz, that is the number of
- *   samples or pixels sampled per second by the hardware. 
+ *   samples or pixels sampled per second by the hardware.
  * @param cri_rate The Clock Run In is a NRZ modulated
  *   sequence of '0' and '1' bits prepending most data transmissions to
  *   synchronize data acquisition circuits. This parameter gives the CRI bit
@@ -322,7 +322,7 @@ bit_slicer_565_be(vbi_bit_slicer *d, uint8_t *raw, uint8_t *buf)
  *   actually significant for a match. For instance it is wise
  *   not to rely on the very first CRI bits transmitted. Note this
  *   mask is not shifted left by @a frc_bits.
- * @param cri_bits 
+ * @param cri_bits
  * @param frc_bits Number of CRI and FRC bits in @a cri_frc, respectively.
  *   Their sum is limited to 32.
  * @param payload Number of payload <em>bits</em>. Only this data
@@ -331,7 +331,7 @@ bit_slicer_565_be(vbi_bit_slicer *d, uint8_t *raw, uint8_t *buf)
  *   last byte are undefined.
  * @param modulation Modulation of the vbi data, see vbi_modulation.
  * @param fmt Format of the raw data, see vbi_pixfmt.
- * 
+ *
  * Initializes vbi_bit_slicer object. Usually you will not use this
  * function but vbi_raw_decode(), the vbi image decoder which handles
  * all these details.
@@ -491,10 +491,10 @@ vbi_bit_slicer_init(vbi_bit_slicer *slicer,
  *   vbi scan line may contain data, this must be an array of vbi_sliced
  *   with the same number of entries as scan lines in the raw image
  *   (rd->count[0] + rd->count[1]).
- * 
+ *
  * Decode a raw vbi image, consisting of several scan lines of raw vbi data,
  * into sliced vbi data. The output is sorted by line number.
- * 
+ *
  * Note this function attempts to learn which lines carry which data
  * service, or none, to speed up decoding. You should avoid using the same
  * vbi_raw_decoder structure for different sources.
@@ -533,7 +533,7 @@ vbi_raw_decode			(vbi_raw_decoder *	rd,
  * @param rd Initialized vbi_raw_decoder structure.
  * @param start Array of start line indices for both fields
  * @param count Array of line counts for both fields
- * 
+ *
  * Grows or shrinks the internal state arrays for VBI geometry changes
  */
 void
@@ -576,12 +576,12 @@ vbi_raw_decoder_resize		(vbi_raw_decoder *	rd,
 /**
  * @param rd Initialized vbi_raw_decoder structure.
  * @param services Set of @ref VBI_SLICED_ symbols.
- * 
+ *
  * Removes one or more data services to be decoded from the
  * vbi_raw_decoder structure. This function can be called at any
- * time and does not touch sampling parameters. 
- * 
- * @return 
+ * time and does not touch sampling parameters.
+ *
+ * @return
  * Set of @ref VBI_SLICED_ symbols describing the remaining data
  * services that will be decoded.
  */
@@ -653,14 +653,14 @@ vbi_raw_decoder_check_services	(vbi_raw_decoder *	rd,
  *  populated in a non-confusing way) but @c 1 or @c 2 will not. If the
  *  data service <i>may</i> use more lines than are sampled, @c 1 will
  *  accept but @c 2 will not. If unsure, set to @c 1.
- * 
+ *
  * After you initialized the sampling parameters in @a rd (according to
  * the abilities of your raw vbi source), this function adds one or more
  * data services to be decoded. The libzvbi raw vbi decoder can decode up
  * to eight data services in parallel. You can call this function while
  * already decoding, it does not change sampling parameters and you must
  * not change them either after calling this.
- * 
+ *
  * @return
  * Set of @ref VBI_SLICED_ symbols describing the data services that actually
  * will be decoded. This excludes those services not decodable given
@@ -708,13 +708,13 @@ vbi_raw_decoder_add_services	(vbi_raw_decoder *	rd,
  *   should be at least twice as high; rd->sampling_rate will
  *   be set to a more reasonable value of 27 MHz derived
  *   from ITU-R Rec. 601.)
- * 
+ *
  * Calculate the sampling parameters in @a rd required to receive and
  * decode the requested data @a services. rd->sampling_format will be
  * @c VBI_PIXFMT_YUV420, rd->bytes_per_line set accordingly to a
  * reasonable minimum. This function can be used to initialize hardware
  * prior to calling vbi_raw_decoder_add_service().
- * 
+ *
  * @return
  * Set of @ref VBI_SLICED_ symbols describing the data services covered
  * by the calculated sampling parameters. This excludes services the libzvbi
@@ -744,7 +744,7 @@ vbi_raw_decoder_parameters	(vbi_raw_decoder *	rd,
 	}
 
 	service_set = services;
- 
+
 	pthread_mutex_lock (&rd->mutex);
 
 	{
@@ -761,7 +761,7 @@ vbi_raw_decoder_parameters	(vbi_raw_decoder *	rd,
 
 /**
  * @param rd Initialized vbi_raw_decoder structure.
- * 
+ *
  * Reset a vbi_raw_decoder structure. This removes
  * all previously added services to be decoded (if any)
  * but does not touch the sampling parameters. You are
@@ -791,7 +791,7 @@ vbi_raw_decoder_reset		(vbi_raw_decoder *	rd)
 /**
  * @param rd Pointer to initialized vbi_raw_decoder
  *  structure, can be @c NULL.
- * 
+ *
  * Free all resources associated with @a rd.
  */
 void
@@ -812,7 +812,7 @@ vbi_raw_decoder_destroy		(vbi_raw_decoder *	rd)
 
 /**
  * @param rd Pointer to a vbi_raw_decoder structure.
- * 
+ *
  * Initializes a vbi_raw_decoder structure.
  */
 void

@@ -113,7 +113,7 @@ decode_ttx(uint8_t *buf, int line)
 
         for (j = 0; j < 42; j++) {
 	   char c = _vbi_to_ascii (buf[j]);
-	   
+
 	   *text = c;
 	   text++;
 	}
@@ -129,7 +129,7 @@ dump_pil(int pil)
 {
 	int day, mon, hour, min;
         static char text[255];
-   
+
         memset(text, 0, 255);
 
 	day = pil >> 15;
@@ -165,7 +165,7 @@ decode_vps(uint8_t *buf)
 
         text_start=text=malloc(255);
         memset(text, 0, 255);
-        
+
 	text += snprintf(text, 255, "VPS: ");
 
 	c = vbi_rev8 (buf[1]);
@@ -200,7 +200,7 @@ decode_vps(uint8_t *buf)
 	text += snprintf(text, 100, " CNI: %04x PCS: %d PTY: %d ", cni, pcs, pty);
 
 	text += snprintf(text, 50, " %s", dump_pil(pil));
-   
+
         return(text_start);
 }
 
@@ -227,7 +227,7 @@ draw(unsigned char *raw)
 
 	if (depth == 24) {
 		unsigned int *p = ximgdata;
-		
+
 		for (i = src_w * src_h; i >= 0; i--)
 			*p++ = palette[(int) *data++];
 	} else {
@@ -285,14 +285,14 @@ draw(unsigned char *raw)
 			break;
 	if (i < slines) {
 	   int svc_idx=0;
-	   while (_vbi_service_table[svc_idx].id !=0 && 
+	   while (_vbi_service_table[svc_idx].id !=0 &&
 		  _vbi_service_table[svc_idx].id != sliced[i].id)
 	     svc_idx++;
-	   
+
 	   if (_vbi_service_table[svc_idx].id == sliced[i].id) {
 	      struct _vbi_service_par service;
 	      service = _vbi_service_table[svc_idx];
-	      
+
 	      xti.nchars += snprintf(buf + xti.nchars, 255 - xti.nchars,
 				     " %s (%x) +%dns",
 				     service.label,
@@ -312,8 +312,8 @@ draw(unsigned char *raw)
 	      }
 	   } else {
 	      xti.nchars += snprintf(buf + xti.nchars, 255 - xti.nchars,
-				     " %s (%d)", 
-				     vbi_sliced_name(sliced[i].id) ?: "???", 
+				     " %s (%d)",
+				     vbi_sliced_name(sliced[i].id) ?: "???",
 				     sliced[i].id);
 	   }
 	} else {
@@ -339,14 +339,14 @@ draw(unsigned char *raw)
 /*
         XSetForeground(display, gc, 0x00FFFF00);
         XFillRectangle(display, window, gc,
-		       0xc0-draw_offset, 
+		       0xc0-draw_offset,
 		       src_h, 1, dst_h);
         XFillRectangle(display, window, gc,
 		       0x19b-draw_offset,
 		       src_h, 1, dst_h);
 */
         /* 50% grey */
-        XSetForeground(display, gc, 0xAAAAAAAA);  
+        XSetForeground(display, gc, 0xAAAAAAAA);
 //XSync(display, False);
         x=draw_offset;
         while (x<src_w && (x-draw_offset)<dst_w) {
@@ -432,7 +432,7 @@ xevent(void)
 			case XK_Right:
 			    if (draw_offset < (src_w - 10))
 				    draw_offset += 10;
-			    goto redraw;  
+			    goto redraw;
 			}
 
 			break;
@@ -454,7 +454,7 @@ redraw:
 		       cur_y = event.xmotion.y;
 		       // printf("Got MotionNotify: (%d, %d)\n", event.xmotion.x, event.xmotion.y);
 		       break;
-		   
+
 		case ClientMessage:
 			exit(EXIT_SUCCESS);
 		}
@@ -479,7 +479,7 @@ init_window(int ac, char **av, const char *dev_name)
 
 	screen = DefaultScreen(display);
 	cmap = DefaultColormap(display, screen);
- 
+
 	window = XCreateSimpleWindow(display,
 		RootWindow(display, screen),
 		0, 0,		// x, y
@@ -487,16 +487,16 @@ init_window(int ac, char **av, const char *dev_name)
 				// w, h
 		2,		// borderwidth
 		0xffffffff,	// fgd
-		0x00000000);	// bgd 
+		0x00000000);	// bgd
 
 	if (!window) {
 		fprintf(stderr, "No window\n");
 		exit(EXIT_FAILURE);
 	}
-			
+
 	XGetWindowAttributes(display, window, &wa);
 	depth = wa.depth;
-			
+
 	if (depth != 15 && depth != 16 && depth != 24) {
 		fprintf(stderr, "Sorry, cannot run at colour depth %d\n", depth);
 		exit(EXIT_FAILURE);
@@ -566,7 +566,7 @@ init_window(int ac, char **av, const char *dev_name)
 	gc = XCreateGC(display, window, 0, NULL);
 
 	XMapWindow(display, window);
-	       
+
 	XSync(display, False);
 }
 
@@ -596,7 +596,7 @@ mainloop(void)
 				continue;
 			else
 				exit(EXIT_FAILURE);
-		case 0: 
+		case 0:
 			fprintf(stderr, "VBI read timeout%s\n",
 				ignore_error ? " (ignored)" : "");
 			if (ignore_error || (pxc != NULL))
@@ -811,7 +811,7 @@ main(int argc, char **argv)
 	if (!do_sim)
 		vbi_capture_delete(cap);
 
-	exit(EXIT_SUCCESS);	
+	exit(EXIT_SUCCESS);
 }
 
 

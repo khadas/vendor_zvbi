@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -47,8 +47,10 @@ static const char rcsid [] =
 #  include <inttypes.h>
   /* Linux 2.6.x asm/types.h defines __s64 and __u64 only
      if __GNUC__ is defined. */
+#ifndef __LP64__
 typedef int64_t __s64;
 typedef uint64_t __u64;
+#endif
 #endif
 
 #include "videodev2.h"
@@ -195,7 +197,7 @@ vbi_capture_v4l2_new		(const char *		dev_name,
  * Note: Starting with libzvbi 0.2.9 the V4L2 0.20 API is no longer
  * supported. The function still recognizes V4L2 0.20 drivers
  * for debugging purposes and supports Linux 2.6 V4L2 drivers.
- * 
+ *
  * @return
  * Initialized vbi_capture context, @c NULL on failure.
  */

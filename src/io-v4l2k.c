@@ -16,8 +16,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -62,8 +62,10 @@ static const char rcsid [] =
 #  include <inttypes.h>
   /* Linux 2.6.x asm/types.h defines __s64 and __u64 only
      if __GNUC__ is defined. */
+#ifndef __LP64__
 typedef int64_t __s64;
 typedef uint64_t __u64;
+#endif
 #endif
 
 #include "videodev2k.h"
@@ -464,14 +466,14 @@ v4l2_stream(vbi_capture *vc, vbi_capture_buffer **raw,
 	if (NULL != raw) {
 		vbi_capture_buffer *r;
 
-		r = *raw; 
+		r = *raw;
 		if (NULL == r) {
 			/* Store raw data in our buffer
 			   and return a buffer pointer. */
 			*raw = b;
 
 			/* Keep this buffer out of the queue. */
-			v->enqueue = v->vbuf.index;   
+			v->enqueue = v->vbuf.index;
 		} else {
 			/* Store raw data in client buffer. */
 			memcpy (r->data, b->data, b->size);
@@ -479,7 +481,7 @@ v4l2_stream(vbi_capture *vc, vbi_capture_buffer **raw,
 			/* FIXME client should pass max buffer size. */
 			r->size = b->size;
 
-			r->timestamp = b->timestamp; 
+			r->timestamp = b->timestamp;
 		}
 	}
 
@@ -1127,7 +1129,7 @@ v4l2_update_services(vbi_capture *vc,
 					   ? 1.0 / 25 : 1001.0 / 30000);
 	v->sp.sampling_format	= VBI_PIXFMT_YUV420;
 
- 	if (vfmt.fmt.vbi.sample_format != V4L2_PIX_FMT_GREY) {
+	if (vfmt.fmt.vbi.sample_format != V4L2_PIX_FMT_GREY) {
 		asprintf(errstr, _("%s (%s) offers unknown vbi sampling format #%d. "
 				   "This may be a driver bug or libzvbi is too old."),
 			 v->p_dev_name, v->vcap.card, vfmt.fmt.vbi.sample_format);
@@ -1135,7 +1137,7 @@ v4l2_update_services(vbi_capture *vc,
 	}
 
 	/* grow pattern array if necessary
-	** note: must do this even if service 
+	** note: must do this even if service
 	** add fails later, to stay in sync with driver */
 	vbi3_raw_decoder_set_sampling_par (&v->rd, &v->sp, /* strict */ 0);
 
@@ -1517,7 +1519,7 @@ vbi_capture_v4l2k_new		(const char *		dev_name,
  * @param errstr If not @c NULL this function stores a pointer to an error
  *   description here. You must free() this string when no longer needed.
  * @param trace If @c TRUE print progress messages on stderr.
- * 
+ *
  * @return
  * Initialized vbi_capture context, @c NULL on failure.
  */

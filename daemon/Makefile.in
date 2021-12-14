@@ -349,10 +349,10 @@ clean-sbinPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-zvbi-chains$(EXEEXT): $(zvbi_chains_OBJECTS) $(zvbi_chains_DEPENDENCIES) 
+zvbi-chains$(EXEEXT): $(zvbi_chains_OBJECTS) $(zvbi_chains_DEPENDENCIES)
 	@rm -f zvbi-chains$(EXEEXT)
 	$(LINK) $(zvbi_chains_LDFLAGS) $(zvbi_chains_OBJECTS) $(zvbi_chains_LDADD) $(LIBS)
-zvbid$(EXEEXT): $(zvbid_OBJECTS) $(zvbid_DEPENDENCIES) 
+zvbid$(EXEEXT): $(zvbid_OBJECTS) $(zvbid_DEPENDENCIES)
 	@rm -f zvbid$(EXEEXT)
 	$(LINK) $(zvbid_LDFLAGS) $(zvbid_OBJECTS) $(zvbid_LDADD) $(LIBS)
 

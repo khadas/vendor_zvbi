@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -319,15 +319,15 @@ wss_test_init(v4l_device *v4l)
 	}
 
 	v4l->wss_slicer_fn =
-	init_bit_slicer(&v4l->wss_slicer, 
+	init_bit_slicer(&v4l->wss_slicer,
 		width,
-		sampling_rate, 
-		/* cri_rate */ 5000000, 
+		sampling_rate,
+		/* cri_rate */ 5000000,
 		/* bit_rate */ 833333,
-		/* cri_frc */ 0xC71E3C1F, 
+		/* cri_frc */ 0xC71E3C1F,
 		/* cri_mask */ 0x924C99CE,
-		/* cri_bits */ 32, 
-		/* frc_bits */ 0, 
+		/* cri_bits */ 32,
+		/* frc_bits */ 0,
 		/* payload */ 14 * 1,
 		MOD_BIPHASE_LSB_ENDIAN,
 		fmt);

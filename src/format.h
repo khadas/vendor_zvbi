@@ -107,7 +107,7 @@ typedef enum {
 	 * characters, while the 'boxed' words are marked as VBI_SEMI_TRANSPARENT),
 	 * but can also occur on a mainly VBI_OPAQUE page to create a 'window'
 	 * effect.
- 	 */
+	 */
 	VBI_TRANSPARENT_SPACE,
 	/**
 	 * Display video instead of the background color.
@@ -254,6 +254,7 @@ typedef enum {
     VBI_TELETEXT_NON_BITMAP_SUBTITLE = -1,     /** NON bitmap subtitle*/
     VBI_TELETEXT_BITMAP_SUBTITLE     = 1,      /**< ttx bitmap subtitle*/
 }vbi_subtitle_mode;
+
 struct vbi_font_descr;
 
 /**
@@ -281,7 +282,7 @@ typedef struct vbi_page {
 	 * Page number, see vbi_pgno.
 	 */
 	/* FIXME this shouldn't be int */
- 	int			pgno;
+	int			pgno;
 	/**
 	 * Subpage number, see vbi_subno.
 	 */

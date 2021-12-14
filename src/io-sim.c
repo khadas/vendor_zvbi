@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -904,7 +904,7 @@ _vbi_raw_video_image		(uint8_t *		raw,
 	if (unlikely (n_scan_lines * sp->bytes_per_line > raw_size)) {
 		warning (__FUNCTION__,
 			 "%u + %u lines * %lu bytes_per_line > %lu raw_size.",
-			 			 sp->count[0], sp->count[1],
+						 sp->count[0], sp->count[1],
 			 (unsigned long) sp->bytes_per_line, raw_size);
 		return FALSE;
 	}
@@ -1550,7 +1550,7 @@ caption_default_test_stream [] =
 	/* TODO: regression test for repeated control code bug:
 	   <control code field 1>
 	   <zero field 2>
-	   <repeated control code field 1, to be ignored> */ 
+	   <repeated control code field 1, to be ignored> */
 
 static unsigned int
 get_attr			(const char *		s,
@@ -1696,9 +1696,9 @@ caption_append_command		(vbi_capture_sim *	sim,
 		{ "tr", 0x142A },
 	};
 	static const int row_code [16] = {
-		0x1140, 0x1160, 0x1240, 0x1260, 
-		0x1540, 0x1560, 0x1640, 0x1660, 
-		0x1740, 0x1760, 0x1040, 0x1340, 
+		0x1140, 0x1160, 0x1240, 0x1260,
+		0x1540, 0x1560, 0x1640, 0x1660,
+		0x1740, 0x1760, 0x1040, 0x1340,
 		0x1360, 0x1440, 0x1460, -1
 	};
 	struct buffer *b;
@@ -2193,7 +2193,7 @@ gen_sliced_625			(vbi_capture_sim *	sim)
 		s[1].line = 7;
 		s[2].id = VBI_SLICED_TELETEXT_D_625;
 		s[2].line = 8;
-		
+
 		s += 3;
 	}
 
@@ -2303,7 +2303,7 @@ delay_raw_data			(vbi_capture_sim *	sim,
 		copy_field (sim->desync_buffer[i ^ 1],
 			    raw_data + sim->sp.bytes_per_line,
 			    sim->sp.count[0], sim->sp.bytes_per_line);
-			    
+
 		copy_field (raw_data + sim->sp.bytes_per_line,
 			    raw_data,
 			    sim->sp.count[0], sim->sp.bytes_per_line);
@@ -2516,7 +2516,7 @@ sim_delete			(vbi_capture *		cap)
  *
  * This function opens a simulated VBI device providing raw and sliced VBI
  * data. It can be used to test applications in absence of a real device.
- * 
+ *
  * The VBI data is valid but limited. Just one Teletext page and one line
  * of roll-up caption. The WSS and VPS data is set to defaults, the VPS
  * contains no CNI.
@@ -2524,7 +2524,7 @@ sim_delete			(vbi_capture *		cap)
  * @note
  * The simulation does not run in real time.
  * Reading from the simulated device will return data immediately.
- * 
+ *
  * @returns
  * Initialized vbi_capture context, @c NULL on failure (out of memory).
  *
@@ -2613,7 +2613,7 @@ vbi_capture_sim_new		(int			scanning,
 
 	/* Signal simulation. */
 
-#if 3 == VBI_VERSION_MINOR	
+#if 3 == VBI_VERSION_MINOR
 	success = vbi_capture_sim_load_vps (&sim->cap, NULL);
 	assert (success);
 

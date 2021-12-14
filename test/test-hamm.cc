@@ -253,7 +253,7 @@ test_unham24			(void)
 		     + ((i & 0x000070) >> (5 - 2))
 		     + ((i & 0x007F00) >> (9 - 5))
 		     + ((i & 0x7F0000) >> (17 - 12)));
-		
+
 		if (A && B && C && D && E) {
 			/* No error. */
 			assert (vbi::unham24 (buf) == d);

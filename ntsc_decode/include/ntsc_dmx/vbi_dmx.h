@@ -131,7 +131,7 @@ typedef struct
 typedef void (*AM_DMX_DataCb) (int dev_no, int fhandle, const uint8_t *data, int len, void *user_data);
 
 /****************************************************************************
- * Function prototypes  
+ * Function prototypes
  ***************************************************************************/
 
 /**\brief 打开解复用设备

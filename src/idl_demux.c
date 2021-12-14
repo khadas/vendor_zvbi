@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -466,11 +466,11 @@ vbi_idl_demux_delete		(vbi_idl_demux *	dx)
 
 	_vbi_idl_demux_destroy (dx);
 
-	vbi_free (dx);		
+	vbi_free (dx);
 }
 
 /**
- * @param channel Filter out packets of this channel. 
+ * @param channel Filter out packets of this channel.
  * @param address Filter out packets with this service data address.
  * @param callback Function to be called by vbi_idl_demux_feed() when
  *   new data is available.

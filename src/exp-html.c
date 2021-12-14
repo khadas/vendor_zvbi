@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -133,7 +133,7 @@ static vbi_option_info *
 option_enum(vbi_export *e, int index)
      /* XXX unsigned index */
 {
-	e = e;
+	(void)e;
 
 	if (index < 0 || index >= (int) elements(html_options))
 		return NULL;
@@ -671,7 +671,7 @@ export(vbi_export *e, vbi_page *pgp)
 								puts("; text-decoration: blink");
 							puts("\">");
 						}
-						
+
 						html->span = TRUE;
 					} else {
 						html->foreground = s->foreground;

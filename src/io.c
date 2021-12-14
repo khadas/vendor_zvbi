@@ -15,8 +15,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -53,9 +53,9 @@ vbi_bool vbi_capture_force_read_mode = FALSE;
  * @param timestamp On success the capture instant in seconds and fractions
  *   since 1970-01-01 00:00 of the video frame will be stored here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a raw vbi frame from the capture device.
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. The function also fails if
  * vbi data is not available in raw format. 0 on timeout, 1 on success.
@@ -88,14 +88,14 @@ vbi_capture_read_raw(vbi_capture *capture, void *data,
  * @param timestamp On success the capture instant in seconds and fractions
  *   since 1970-01-01 00:00 will be stored here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a sliced vbi frame, that is an array of vbi_sliced structures,
- * from the capture device. 
+ * from the capture device.
  *
  * Note: it's generally more efficient to use vbi_capture_pull_sliced()
  * instead, as that one may avoid having to copy sliced data into the
  * given buffer (e.g. for the VBI proxy)
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. 0 on timeout, 1 on success.
  */
@@ -132,7 +132,7 @@ vbi_capture_read_sliced(vbi_capture *capture, vbi_sliced *data, int *lines,
  * @param timestamp On success the capture instant in seconds and fractions
  *   since 1970-01-01 00:00 will be stored here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a raw vbi frame from the capture device, decode to sliced data
  * and also read the sliced vbi frame, that is an array of vbi_sliced
  * structures, from the capture device.
@@ -142,7 +142,7 @@ vbi_capture_read_sliced(vbi_capture *capture, vbi_sliced *data, int *lines,
  * use memory mapped buffers.)  It's generally more efficient to use one of
  * the vbi_capture_pull() interfaces, especially if you don't require access
  * to raw data at all.
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. The function also fails if
  * vbi data is not available in raw format. 0 on timeout, 1 on success.
@@ -176,12 +176,12 @@ vbi_capture_read(vbi_capture *capture, void *raw_data,
  * @param capture Initialized vbi capture context.
  * @param buffer Store pointer to a vbi_capture_buffer here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a raw vbi frame from the capture device, returning a
  * pointer to the image in @a buffer->data, which has @a buffer->size.
  * The data remains valid until the next
  * vbi_capture_pull_raw() call and must be read only.
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. The function also fails
  * if vbi data is not available in raw format. 0 on timeout, 1 on success.
@@ -203,14 +203,14 @@ vbi_capture_pull_raw(vbi_capture *capture, vbi_capture_buffer **buffer,
  * @param capture Initialized vbi capture context.
  * @param buffer Store pointer to a vbi_capture_buffer here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a sliced vbi frame, that is an array of vbi_sliced,
  * from the capture device, returning a pointer to the array as
  * @a buffer->data. @a buffer->size is the size of the array, that is
  * the number of lines decoded, which can be zero, <i>times the size
  * of structure vbi_sliced</i>. The data remains valid until the
  * next vbi_capture_pull_sliced() call and must be read only.
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. 0 on timeout, 1 on success.
  */
@@ -232,7 +232,7 @@ vbi_capture_pull_sliced(vbi_capture *capture, vbi_capture_buffer **buffer,
  * @param raw_buffer Store pointer to a vbi_capture_buffer here.
  * @param sliced_buffer Store pointer to a vbi_capture_buffer here.
  * @param timeout Wait timeout, will be read only.
- * 
+ *
  * Read a raw vbi frame from the capture device and decode to sliced
  * data. Both raw and sliced data is returned, a pointer to the raw image
  * as raw_buffer->data and a pointer to an array of vbi_sliced as
@@ -242,7 +242,7 @@ vbi_capture_pull_sliced(vbi_capture *capture, vbi_capture_buffer **buffer,
  *
  * The raw and sliced data remains valid
  * until the next vbi_capture_pull() call and must be read only.
- * 
+ *
  * @return
  * -1 on error, examine @c errno for details. The function also fails
  * if vbi data is not available in raw format. 0 on timeout, 1 on success.
@@ -264,14 +264,14 @@ vbi_capture_pull(vbi_capture *capture, vbi_capture_buffer **raw_buffer,
 
 /**
  * @param capture Initialized vbi capture context.
- * 
+ *
  * Describe the captured data. Raw vbi frames consist of
  * vbi_raw_decoder.count[0] + vbi_raw_decoder.count[1] lines in
  * vbi_raw_decoder.sampling_format, each vbi_raw_decoder.bytes_per_line.
  * Sliced vbi arrays consist of zero to
  * vbi_raw_decoder.count[0] + vbi_raw_decoder.count[1] vbi_sliced
  * structures.
- * 
+ *
  * @return
  * Pointer to a vbi_raw_decoder structure, read only.
  **/
@@ -331,7 +331,7 @@ vbi_capture_update_services(vbi_capture *capture,
 
 /**
  * @param capture Initialized vbi capture context, can be @c NULL.
- * 
+ *
  * @return
  * The file descriptor used to read from the device. If not
  * applicable (e.g. when using the proxy) or the @a capture context is
@@ -403,7 +403,7 @@ vbi_capture_flush(vbi_capture *capture)
  *   refers to the same hardware as the VBI device which is used for
  *   capturing.  Note: only useful for old video4linux drivers which
  *   don't support norm queries through VBI devices.
- * 
+ *
  * @brief Set path to video device for TV norm queries
  *
  * @return
@@ -423,7 +423,7 @@ vbi_capture_set_video_path(vbi_capture *capture, const char * p_dev_video)
 
 /**
  * @param capture Initialized vbi capture context.
- * 
+ *
  * @brief Query properties of the capture device file handle
  */
 VBI_CAPTURE_FD_FLAGS
@@ -439,7 +439,7 @@ vbi_capture_get_fd_flags(vbi_capture *capture)
 
 /**
  * @param capture Initialized vbi capture context, can be @c NULL.
- * 
+ *
  * Free all resources associated with the @a capture context.
  */
 void
@@ -478,7 +478,7 @@ timeval_subtract		(struct timeval *	delta,
  * spent in waiting has to be substracted from the timeout. (Note that we don't
  * use the Linux select(2) feature to return the time not slept in the timeout
  * struct, because that's not portable.)
- * 
+ *
  * @return
  * No direct return; modifies timeout value in the struct pointed to by the
  * second pointer argument as described above.
@@ -486,7 +486,7 @@ timeval_subtract		(struct timeval *	delta,
 void
 vbi_capture_io_update_timeout	(struct timeval *	timeout,
 				 const struct timeval *	tv_start)
-				 
+
 {
 	struct timeval delta;
 	struct timeval tv_stop;
@@ -597,7 +597,7 @@ fprint_symbolic			(FILE *			fp,
 
 		mode = MODE_ENUM + (n[1] > n[0]);
 
-		va_end (ap); 
+		va_end (ap);
 	}
 
 	va_start (ap, value);
@@ -622,7 +622,7 @@ fprint_symbolic			(FILE *			fp,
 	else if (value)
 		fprintf (fp, "%s0x%lx", j ? "|" : "", value);
 
-	va_end (ap); 
+	va_end (ap);
 }
 
 /**
@@ -637,7 +637,7 @@ fprint_unknown_ioctl		(FILE *			fp,
 	fprintf (fp, "<unknown cmd 0x%x %c%c arg=%p size=%u>",
 		 cmd, IOCTL_READ (cmd) ? 'R' : '-',
 		 IOCTL_WRITE (cmd) ? 'W' : '-',
-		 arg, IOCTL_ARG_SIZE (cmd)); 
+		 arg, IOCTL_ARG_SIZE (cmd));
 }
 
 /**
@@ -750,7 +750,7 @@ device_ioctl			(FILE *			fp,
 		log_fn (fp, cmd, 0, NULL);
 
 		fputc ('(', fp);
-      
+
 		if (IOCTL_WRITE (cmd))
 			log_fn (fp, cmd, IOCTL_READ (cmd) ? 3 : 2, &buf);
 
@@ -833,23 +833,23 @@ device_munmap			(FILE *			fp,
 				 size_t			length)
 {
 	int r;
-	
+
 	r = munmap (start, length);
-	
+
 	if (fp) {
 		int saved_errno;
-		
+
 		saved_errno = errno;
-		
+
 		if (-1 == r)
-			fprintf (fp, "%d = munmap (start=%p length=%d), "
+			fprintf (fp, "%d = munmap (length=%d), "
 				 "errno=%d, %s\n",
-				 r, start, (int) length,
+				 r, (int) length,
 				 saved_errno, strerror (saved_errno));
 		else
-			fprintf (fp, "%d = munmap (start=%p length=%d)\n",
-				 r, start, (int) length);
-		
+			fprintf (fp, "%d = munmap (length=%d)\n",
+				 r, (int) length);
+
 		errno = saved_errno;
 	}
 

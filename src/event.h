@@ -306,7 +306,7 @@ typedef struct {
 	 * numbering scheme, see vbi_sliced. For example PAL 23 ... 310 (288 lines),
 	 * NTSC 22 ... 262 (240 lines).
 	 */
- 	int			first_line;
+	int			first_line;
 	int			last_line;
 	/**
 	 * The picture aspect ratio in <em>anamorphic</em> mode,
@@ -319,7 +319,7 @@ typedef struct {
 	 * actually a helper flag for PALPlus decoders, but it may assist
 	 * deinterlacers too.)
 	 */
- 	vbi_bool		film_mode;
+	vbi_bool		film_mode;
 	/**
 	 * Describes how subtitles are inserted into the picture,
 	 * see vbi_subt for details.

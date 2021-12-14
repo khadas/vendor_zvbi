@@ -186,14 +186,14 @@ _ure_matches_properties(unsigned long props, ucs4_t c)
     {
       int type = unicode_type(c);
       if (type >= UNICODE_LINE_SEPARATOR)
-	return 1;
+      return 1;
     }
 
   if (props & _URE_NONSPACING)
     {
       int type = unicode_type(c);
       if (type < UNICODE_LINE_SEPARATOR)
-	return 1;
+      return 1;
     }
 */
   if (props & _URE_NONSPACING)
@@ -393,7 +393,7 @@ _ure_push(ucs2_t v, _ure_buffer_t *b)
       s->slist = (ucs2_t *) malloc(sizeof(ucs2_t) << 3);
     else
       s->slist = (ucs2_t *) realloc((char *) s->slist,
-				    sizeof(ucs2_t) * (s->slist_size + 8));
+                    sizeof(ucs2_t) * (s->slist_size + 8));
     s->slist_size += 8;
   }
   s->slist[s->slist_used++] = v;
@@ -626,9 +626,8 @@ _ure_add_range(_ure_ccl_t *ccl, _ure_range_t *r, _ure_buffer_t *b)
     if (ccl->ranges_size == 0)
       ccl->ranges = (_ure_range_t *) malloc(sizeof(_ure_range_t) << 3);
     else
-      ccl->ranges = (_ure_range_t *)
-	realloc((char *) ccl->ranges,
-		sizeof(_ure_range_t) * (ccl->ranges_size + 8));
+      ccl->ranges = (_ure_range_t *)realloc((char *) ccl->ranges,
+          sizeof(_ure_range_t) * (ccl->ranges_size + 8));
     ccl->ranges_size += 8;
   }
 
@@ -636,7 +635,7 @@ _ure_add_range(_ure_ccl_t *ccl, _ure_range_t *r, _ure_buffer_t *b)
 
   if (i < ccl->ranges_used)
     memmove((char *) (rp + 1), (char *) rp,
-	    sizeof(_ure_range_t) * (ccl->ranges_used - i));
+        sizeof(_ure_range_t) * (ccl->ranges_used - i));
 
   ccl->ranges_used++;
   rp->min_code = r->min_code;
@@ -651,9 +650,9 @@ typedef struct {
 } _ure_trie_t;
 
 static _ure_trie_t cclass_trie[] = {
-  {':', 1, 1, 0},	/* 0 */
-  {'a', 10, 11, 0},	/* 1 a (0/10) */
-  {'c', 9, 20, 0},	/* 2 c (1/10) */
+  {':', 1, 1, 0},   /* 0 */
+  {'a', 10, 11, 0}, /* 1 a (0/10) */
+  {'c', 9, 20, 0},  /* 2 c (1/10) */
   {'d', 8, 79, 0}, /* {'d', 8, 25, 0}, */
   {'g', 7, 71, 0}, /* {'g', 7, 30, 0}, */
   {'l', 6, 35, 0},
@@ -661,17 +660,17 @@ static _ure_trie_t cclass_trie[] = {
   {'s', 4, 50, 0},
   {'u', 3, 55, 0},
   {'x', 2, 60, 0},
-  {'t', 1, 66, 0},	/* 10 t (9/10) */
-  {'l', 1, 12, 0},	/* 11 al (0/1) */
-  {'n', 2, 14, 0},	/* 12 aln (0/2) */
-  {'p', 1, 17, 0},	/* 13 alp (1/2) */
-  {'u', 1, 15, 0},	/* alnu */
-  {'m', 1, 16, 0},	/* alnum */
+  {'t', 1, 66, 0},  /* 10 t (9/10) */
+  {'l', 1, 12, 0},  /* 11 al (0/1) */
+  {'n', 2, 14, 0},  /* 12 aln (0/2) */
+  {'p', 1, 17, 0},  /* 13 alp (1/2) */
+  {'u', 1, 15, 0},  /* alnu */
+  {'m', 1, 16, 0},  /* alnum */
   {':', 1, 17, _URE_ALNUM},
   {'h', 1, 18, 0},
   {'a', 1, 19, 0},
   {':', 1, 20, _URE_ALPHA},
-  {'n', 1, 21, 0},	/* 20 <- cn */
+  {'n', 1, 21, 0},  /* 20 <- cn */
   {'t', 1, 22, 0},
   {'r', 1, 23, 0},
   {'l', 1, 24, 0},
@@ -835,61 +834,61 @@ _ure_cclass(ucs2_t *cp, unsigned long limit, _ure_symtab_t *symp,
     c = *sp++;
     if (c == '\\') {
       if (sp == ep) {
-	/*
-	 * The EOS was encountered when expecting the reverse solidus
-	 * to be followed by the character it is escaping.  Set an
-	 * error code and return the number of characters consumed up
-	 * to this point.
-	 */
-	b->error = _URE_UNEXPECTED_EOS;
-	return sp - cp;
+    /*
+     * The EOS was encountered when expecting the reverse solidus
+     * to be followed by the character it is escaping.  Set an
+     * error code and return the number of characters consumed up
+     * to this point.
+     */
+    b->error = _URE_UNEXPECTED_EOS;
+    return sp - cp;
       }
 
-      c = *sp++;
-      switch (c) {
-      case 'a':
-	c = 0x07;
-	break;
-      case 'b':
-	c = 0x08;
-	break;
-      case 'f':
-	c = 0x0c;
-	break;
-      case 'n':
-	c = 0x0a;
-	break;
-      case 'r':
-	c = 0x0d;
-	break;
+    c = *sp++;
+    switch (c) {
+    case 'a':
+    c = 0x07;
+    break;
+    case 'b':
+    c = 0x08;
+    break;
+    case 'f':
+    c = 0x0c;
+    break;
+    case 'n':
+    c = 0x0a;
+    break;
+    case 'r':
+    c = 0x0d;
+    break;
       case 't':
-	c = 0x09;
-	break;
+    c = 0x09;
+    break;
       case 'v':
-	c = 0x0b;
-	break;
+    c = 0x0b;
+    break;
       case 'p':
       case 'P':
-	sp += _ure_prop_list(sp, ep - sp, &symp->props, b);
-	/*
-	 * Invert the bit mask of the properties if this is a negated
-	 * character class or if 'P' is used to specify a list of
-	 * character properties that should *not* match in a
-	 * character class.
-	 */
-	if (c == 'P')
-	  symp->props = ~symp->props;
-	continue;
-	break;
+    sp += _ure_prop_list(sp, ep - sp, &symp->props, b);
+    /*
+     * Invert the bit mask of the properties if this is a negated
+     * character class or if 'P' is used to specify a list of
+     * character properties that should *not* match in a
+     * character class.
+     */
+    if (c == 'P')
+        symp->props = ~symp->props;
+    continue;
+    break;
       case 'x':
       case 'X':
       case 'u':
       case 'U':
-	if (sp < ep &&
-	    ((*sp >= '0' && *sp <= '9') ||
-	     (*sp >= 'A' && *sp <= 'F') ||
-	     (*sp >= 'a' && *sp <= 'f')))
-	  sp += _ure_hex(sp, ep - sp, &c);
+    if (sp < ep &&
+        ((*sp >= '0' && *sp <= '9') ||
+         (*sp >= 'A' && *sp <= 'F') ||
+         (*sp >= 'a' && *sp <= 'f')))
+        sp += _ure_hex(sp, ep - sp, &c);
       }
     } else if (c == ':') {
       /*
@@ -897,10 +896,10 @@ _ure_cclass(ucs2_t *cp, unsigned long limit, _ure_symtab_t *symp,
        */
       sp--;
       if ((n = _ure_posix_ccl(sp, ep - sp, symp, b)) == 0)
-	sp++;
+    sp++;
       else {
-	sp += n;
-	continue;
+    sp += n;
+    continue;
       }
     }
 
@@ -912,21 +911,21 @@ _ure_cclass(ucs2_t *cp, unsigned long limit, _ure_symtab_t *symp,
      */
     if (last != 0) {
       if (c >= 0xdc00 && c <= 0xdfff)
-	/*
-	 * Construct the UTF16 character code.
-	 */
-	c = 0x10000 + (((last & 0x03ff) << 10) | (c & 0x03ff));
+    /*
+     * Construct the UTF16 character code.
+     */
+    c = 0x10000 + (((last & 0x03ff) << 10) | (c & 0x03ff));
       else {
-	/*
-	 * Add the isolated high surrogate to the range.
-	 */
-	if (range_end == 1)
-	  range.max_code = last & 0xffff;
-	else
-	  range.min_code = range.max_code = last & 0xffff;
+    /*
+     * Add the isolated high surrogate to the range.
+     */
+    if (range_end == 1)
+        range.max_code = last & 0xffff;
+    else
+        range.min_code = range.max_code = last & 0xffff;
 
-	_ure_add_range(cclp, &range, b);
-	range_end = 0;
+    _ure_add_range(cclp, &range, b);
+    range_end = 0;
       }
     }
 
@@ -946,11 +945,11 @@ _ure_cclass(ucs2_t *cp, unsigned long limit, _ure_symtab_t *symp,
        * character is a low surrogate.
        */
       if (*sp == '-') {
-	sp++;
-	range.min_code = c;
-	range_end = 1;
+    sp++;
+    range.min_code = c;
+    range_end = 1;
       } else
-	last = c;
+    last = c;
     } else if (range_end == 1) {
       range.max_code = c;
       _ure_add_range(cclp, &range, b);
@@ -958,10 +957,10 @@ _ure_cclass(ucs2_t *cp, unsigned long limit, _ure_symtab_t *symp,
     } else {
       range.min_code = range.max_code = c;
       if (*sp == '-') {
-	sp++;
-	range_end = 1;
+    sp++;
+    range_end = 1;
       } else
-	_ure_add_range(cclp, &range, b);
+    _ure_add_range(cclp, &range, b);
     }
   }
 
@@ -1082,10 +1081,10 @@ _ure_compile_symbol(ucs2_t *sym, unsigned long limit, _ure_symtab_t *symp,
        * through to the next case.
        */
       if (sp < ep &&
-	  ((*sp >= '0' && *sp <= '9') ||
-	   (*sp >= 'A' && *sp <= 'F') ||
-	   (*sp >= 'a' && *sp <= 'f')))
-	sp += _ure_hex(sp, ep - sp, &c);
+      ((*sp >= '0' && *sp <= '9') ||
+       (*sp >= 'A' && *sp <= 'F') ||
+       (*sp >= 'a' && *sp <= 'f')))
+    sp += _ure_hex(sp, ep - sp, &c);
       /* FALLTHROUGH */
     default:
       /*
@@ -1125,18 +1124,18 @@ _ure_compile_symbol(ucs2_t *sym, unsigned long limit, _ure_symtab_t *symp,
 
     if (0xdc00 <= *sp && *sp <= 0xdfff) {
       symp->sym.chr = 0x10000 + (((symp->sym.chr & 0x03ff) << 10) |
-				 (*sp & 0x03ff));
+                 (*sp & 0x03ff));
       sp++;
     } else if (*sp == '\\' && (*(sp + 1) == 'x' || *(sp + 1) == 'X' ||
-			       *(sp + 1) == 'u' || *(sp + 1) == 'U')) {
+                   *(sp + 1) == 'u' || *(sp + 1) == 'U')) {
       sp += _ure_probe_ls(sp + 2, ep - (sp + 2), &c);
       if (0xdc00 <= c && c <= 0xdfff) {
-	/*
-	 * Take into account the \[xu] in front of the hex code.
-	 */
-	sp += 2;
-	symp->sym.chr = 0x10000 + (((symp->sym.chr & 0x03ff) << 10) |
-				   (c & 0x03ff));
+    /*
+     * Take into account the \[xu] in front of the hex code.
+     */
+    sp += 2;
+    symp->sym.chr = 0x10000 + (((symp->sym.chr & 0x03ff) << 10) |
+                   (c & 0x03ff));
       }
     }
   }
@@ -1176,8 +1175,8 @@ _ure_sym_neq(_ure_symtab_t *a, _ure_symtab_t *b)
     if (a->sym.ccl.ranges_used != b->sym.ccl.ranges_used)
       return 1;
     if (a->sym.ccl.ranges_used > 0 &&
-	memcmp((char *) a->sym.ccl.ranges, (char *) b->sym.ccl.ranges,
-	       sizeof(_ure_range_t) * a->sym.ccl.ranges_used) != 0)
+    memcmp((char *) a->sym.ccl.ranges, (char *) b->sym.ccl.ranges,
+           sizeof(_ure_range_t) * a->sym.ccl.ranges_used) != 0)
       return 1;
   } else if (a->type == _URE_CHAR && a->sym.chr != b->sym.chr)
     return 1;
@@ -1219,7 +1218,7 @@ _ure_make_symbol(ucs2_t *sym, unsigned long limit, unsigned long *consumed,
      * Free up any ranges used for the symbol.
      */
     if ((symbol.type == _URE_CCLASS || symbol.type == _URE_NCCLASS) &&
-	symbol.sym.ccl.ranges_size > 0)
+    symbol.sym.ccl.ranges_size > 0)
       free((char *) symbol.sym.ccl.ranges);
 
     return b->symtab[i].id;
@@ -1233,8 +1232,8 @@ _ure_make_symbol(ucs2_t *sym, unsigned long limit, unsigned long *consumed,
       b->symtab = (_ure_symtab_t *) malloc(sizeof(_ure_symtab_t) << 3);
     else
       b->symtab = (_ure_symtab_t *)
-	realloc((char *) b->symtab,
-		sizeof(_ure_symtab_t) * (b->symtab_size + 8));
+    realloc((char *) b->symtab,
+        sizeof(_ure_symtab_t) * (b->symtab_size + 8));
     sp = b->symtab + b->symtab_size;
     (void) memset((char *) sp, 0, sizeof(_ure_symtab_t) << 3);
     b->symtab_size += 8;
@@ -1242,7 +1241,7 @@ _ure_make_symbol(ucs2_t *sym, unsigned long limit, unsigned long *consumed,
 
   symbol.id = b->symtab_used++;
   (void) memcpy((char *) &b->symtab[symbol.id], (char *) &symbol,
-		sizeof(_ure_symtab_t));
+        sizeof(_ure_symtab_t));
 
   return symbol.id;
 }
@@ -1272,7 +1271,7 @@ _ure_make_expr(ucs2_t type, ucs2_t lhs, ucs2_t rhs, _ure_buffer_t *b)
    */
   for (i = 0; i < b->expr_used; i++) {
     if (b->expr[i].type == type && b->expr[i].lhs == lhs &&
-	b->expr[i].rhs == rhs)
+    b->expr[i].rhs == rhs)
       break;
   }
   if (i < b->expr_used)
@@ -1286,8 +1285,8 @@ _ure_make_expr(ucs2_t type, ucs2_t lhs, ucs2_t rhs, _ure_buffer_t *b)
       b->expr = (_ure_elt_t *) malloc(sizeof(_ure_elt_t) << 3);
     else
       b->expr = (_ure_elt_t *)
-	realloc((char *) b->expr,
-		sizeof(_ure_elt_t) * (b->expr_size + 8));
+    realloc((char *) b->expr,
+        sizeof(_ure_elt_t) * (b->expr_size + 8));
     b->expr_size += 8;
   }
 
@@ -1340,19 +1339,19 @@ _ure_re2nfa(ucs2_t *re, unsigned long relen, _ure_buffer_t *b)
        * Check for the case of too many close parentheses.
        */
       if (_ure_peek(b) == _URE_NOOP) {
-	b->error = _URE_UNBALANCED_GROUP;
-	break;
+    b->error = _URE_UNBALANCED_GROUP;
+    break;
       }
 
       while ((top = _ure_peek(b)) == _URE_AND || top == _URE_OR)
-	/*
-	 * Make an expression with the AND or OR operator and its right
-	 * hand side.
-	 */
-	{
-	  p = _ure_pop(b);
-	  state = _ure_make_expr(p, _ure_pop(b), state, b);
-	}
+    /*
+     * Make an expression with the AND or OR operator and its right
+     * hand side.
+     */
+    {
+      p = _ure_pop(b);
+      state = _ure_make_expr(p, _ure_pop(b), state, b);
+    }
 
       /*
        * Remove the _URE_PAREN off the stack.
@@ -1361,14 +1360,14 @@ _ure_re2nfa(ucs2_t *re, unsigned long relen, _ure_buffer_t *b)
       break;
     case '|':
       while ((top = _ure_peek(b)) == _URE_AND || top == _URE_OR)
-	/*
-	 * Make an expression with the AND or OR operator and its right
-	 * hand side.
-	 */
-	{
-	  p = _ure_pop(b);
-	  state = _ure_make_expr(p, _ure_pop(b), state, b);
-	}
+    /*
+     * Make an expression with the AND or OR operator and its right
+     * hand side.
+     */
+    {
+      p = _ure_pop(b);
+      state = _ure_make_expr(p, _ure_pop(b), state, b);
+    }
 
       _ure_push(state, b);
       _ure_push(_URE_OR, b);
@@ -1376,22 +1375,22 @@ _ure_re2nfa(ucs2_t *re, unsigned long relen, _ure_buffer_t *b)
     case '*':
       /* If this is the first char, treat as escaped */
       if (re+1 != sp)
-	{
-	  state = _ure_make_expr(_URE_STAR, state, _URE_NOOP, b);
-	  break;
-	}
+    {
+      state = _ure_make_expr(_URE_STAR, state, _URE_NOOP, b);
+      break;
+    }
     case '+':
       if (re+1 != sp)
-	{
-	  state = _ure_make_expr(_URE_PLUS, state, _URE_NOOP, b);
-	  break;
-	}
+    {
+      state = _ure_make_expr(_URE_PLUS, state, _URE_NOOP, b);
+      break;
+    }
     case '?':
       if (re+1 != sp)
-	{
-	  state = _ure_make_expr(_URE_QUEST, state, _URE_NOOP, b);
-	  break;
-	}
+    {
+      state = _ure_make_expr(_URE_QUEST, state, _URE_NOOP, b);
+      break;
+    }
     default:
       sp--;
       sym = _ure_make_symbol(sp, ep - sp, &used, b);
@@ -1401,7 +1400,7 @@ _ure_re2nfa(ucs2_t *re, unsigned long relen, _ure_buffer_t *b)
     }
 
     if (c != '(' && c != '|' && sp < ep &&
-	(!_ure_isspecial(*sp) || *sp == '(')) {
+    (!_ure_isspecial(*sp) || *sp == '(')) {
       _ure_push(state, b);
       _ure_push(_URE_AND, b);
     }
@@ -1453,17 +1452,17 @@ _ure_add_symstate(ucs2_t sym, ucs2_t state, _ure_buffer_t *b)
      */
     if (sp->states.slist_used == sp->states.slist_size) {
       if (sp->states.slist_size == 0)
-	sp->states.slist = (ucs2_t *) malloc(sizeof(ucs2_t) << 3);
+    sp->states.slist = (ucs2_t *) malloc(sizeof(ucs2_t) << 3);
       else
-	sp->states.slist = (ucs2_t *)
-	  realloc((char *) sp->states.slist,
-		  sizeof(ucs2_t) * (sp->states.slist_size + 8));
+    sp->states.slist = (ucs2_t *)
+      realloc((char *) sp->states.slist,
+          sizeof(ucs2_t) * (sp->states.slist_size + 8));
       sp->states.slist_size += 8;
     }
     if (i < sp->states.slist_used)
       (void) memmove((char *) (sp->states.slist + i + 1),
-		     (char *) (sp->states.slist + i),
-		     sizeof(ucs2_t) * (sp->states.slist_used - i));
+             (char *) (sp->states.slist + i),
+             sizeof(ucs2_t) * (sp->states.slist_used - i));
     sp->states.slist[i] = state;
     sp->states.slist_used++;
   }
@@ -1483,8 +1482,8 @@ _ure_add_state(ucs2_t nstates, ucs2_t *states, _ure_buffer_t *b)
 
   for (i = 0, sp = b->states.states; i < b->states.states_used; i++, sp++) {
     if (sp->st.slist_used == nstates &&
-	memcmp((char *) states, (char *) sp->st.slist,
-	       sizeof(ucs2_t) * nstates) == 0)
+    memcmp((char *) states, (char *) sp->st.slist,
+           sizeof(ucs2_t) * nstates) == 0)
       break;
   }
 
@@ -1494,12 +1493,12 @@ _ure_add_state(ucs2_t nstates, ucs2_t *states, _ure_buffer_t *b)
      */
     if (b->states.states_used == b->states.states_size) {
       if (b->states.states_size == 0)
-	b->states.states = (_ure_state_t *)
-	  malloc(sizeof(_ure_state_t) << 3);
+    b->states.states = (_ure_state_t *)
+      malloc(sizeof(_ure_state_t) << 3);
       else
-	b->states.states = (_ure_state_t *)
-	  realloc((char *) b->states.states,
-		  sizeof(_ure_state_t) * (b->states.states_size + 8));
+    b->states.states = (_ure_state_t *)
+      realloc((char *) b->states.states,
+          sizeof(_ure_state_t) * (b->states.states_size + 8));
       sp = b->states.states + b->states.states_size;
       (void) memset((char *) sp, 0, sizeof(_ure_state_t) << 3);
       b->states.states_size += 8;
@@ -1510,17 +1509,17 @@ _ure_add_state(ucs2_t nstates, ucs2_t *states, _ure_buffer_t *b)
 
     if (sp->st.slist_used + nstates > sp->st.slist_size) {
       if (sp->st.slist_size == 0)
-	sp->st.slist = (ucs2_t *)
-	  malloc(sizeof(ucs2_t) * (sp->st.slist_used + nstates));
+    sp->st.slist = (ucs2_t *)
+      malloc(sizeof(ucs2_t) * (sp->st.slist_used + nstates));
       else
-	sp->st.slist = (ucs2_t *)
-	  realloc((char *) sp->st.slist,
-		  sizeof(ucs2_t) * (sp->st.slist_used + nstates));
+    sp->st.slist = (ucs2_t *)
+      realloc((char *) sp->st.slist,
+          sizeof(ucs2_t) * (sp->st.slist_used + nstates));
       sp->st.slist_size = sp->st.slist_used + nstates;
     }
     sp->st.slist_used = nstates;
     (void) memcpy((char *) sp->st.slist, (char *) states,
-		  sizeof(ucs2_t) * nstates);
+          sizeof(ucs2_t) * nstates);
   }
 
   /*
@@ -1574,82 +1573,82 @@ _ure_reduce(ucs2_t start, _ure_buffer_t *b)
        * reducing subexpressions generated as a result of a reduction.
        */
       while (eval) {
-	switch (b->expr[state].type) {
-	case _URE_SYMBOL:
-	  ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
-	  _ure_add_symstate(b->expr[state].lhs, ns1, b);
-	  syms++;
-	  eval = 0;
-	  break;
-	case _URE_ONE:
-	  sp->accepting = 1;
-	  eval = 0;
-	  break;
-	case _URE_QUEST:
-	  s1 = b->expr[state].lhs;
-	  ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
-	  state = _ure_make_expr(_URE_OR, ns1, s1, b);
-	  break;
-	case _URE_PLUS:
-	  s1 = b->expr[state].lhs;
-	  ns1 = _ure_make_expr(_URE_STAR, s1, _URE_NOOP, b);
-	  state = _ure_make_expr(_URE_AND, s1, ns1, b);
-	  break;
-	case _URE_STAR:
-	  s1 = b->expr[state].lhs;
-	  ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
-	  ns2 = _ure_make_expr(_URE_PLUS, s1, _URE_NOOP, b);
-	  state = _ure_make_expr(_URE_OR, ns1, ns2, b);
-	  break;
-	case _URE_OR:
-	  s1 = b->expr[state].lhs;
-	  s2 = b->expr[state].rhs;
-	  _ure_push(s1, b);
-	  _ure_push(s2, b);
-	  eval = 0;
-	  break;
-	case _URE_AND:
-	  s1 = b->expr[state].lhs;
-	  s2 = b->expr[state].rhs;
-	  switch (b->expr[s1].type) {
-	  case _URE_SYMBOL:
-	    _ure_add_symstate(b->expr[s1].lhs, s2, b);
-	    syms++;
-	    eval = 0;
-	    break;
-	  case _URE_ONE:
-	    state = s2;
-	    break;
-	  case _URE_QUEST:
-	    ns1 = b->expr[s1].lhs;
-	    ns2 = _ure_make_expr(_URE_AND, ns1, s2, b);
-	    state = _ure_make_expr(_URE_OR, s2, ns2, b);
-	    break;
-	  case _URE_PLUS:
-	    ns1 = b->expr[s1].lhs;
-	    ns2 = _ure_make_expr(_URE_OR, s2, state, b);
-	    state = _ure_make_expr(_URE_AND, ns1, ns2, b);
-	    break;
-	  case _URE_STAR:
-	    ns1 = b->expr[s1].lhs;
-	    ns2 = _ure_make_expr(_URE_AND, ns1, state, b);
-	    state = _ure_make_expr(_URE_OR, s2, ns2, b);
-	    break;
-	  case _URE_OR:
-	    ns1 = b->expr[s1].lhs;
-	    ns2 = b->expr[s1].rhs;
-	    ns1 = _ure_make_expr(_URE_AND, ns1, s2, b);
-	    ns2 = _ure_make_expr(_URE_AND, ns2, s2, b);
-	    state = _ure_make_expr(_URE_OR, ns1, ns2, b);
-	    break;
-	  case _URE_AND:
-	    ns1 = b->expr[s1].lhs;
-	    ns2 = b->expr[s1].rhs;
-	    ns2 = _ure_make_expr(_URE_AND, ns2, s2, b);
-	    state = _ure_make_expr(_URE_AND, ns1, ns2, b);
-	    break;
-	  }
-	}
+    switch (b->expr[state].type) {
+    case _URE_SYMBOL:
+      ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
+      _ure_add_symstate(b->expr[state].lhs, ns1, b);
+      syms++;
+      eval = 0;
+      break;
+    case _URE_ONE:
+      sp->accepting = 1;
+      eval = 0;
+      break;
+    case _URE_QUEST:
+      s1 = b->expr[state].lhs;
+      ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
+      state = _ure_make_expr(_URE_OR, ns1, s1, b);
+      break;
+    case _URE_PLUS:
+      s1 = b->expr[state].lhs;
+      ns1 = _ure_make_expr(_URE_STAR, s1, _URE_NOOP, b);
+      state = _ure_make_expr(_URE_AND, s1, ns1, b);
+      break;
+    case _URE_STAR:
+      s1 = b->expr[state].lhs;
+      ns1 = _ure_make_expr(_URE_ONE, _URE_NOOP, _URE_NOOP, b);
+      ns2 = _ure_make_expr(_URE_PLUS, s1, _URE_NOOP, b);
+      state = _ure_make_expr(_URE_OR, ns1, ns2, b);
+      break;
+    case _URE_OR:
+      s1 = b->expr[state].lhs;
+      s2 = b->expr[state].rhs;
+      _ure_push(s1, b);
+      _ure_push(s2, b);
+      eval = 0;
+      break;
+    case _URE_AND:
+      s1 = b->expr[state].lhs;
+      s2 = b->expr[state].rhs;
+      switch (b->expr[s1].type) {
+      case _URE_SYMBOL:
+        _ure_add_symstate(b->expr[s1].lhs, s2, b);
+        syms++;
+        eval = 0;
+        break;
+      case _URE_ONE:
+        state = s2;
+        break;
+      case _URE_QUEST:
+        ns1 = b->expr[s1].lhs;
+        ns2 = _ure_make_expr(_URE_AND, ns1, s2, b);
+        state = _ure_make_expr(_URE_OR, s2, ns2, b);
+        break;
+      case _URE_PLUS:
+        ns1 = b->expr[s1].lhs;
+        ns2 = _ure_make_expr(_URE_OR, s2, state, b);
+        state = _ure_make_expr(_URE_AND, ns1, ns2, b);
+        break;
+      case _URE_STAR:
+        ns1 = b->expr[s1].lhs;
+        ns2 = _ure_make_expr(_URE_AND, ns1, state, b);
+        state = _ure_make_expr(_URE_OR, s2, ns2, b);
+        break;
+      case _URE_OR:
+        ns1 = b->expr[s1].lhs;
+        ns2 = b->expr[s1].rhs;
+        ns1 = _ure_make_expr(_URE_AND, ns1, s2, b);
+        ns2 = _ure_make_expr(_URE_AND, ns2, s2, b);
+        state = _ure_make_expr(_URE_OR, ns1, ns2, b);
+        break;
+      case _URE_AND:
+        ns1 = b->expr[s1].lhs;
+        ns2 = b->expr[s1].rhs;
+        ns2 = _ure_make_expr(_URE_AND, ns2, s2, b);
+        state = _ure_make_expr(_URE_AND, ns1, ns2, b);
+        break;
+      }
+    }
       }
     }
 
@@ -1670,12 +1669,12 @@ _ure_reduce(ucs2_t start, _ure_buffer_t *b)
      */
     if (sp->trans_used + syms > sp->trans_size) {
       if (sp->trans_size == 0)
-	sp->trans = (_ure_elt_t *)
-	  malloc(sizeof(_ure_elt_t) * (sp->trans_used + syms));
+    sp->trans = (_ure_elt_t *)
+      malloc(sizeof(_ure_elt_t) * (sp->trans_used + syms));
       else
-	sp->trans = (_ure_elt_t *)
-	  realloc((char *) sp->trans,
-		  sizeof(_ure_elt_t) * (sp->trans_used + syms));
+    sp->trans = (_ure_elt_t *)
+      realloc((char *) sp->trans,
+          sizeof(_ure_elt_t) * (sp->trans_used + syms));
       sp->trans_size = sp->trans_used + syms;
     }
 
@@ -1687,18 +1686,18 @@ _ure_reduce(ucs2_t start, _ure_buffer_t *b)
       sp = b->states.states + i;
 
       if (smp->states.slist_used > 0) {
-	sp->trans[syms].lhs = smp->id;
-	rhs = _ure_add_state(smp->states.slist_used,
-			     smp->states.slist, b);
-	/*
-	 * Reset the state pointer in case the reallocation moves it
-	 * in memory.
-	 */
-	sp = b->states.states + i;
-	sp->trans[syms].rhs = rhs;
+    sp->trans[syms].lhs = smp->id;
+    rhs = _ure_add_state(smp->states.slist_used,
+                 smp->states.slist, b);
+    /*
+     * Reset the state pointer in case the reallocation moves it
+     * in memory.
+     */
+    sp = b->states.states + i;
+    sp->trans[syms].rhs = rhs;
 
-	smp->states.slist_used = 0;
-	syms++;
+    smp->states.slist_used = 0;
+    syms++;
       }
     }
 
@@ -1737,7 +1736,7 @@ _ure_add_equiv(ucs2_t l, ucs2_t r, _ure_buffer_t *b)
    * Check to see if the equivalence pair already exists.
    */
   for (tmp = 0; tmp < b->equiv_used &&
-	 (b->equiv[tmp].l != l || b->equiv[tmp].r != r);
+     (b->equiv[tmp].l != l || b->equiv[tmp].r != r);
        tmp++) ;
 
   if (tmp < b->equiv_used)
@@ -1748,8 +1747,8 @@ _ure_add_equiv(ucs2_t l, ucs2_t r, _ure_buffer_t *b)
       b->equiv = (_ure_equiv_t *) malloc(sizeof(_ure_equiv_t) << 3);
     else
       b->equiv = (_ure_equiv_t *) realloc((char *) b->equiv,
-					  sizeof(_ure_equiv_t) *
-					  (b->equiv_size + 8));
+                      sizeof(_ure_equiv_t) *
+                      (b->equiv_size + 8));
     b->equiv_size += 8;
   }
   b->equiv[b->equiv_used].l = l;
@@ -1778,33 +1777,33 @@ _ure_merge_equiv(_ure_buffer_t *b)
     for (j = 0; j < i; j++) {
       sp2 = b->states.states + j;
       if (sp2->id != j)
-	continue;
+    continue;
       b->equiv_used = 0;
       _ure_add_equiv(i, j, b);
       for (eq = 0, done = 0; eq < b->equiv_used; eq++) {
-	ls = b->states.states + b->equiv[eq].l;
-	rs = b->states.states + b->equiv[eq].r;
-	if (ls->accepting != rs->accepting ||
-	    ls->trans_used != rs->trans_used) {
-	  done = 1;
-	  break;
-	}
-	for (k = 0; k < ls->trans_used &&
-	       ls->trans[k].lhs == rs->trans[k].lhs; k++) ;
-	if (k < ls->trans_used) {
-	  done = 1;
-	  break;
-	}
+    ls = b->states.states + b->equiv[eq].l;
+    rs = b->states.states + b->equiv[eq].r;
+    if (ls->accepting != rs->accepting ||
+        ls->trans_used != rs->trans_used) {
+      done = 1;
+      break;
+    }
+    for (k = 0; k < ls->trans_used &&
+           ls->trans[k].lhs == rs->trans[k].lhs; k++) ;
+    if (k < ls->trans_used) {
+      done = 1;
+      break;
+    }
 
-	for (k = 0; k < ls->trans_used; k++)
-	  _ure_add_equiv(ls->trans[k].rhs, rs->trans[k].rhs, b);
+    for (k = 0; k < ls->trans_used; k++)
+      _ure_add_equiv(ls->trans[k].rhs, rs->trans[k].rhs, b);
       }
       if (done == 0)
-	break;
+    break;
     }
     for (eq = 0; j < i && eq < b->equiv_used; eq++)
       b->states.states[b->equiv[eq].r].id =
-	b->states.states[b->equiv[eq].l].id;
+    b->states.states[b->equiv[eq].l].id;
   }
 
   /*
@@ -1973,7 +1972,7 @@ ure_compile(ucs2_t *re, unsigned long relen, int casefold, ure_buffer_t buf)
    * Allocate enough space for the states and transitions.
    */
   dfa->states = (_ure_dstate_t *) malloc(sizeof(_ure_dstate_t) *
-					 dfa->nstates);
+                     dfa->nstates);
   dfa->trans = (_ure_trans_t *) malloc(sizeof(_ure_trans_t) * dfa->ntrans);
 
   /*
@@ -1992,8 +1991,8 @@ ure_compile(ucs2_t *re, unsigned long relen, int casefold, ure_buffer_t buf)
        * Add the transitions for the state.
        */
       for (j = 0; j < dsp->ntrans; j++, tp++) {
-	tp->symbol = sp->trans[j].lhs;
-	tp->next_state = buf->states.states[sp->trans[j].rhs].id;
+    tp->symbol = sp->trans[j].lhs;
+    tp->next_state = buf->states.states[sp->trans[j].rhs].id;
       }
 
       dsp++;
@@ -2019,8 +2018,8 @@ ure_dfa_free(ure_dfa_t dfa)
 
   for (i = 0; i < dfa->nsyms; i++) {
     if ((dfa->syms[i].type == _URE_CCLASS ||
-	 dfa->syms[i].type == _URE_NCCLASS) &&
-	dfa->syms[i].sym.ccl.ranges_size > 0)
+     dfa->syms[i].type == _URE_NCCLASS) &&
+    dfa->syms[i].sym.ccl.ranges_size > 0)
       free((char *) dfa->syms[i].sym.ccl.ranges);
   }
   if (dfa->nsyms > 0)
@@ -2057,54 +2056,54 @@ ure_write_dfa(ure_dfa_t dfa, FILE *out)
     if (sym->type == _URE_CCLASS || sym->type == _URE_NCCLASS) {
       fprintf(out, "C%hd = ", sym->id);
       if (sym->sym.ccl.ranges_used > 0) {
-	putc('[', out);
-	if (sym->type == _URE_NCCLASS)
-	  putc('^', out);
+    putc('[', out);
+    if (sym->type == _URE_NCCLASS)
+      putc('^', out);
       }
       if (sym->props != 0) {
-	if (sym->type == _URE_NCCLASS)
-	  fprintf(out, "\\P");
-	else
-	  fprintf(out, "\\p");
-	for (k = h = 0; k < 32; k++) {
-	  if (sym->props & (1 << k)) {
-	    if (h != 0)
-	      putc(',', out);
-	    fprintf(out, "%hd", k + 1);
-	    h = 1;
-	  }
-	}
+    if (sym->type == _URE_NCCLASS)
+      fprintf(out, "\\P");
+    else
+      fprintf(out, "\\p");
+    for (k = h = 0; k < 32; k++) {
+      if (sym->props & (1 << k)) {
+        if (h != 0)
+          putc(',', out);
+        fprintf(out, "%hd", k + 1);
+        h = 1;
+      }
+    }
       }
       /*
        * Dump the ranges.
        */
       for (k = 0, rp = sym->sym.ccl.ranges;
-	   k < sym->sym.ccl.ranges_used; k++, rp++) {
-	/*
-	 * Check for UTF16 characters.
-	 */
-	if (0x10000 <= rp->min_code &&
-	    rp->min_code <= 0x10ffff) {
-	  h = ((rp->min_code - 0x10000) >> 10) + 0xd800;
-	  l = ((rp->min_code - 0x10000) & 1023) + 0xdc00;
-	  fprintf(out, "\\x%04X\\x%04X",
-		  (unsigned) h, (unsigned) l);
-	} else
-	  fprintf(out, "\\x%04lX",
-		  (unsigned long)(rp->min_code & 0xffff));
-	if (rp->max_code != rp->min_code) {
-	  putc('-', out);
-	  if (rp->max_code >= 0x10000 &&
-	      rp->max_code <= 0x10ffff) {
-	    h = ((rp->max_code - 0x10000) >> 10) + 0xd800;
-	    l = ((rp->max_code - 0x10000) & 1023) + 0xdc00;
-	    fprintf(out, "\\x%04hX\\x%04hX", h, l);
-	  } else
-	    fprintf(out, "\\x%04lX", (unsigned long) rp->max_code & 0xffff);
-	}
+       k < sym->sym.ccl.ranges_used; k++, rp++) {
+    /*
+     * Check for UTF16 characters.
+     */
+    if (0x10000 <= rp->min_code &&
+        rp->min_code <= 0x10ffff) {
+      h = ((rp->min_code - 0x10000) >> 10) + 0xd800;
+      l = ((rp->min_code - 0x10000) & 1023) + 0xdc00;
+      fprintf(out, "\\x%04X\\x%04X",
+          (unsigned) h, (unsigned) l);
+    } else
+      fprintf(out, "\\x%04lX",
+          (unsigned long)(rp->min_code & 0xffff));
+    if (rp->max_code != rp->min_code) {
+      putc('-', out);
+      if (rp->max_code >= 0x10000 &&
+          rp->max_code <= 0x10ffff) {
+        h = ((rp->max_code - 0x10000) >> 10) + 0xd800;
+        l = ((rp->max_code - 0x10000) & 1023) + 0xdc00;
+        fprintf(out, "\\x%04hX\\x%04hX", h, l);
+      } else
+        fprintf(out, "\\x%04lX", (unsigned long) rp->max_code & 0xffff);
+    }
       }
       if (sym->sym.ccl.ranges_used > 0)
-	putc(']', out);
+    putc(']', out);
       putc('\n', out);
     }
   }
@@ -2114,43 +2113,43 @@ ure_write_dfa(ure_dfa_t dfa, FILE *out)
     if (sp->accepting) {
       fprintf(out, "1 ");
       if (sp->ntrans)
-	fprintf(out, "| ");
+    fprintf(out, "| ");
     }
     for (j = 0; j < sp->ntrans; j++) {
       if (j > 0)
-	fprintf(out, "| ");
+    fprintf(out, "| ");
 
       sym = dfa->syms + sp->trans[j].symbol;
       switch (sym->type) {
       case _URE_CHAR:
-	if (0x10000 <= sym->sym.chr && sym->sym.chr <= 0x10ffff) {
-	  /*
-	   * Take care of UTF16 characters.
-	   */
-	  h = ((sym->sym.chr - 0x10000) >> 10) + 0xd800;
-	  l = ((sym->sym.chr - 0x10000) & 1023) + 0xdc00;
-	  fprintf(out, "\\x%04hX\\x%04hX ", h, l);
-	} else
-	  //                  fprintf(out, "\\x%04lX ", sym->sym.chr & 0xffff);
-	  fprintf(out, "%c ", (char)sym->sym.chr);
-	break;
+    if (0x10000 <= sym->sym.chr && sym->sym.chr <= 0x10ffff) {
+      /*
+       * Take care of UTF16 characters.
+       */
+      h = ((sym->sym.chr - 0x10000) >> 10) + 0xd800;
+      l = ((sym->sym.chr - 0x10000) & 1023) + 0xdc00;
+      fprintf(out, "\\x%04hX\\x%04hX ", h, l);
+    } else
+      //                  fprintf(out, "\\x%04lX ", sym->sym.chr & 0xffff);
+      fprintf(out, "%c ", (char)sym->sym.chr);
+    break;
       case _URE_ANY_CHAR:
-	fprintf(out, "<any> ");
-	break;
+    fprintf(out, "<any> ");
+    break;
       case _URE_BOL_ANCHOR:
-	fprintf(out, "<bol-anchor> ");
-	break;
+    fprintf(out, "<bol-anchor> ");
+    break;
       case _URE_EOL_ANCHOR:
-	fprintf(out, "<eol-anchor> ");
-	break;
+    fprintf(out, "<eol-anchor> ");
+    break;
       case _URE_CCLASS:
       case _URE_NCCLASS:
-	fprintf(out, "[C%hd] ", sym->id);
-	break;
+    fprintf(out, "[C%hd] ", sym->id);
+    break;
       }
       fprintf(out, "S%hd", sp->trans[j].next_state);
       if (j + 1 < sp->ntrans)
-	putc(' ', out);
+    putc(' ', out);
     }
     putc('\n', out);
   }
@@ -2208,14 +2207,14 @@ ure_exec(ure_dfa_t dfa, int flags, ucs2_t *text, unsigned long textlen,
      * combined with a following low surrogate.
      */
     if (sp < ep && 0xd800 <= c && c <= 0xdbff &&
-	0xdc00 <= *sp && *sp <= 0xdfff)
+    0xdc00 <= *sp && *sp <= 0xdfff)
       c = 0x10000 + (((c & 0x03ff) << 10) | (*sp++ & 0x03ff));
 
     /*
      * Determine if the character is non-spacing and should be skipped.
      */
     if ((flags & URE_IGNORE_NONSPACING) &&
-	(_ure_matches_properties(_URE_NONSPACING, c)))
+    (_ure_matches_properties(_URE_NONSPACING, c)))
       continue;
 #endif
 
@@ -2229,126 +2228,126 @@ ure_exec(ure_dfa_t dfa, int flags, ucs2_t *text, unsigned long textlen,
       sym = dfa->syms + stp->trans[i].symbol;
       switch (sym->type) {
       case _URE_ANY_CHAR:
-	if ((flags & URE_DOT_MATCHES_SEPARATORS) ||
-	    !_ure_issep(c))
-	  matched = 1;
-	break;
+    if ((flags & URE_DOT_MATCHES_SEPARATORS) ||
+        !_ure_issep(c))
+      matched = 1;
+    break;
       case _URE_CHAR:
-	if (c == sym->sym.chr)
-	  matched = 1;
-	break;
+    if (c == sym->sym.chr)
+      matched = 1;
+    break;
       case _URE_BOL_ANCHOR:
-	if (flags & URE_NOTBOL)
-	  break;
-	if (lp == text) {
-	  sp = lp;
-	  matched = 1;
-	} else if (_ure_isbrk(c)) {
-	  if (c == '\r' && sp < ep && *sp == '\n')
-	    sp++;
-	  lp = sp;
-	  matched = 1;
-	}
-	break;
+    if (flags & URE_NOTBOL)
+      break;
+    if (lp == text) {
+      sp = lp;
+      matched = 1;
+    } else if (_ure_isbrk(c)) {
+      if (c == '\r' && sp < ep && *sp == '\n')
+        sp++;
+      lp = sp;
+      matched = 1;
+    }
+    break;
       case _URE_EOL_ANCHOR:
-	if (flags & URE_NOTEOL)
-	  break;
-	if (_ure_isbrk(c)) {
-	  /*
-	   * Put the pointer back before the separator so the match
-	   * end position will be correct.  This case will also
-	   * cause the `sp' pointer to be advanced over the current
-	   * separator once the match end point has been recorded.
-	   */
-	  sp = lp;
-	  matched = 1;
-	}
-	break;
+    if (flags & URE_NOTEOL)
+      break;
+    if (_ure_isbrk(c)) {
+      /*
+       * Put the pointer back before the separator so the match
+       * end position will be correct.  This case will also
+       * cause the `sp' pointer to be advanced over the current
+       * separator once the match end point has been recorded.
+       */
+      sp = lp;
+      matched = 1;
+    }
+    break;
       case _URE_CCLASS:
       case _URE_NCCLASS:
-	if (sym->props != 0)
-	  matched = _ure_matches_properties(sym->props, c);
-	for (j = 0, rp = sym->sym.ccl.ranges;
-	     j < sym->sym.ccl.ranges_used; j++, rp++) {
-	  if (rp->min_code <= c && c <= rp->max_code)
-	    matched = 1;
-	}
-	if (sym->type == _URE_NCCLASS)
-	  {
-	    matched = !matched;
-	    if (matched && _ure_issep(c) &&
-		(!(flags & URE_DOT_MATCHES_SEPARATORS)))
-	      matched = 0;
-	  }
-	break;
+    if (sym->props != 0)
+      matched = _ure_matches_properties(sym->props, c);
+    for (j = 0, rp = sym->sym.ccl.ranges;
+         j < sym->sym.ccl.ranges_used; j++, rp++) {
+      if (rp->min_code <= c && c <= rp->max_code)
+        matched = 1;
+    }
+    if (sym->type == _URE_NCCLASS)
+      {
+        matched = !matched;
+        if (matched && _ure_issep(c) &&
+        (!(flags & URE_DOT_MATCHES_SEPARATORS)))
+          matched = 0;
+      }
+    break;
       }
 
       if (matched) {
-	me = sp - text;
-	if (ms == (unsigned long) ~0)
-	  ms = lp - text;
+    me = sp - text;
+    if (ms == (unsigned long) ~0)
+      ms = lp - text;
 
-	stp = dfa->states + stp->trans[i].next_state;
+    stp = dfa->states + stp->trans[i].next_state;
 
-	/*
-	 * If the match was an EOL anchor, adjust the pointer past the
-	 * separator that caused the match.  The correct match
-	 * position has been recorded already.
-	 */
-	if (sym->type == _URE_EOL_ANCHOR) {
-	  /*
-	   * Skip the character that caused the match.
-	   */
-	  sp++;
+    /*
+     * If the match was an EOL anchor, adjust the pointer past the
+     * separator that caused the match.  The correct match
+     * position has been recorded already.
+     */
+    if (sym->type == _URE_EOL_ANCHOR) {
+      /*
+       * Skip the character that caused the match.
+       */
+      sp++;
 
-	  /*
-	   * Handle the infamous CRLF situation.
-	   */
-	  if (sp < ep && c == '\r' && *sp == '\n')
-	    sp++;
-	}
+      /*
+       * Handle the infamous CRLF situation.
+       */
+      if (sp < ep && c == '\r' && *sp == '\n')
+        sp++;
+    }
       }
     }
 
     if (matched == 0) {
       if (stp->accepting == 0) {
-	/*
-	 * If the last state was not accepting, then reset
-	 * and start over.
-	 */
-	stp = dfa->states;
-	ms = me = ~0;
+    /*
+     * If the last state was not accepting, then reset
+     * and start over.
+     */
+    stp = dfa->states;
+    ms = me = ~0;
       } else
-	/*
-	 * The last state was accepting, so terminate the matching
-	 * loop to avoid more work.
-	 */
-	found = 1;
+    /*
+     * The last state was accepting, so terminate the matching
+     * loop to avoid more work.
+     */
+    found = 1;
     } else if (sp == ep) {
       if (!stp->accepting) {
-	/*
-	 * This ugly hack is to make sure the end-of-line anchors
-	 * match when the source text hits the end.  This is only done
-	 * if the last subexpression matches.
-	 */
-	for (i = 0; found == 0 && i < stp->ntrans; i++) {
-	  sym = dfa->syms + stp->trans[i].symbol;
-	  if (sym->type ==_URE_EOL_ANCHOR) {
-	    stp = dfa->states + stp->trans[i].next_state;
-	    if (stp->accepting) {
-	      me = sp - text;
-	      found = 1;
-	    } else
-	      break;
-	  }
-	}
+    /*
+     * This ugly hack is to make sure the end-of-line anchors
+     * match when the source text hits the end.  This is only done
+     * if the last subexpression matches.
+     */
+    for (i = 0; found == 0 && i < stp->ntrans; i++) {
+      sym = dfa->syms + stp->trans[i].symbol;
+      if (sym->type ==_URE_EOL_ANCHOR) {
+        stp = dfa->states + stp->trans[i].next_state;
+        if (stp->accepting) {
+          me = sp - text;
+          found = 1;
+        } else
+          break;
+      }
+    }
       } else {
-	/*
-	 * Make sure any conditions that match all the way to the end
-	 * of the string match.
-	 */
-	found = 1;
-	me = sp - text;
+    /*
+     * Make sure any conditions that match all the way to the end
+     * of the string match.
+     */
+    found = 1;
+    me = sp - text;
       }
     }
   }

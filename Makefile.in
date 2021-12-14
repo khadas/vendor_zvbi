@@ -238,7 +238,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-@ENABLE_PROXY_FALSE@proxy_dirs = 
+@ENABLE_PROXY_FALSE@proxy_dirs =
 @ENABLE_PROXY_TRUE@proxy_dirs = daemon
 EXTRA_DIST = \
 	BUGS \
@@ -311,7 +311,7 @@ config.h: stamp-h1
 stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
+$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_srcdir) && $(AUTOHEADER)
 	rm -f stamp-h1
 	touch $@

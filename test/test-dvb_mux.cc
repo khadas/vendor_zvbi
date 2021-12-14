@@ -548,7 +548,7 @@ assert_pes_packet_ok		(unsigned int *		n_sliced_dus,
 	   copyright,
 	   original_or_copy */
 	assert (0x84 == p[6]);
-	
+
 	/* PTS_DTS_flags [2],
 	   ESCR_flag,
 	   ES_rate_flag
@@ -680,7 +680,7 @@ assert_du_conversion_ok		(const uint8_t *	packet,
 	const uint8_t *p;
 	unsigned int p_left;
 	unsigned int n_lines_out;
-	unsigned int max_lines_out; 
+	unsigned int max_lines_out;
 	vbi_bool success;
 
 	max_lines_out = n_lines_in * 2 + 1;
@@ -1364,7 +1364,7 @@ test_ms_bad_line_order		(unsigned int		nth,
 
 	buffer = (uint8_t *) xmalloc (buffer_size = 20 * 46);
 	sliced = alloc_sliced (n_lines = 8);
-	
+
 	for (i = 0; i < 4; ++i) {
 		sliced[i].id = VBI_SLICED_TELETEXT_B_625;
 		sliced[i].line = 7 + i;
@@ -1847,7 +1847,7 @@ assert_multiplex_raw		(uint8_t * const 	p1,
 			exp_consumed_samples += n_samples;
 		}
 	}
-	
+
 	if (stuffing)
 		exp_out_data_size = p1_size;
 
@@ -2552,7 +2552,7 @@ class DVBPESMuxTest : public DVBPESMux {
 		vbi_bool success;
 
 		assert (NULL != mx);
-	
+
 		success = vbi_dvb_mux_set_data_identifier
 			(mx, get_data_identifier ());
 		assert (TRUE == success);
@@ -3017,7 +3017,7 @@ DVBPESMuxTest::test		(const vbi_bool 	exp_success,
 
 		/* Verify that the TS callback and the TS coroutine give
 		   the same result as the PES coroutine. */
-	
+
 		mx = vbi_dvb_ts_mux_new (/* pid */ 0x1234,
 					  /* callback */ dvb_mux_ts_cb,
 					  /* user_data */ this);
@@ -3730,7 +3730,7 @@ test_dvb_mux_data_identifier_accessors (void)
 		vbi_bool success;
 
 		old_di = 0x1F ^ (i & 0xF);
-		mx.set_data_identifier (old_di); 
+		mx.set_data_identifier (old_di);
 
 		success = mx.set_data_identifier (i);
 
@@ -3856,8 +3856,8 @@ test_dvb_mux_new_pid_checks	(void)
 		mx = (vbi_dvb_mux *) -1;
 	}
 
-	assert (NULL == vbi_dvb_ts_mux_new (0x123456, NULL, NULL)); 
-	assert (NULL == vbi_dvb_ts_mux_new (UINT_MAX, NULL, NULL)); 
+	assert (NULL == vbi_dvb_ts_mux_new (0x123456, NULL, NULL));
+	assert (NULL == vbi_dvb_ts_mux_new (UINT_MAX, NULL, NULL));
 }
 
 static void

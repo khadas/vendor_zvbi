@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -47,13 +47,13 @@ extern int		vbi_print_page_region(vbi_page *pg, char *buf, int size,
  *   end of rows will be collapsed into single spaces, blank
  *   lines are suppressed.
  * @param ltr Currently ignored, please set to @c TRUE.
- * 
+ *
  * Print a Teletext or Closed Caption vbi_page, rows separated
  * by linefeeds "\n", in the desired format. All character attributes
  * and colors will be lost. Graphics characters, DRCS and all
  * characters not representable in the target format will be replaced
  * by spaces.
- * 
+ *
  * @return
  * Number of bytes written into @a buf, a value of zero when
  * some error occurred. In this case @a buf may contain incomplete

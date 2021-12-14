@@ -102,10 +102,10 @@ static unsigned int vbi_seq_no;
 static int vbi_fd;
 static int vbi_fd_nonblocking;
 
-#define CHECK_INIT() if(!vbi_chains_init) vbi_chains_doinit();
+#define CHECK_INIT() if (!vbi_chains_init) vbi_chains_doinit();
 
-#define dprintf1(fmt, arg...)    do {if (vbi_chains_debug >= 1) fprintf(stderr, "proxy-chains: " fmt, ## arg);} while(0)
-#define dprintf2(fmt, arg...)    do {if (vbi_chains_debug >= 2) fprintf(stderr, "proxy-chains: " fmt, ## arg);} while(0)
+#define dprintf1(fmt, arg...)    do {if (vbi_chains_debug >= 1) fprintf(stderr, "proxy-chains: " fmt, ## arg);} while (0)
+#define dprintf2(fmt, arg...)    do {if (vbi_chains_debug >= 2) fprintf(stderr, "proxy-chains: " fmt, ## arg);} while (0)
 
 /*
  * Initialization - maybe this should be either be a startup only called
@@ -339,7 +339,7 @@ int ioctl(int fd, ioctl_request_t request, ...)
 
             if (p_fmt->type == V4L2_BUF_TYPE_VBI_CAPTURE)
             {
-               p_capt = vbi_proxy_client_get_capture_if(p_proxy_client);
+               p_capt = vbi_proxy_client_get_capture_if (p_proxy_client);
                p_dec = vbi_capture_parameters(p_capt);
                memset(p_fmt, 0, sizeof(p_fmt[0]));
                p_fmt->type = V4L2_BUF_TYPE_VBI_CAPTURE;
@@ -403,7 +403,7 @@ int ioctl(int fd, ioctl_request_t request, ...)
             vbi_raw_decoder *p_dec;
             struct vbi_format fmt;
 
-            p_capt = vbi_proxy_client_get_capture_if(p_proxy_client);
+            p_capt = vbi_proxy_client_get_capture_if (p_proxy_client);
             p_dec = vbi_capture_parameters(p_capt);
             memset(&fmt, 0, sizeof(fmt));
             fmt.sampling_rate = p_dec->sampling_rate;
@@ -428,7 +428,7 @@ int ioctl(int fd, ioctl_request_t request, ...)
             vbi_raw_decoder *p_dec;
             int size;
 
-            p_capt = vbi_proxy_client_get_capture_if(p_proxy_client);
+            p_capt = vbi_proxy_client_get_capture_if (p_proxy_client);
             p_dec = vbi_capture_parameters(p_capt);
             size = (p_dec->count[0] + p_dec->count[1]) * p_dec->bytes_per_line;
             dprintf1("ioctl BTTV_VBISIZE: %d\n", size);
@@ -555,7 +555,7 @@ ssize_t read(int fd, void *buf, size_t count)
       dprintf2("read %d bytes buf=0x%lX\n", (int) count, (long) buf);
       vbi_chains_working = 1;
 
-      p_capt = vbi_proxy_client_get_capture_if(p_proxy_client);
+      p_capt = vbi_proxy_client_get_capture_if (p_proxy_client);
       timeout.tv_sec = (vbi_fd_nonblocking ? 0 : 60 * 60 * 24);
       timeout.tv_usec = 0;
 

@@ -17,8 +17,8 @@ fprintf (fp, "sampling_rate=%lu "
 "start[]=? "
 "count[]=? "
 "flags=",
-(unsigned long) t->sampling_rate, 
-(unsigned long) t->samples_per_line, 
+(unsigned long) t->sampling_rate,
+(unsigned long) t->samples_per_line,
 (unsigned long) t->sample_format);
 fprint_symbolic (fp, 2, t->flags,
 "UNSYNC", (unsigned long) VBI_UNSYNC,
@@ -35,10 +35,10 @@ fprintf (fp, "video=%ld "
 "radio=%ld "
 "audio=%ld "
 "teletext=%ld ",
-(long) t->video, 
-(long) t->vbi, 
-(long) t->radio, 
-(long) t->audio, 
+(long) t->video,
+(long) t->vbi,
+(long) t->radio,
+(long) t->audio,
 (long) t->teletext);
 }
 
@@ -50,9 +50,9 @@ fprintf (fp, "tuner=%ld "
 "rangelow=%lu "
 "rangehigh=%lu "
 "flags=",
-(long) t->tuner, 
-32, (const char *) t->name, 
-(unsigned long) t->rangelow, 
+(long) t->tuner,
+32, (const char *) t->name,
+(unsigned long) t->rangelow,
 (unsigned long) t->rangehigh);
 fprint_symbolic (fp, 2, t->flags,
 (void *) 0);
@@ -70,8 +70,8 @@ fprintf (fp, "channel=%ld "
 "name=\"%.*s\" "
 "tuners=%ld "
 "flags=",
-(long) t->channel, 
-32, (const char *) t->name, 
+(long) t->channel,
+32, (const char *) t->name,
 (long) t->tuners);
 fprint_symbolic (fp, 2, t->flags,
 "TUNER", (unsigned long) VIDEO_VC_TUNER,
@@ -100,11 +100,11 @@ fprintf (fp, " channels=%ld "
 "maxheight=%ld "
 "minwidth=%ld "
 "minheight=%ld ",
-(long) t->channels, 
-(long) t->audios, 
-(long) t->maxwidth, 
-(long) t->maxheight, 
-(long) t->minwidth, 
+(long) t->channels,
+(long) t->audios,
+(long) t->maxwidth,
+(long) t->maxheight,
+(long) t->minwidth,
 (long) t->minheight);
 }
 

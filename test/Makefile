@@ -410,7 +410,7 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run aclocal-1.9 -I m4
 AMDEP_FALSE = #
-AMDEP_TRUE = 
+AMDEP_TRUE =
 AMTAR = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run tar
 AR = ar
 AUTOCONF = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run autoconf
@@ -418,12 +418,12 @@ AUTOHEADER = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run autoh
 AUTOMAKE = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run automake-1.9
 AWK = gawk
 BUILD_STATIC_LIB_FALSE = #
-BUILD_STATIC_LIB_TRUE = 
+BUILD_STATIC_LIB_TRUE =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
-CPPFLAGS = 
+CPPFLAGS =
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -432,56 +432,56 @@ CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO = echo
-ECHO_C = 
+ECHO_C =
 ECHO_N = -n
-ECHO_T = 
+ECHO_T =
 EGREP = /usr/bin/grep -E
 ENABLE_DVB_FALSE = #
-ENABLE_DVB_TRUE = 
+ENABLE_DVB_TRUE =
 ENABLE_PROXY_FALSE = #
-ENABLE_PROXY_TRUE = 
-EXEEXT = 
-F77 = 
-FFLAGS = 
+ENABLE_PROXY_TRUE =
+EXEEXT =
+F77 =
+FFLAGS =
 GMSGFMT = /usr/bin/msgfmt
 GMSGFMT_015 = /usr/bin/msgfmt
 GREP = /usr/bin/grep
 HAVE_DOXYGEN = no
-HAVE_DOXYGEN_FALSE = 
+HAVE_DOXYGEN_FALSE =
 HAVE_DOXYGEN_TRUE = #
 HAVE_GCC_C89_SUPPORT_FALSE = #
-HAVE_GCC_C89_SUPPORT_TRUE = 
+HAVE_GCC_C89_SUPPORT_TRUE =
 HAVE_GCC_C94_SUPPORT_FALSE = #
-HAVE_GCC_C94_SUPPORT_TRUE = 
+HAVE_GCC_C94_SUPPORT_TRUE =
 HAVE_GCC_C99_SUPPORT_FALSE = #
-HAVE_GCC_C99_SUPPORT_TRUE = 
+HAVE_GCC_C99_SUPPORT_TRUE =
 HAVE_GCC_LIMITS_FALSE = #
-HAVE_GCC_LIMITS_TRUE = 
+HAVE_GCC_LIMITS_TRUE =
 HAVE_GXX_CXX98_SUPPORT_FALSE = #
-HAVE_GXX_CXX98_SUPPORT_TRUE = 
+HAVE_GXX_CXX98_SUPPORT_TRUE =
 HAVE_X_FALSE = #
-HAVE_X_TRUE = 
-INSIDE_GNOME_COMMON_FALSE = 
+HAVE_X_TRUE =
+INSIDE_GNOME_COMMON_FALSE =
 INSIDE_GNOME_COMMON_TRUE = #
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-INTLLIBS = 
-INTL_MACOSX_LIBS = 
-LDFLAGS = 
-LIBICONV = 
-LIBINTL = 
-LIBOBJS = 
+INTLLIBS =
+INTL_MACOSX_LIBS =
+LDFLAGS =
+LIBICONV =
+LIBINTL =
+LIBOBJS =
 LIBS =  -lpthread  -lm  -lpng -lz
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBZVBI_SO_VERSION = 13:1:13
 LN_S = ln -s
-LTLIBICONV = 
-LTLIBINTL = 
-LTLIBOBJS = 
+LTLIBICONV =
+LTLIBINTL =
+LTLIBOBJS =
 MAINT = #
-MAINTAINER_MODE_FALSE = 
+MAINTAINER_MODE_FALSE =
 MAINTAINER_MODE_TRUE = #
 MAKEINFO = ${SHELL} /home/gk/work/ics/external/zvbi-0.2.33/missing --run makeinfo
 MSGFMT = /usr/bin/msgfmt
@@ -489,7 +489,7 @@ MSGFMT_015 = /usr/bin/msgfmt
 MSGMERGE = /usr/bin/msgmerge
 OBJEXT = o
 PACKAGE = zvbi
-PACKAGE_BUGREPORT = 
+PACKAGE_BUGREPORT =
 PACKAGE_NAME = zvbi
 PACKAGE_STRING = zvbi 0.2.33
 PACKAGE_TARNAME = zvbi
@@ -497,35 +497,35 @@ PACKAGE_VERSION = 0.2.33
 PATH_SEPARATOR = :
 POSUB = po
 RANLIB = ranlib
-SET_MAKE = 
+SET_MAKE =
 SHELL = /bin/sh
 STRIP = strip
-UNICODE_CFLAGS = 
-UNICODE_LIBS = 
+UNICODE_CFLAGS =
+UNICODE_LIBS =
 USE_NLS = yes
 VERSION = 0.2.33
 XGETTEXT = /usr/bin/xgettext
 XGETTEXT_015 = /usr/bin/xgettext
-XMKMF = 
-X_CFLAGS = 
-X_EXTRA_LIBS = 
+XMKMF =
+X_CFLAGS =
+X_EXTRA_LIBS =
 X_LIBS =  -lX11
 X_PRE_LIBS =  -lSM -lICE
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = 
+ac_ct_F77 =
 am__fastdepCC_FALSE = #
-am__fastdepCC_TRUE = 
+am__fastdepCC_TRUE =
 am__fastdepCXX_FALSE = #
-am__fastdepCXX_TRUE = 
+am__fastdepCXX_TRUE =
 am__include = include
 am__leading_dot = .
-am__quote = 
+am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
 build = x86_64-unknown-linux-gnu
-build_alias = 
+build_alias =
 build_cpu = x86_64
 build_os = linux-gnu
 build_vendor = unknown
@@ -535,7 +535,7 @@ docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
 host = x86_64-unknown-linux-gnu
-host_alias = 
+host_alias =
 host_cpu = x86_64
 host_os = linux-gnu
 host_vendor = unknown
@@ -557,7 +557,7 @@ psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
-target_alias = 
+target_alias =
 compile_tests = ctest cpptest $(am__append_1) $(am__append_2) \
 	$(am__append_3) $(am__append_4)
 cpptest_SOURCES = cpptest.cc
@@ -603,9 +603,9 @@ test_raw_decoder_SOURCES = \
 	test-common.cc test-common.h
 
 test_vps_SOURCES = test-vps.c
-#proxy_programs = 
+#proxy_programs =
 proxy_programs = proxy-test
-#x_programs = 
+#x_programs =
 x_programs = caption osc
 capture_SOURCES = \
 	capture.c \
@@ -705,79 +705,79 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-caption$(EXEEXT): $(caption_OBJECTS) $(caption_DEPENDENCIES) 
+caption$(EXEEXT): $(caption_OBJECTS) $(caption_DEPENDENCIES)
 	@rm -f caption$(EXEEXT)
 	$(LINK) $(caption_LDFLAGS) $(caption_OBJECTS) $(caption_LDADD) $(LIBS)
-capture$(EXEEXT): $(capture_OBJECTS) $(capture_DEPENDENCIES) 
+capture$(EXEEXT): $(capture_OBJECTS) $(capture_DEPENDENCIES)
 	@rm -f capture$(EXEEXT)
 	$(LINK) $(capture_LDFLAGS) $(capture_OBJECTS) $(capture_LDADD) $(LIBS)
-cpptest$(EXEEXT): $(cpptest_OBJECTS) $(cpptest_DEPENDENCIES) 
+cpptest$(EXEEXT): $(cpptest_OBJECTS) $(cpptest_DEPENDENCIES)
 	@rm -f cpptest$(EXEEXT)
 	$(CXXLINK) $(cpptest_LDFLAGS) $(cpptest_OBJECTS) $(cpptest_LDADD) $(LIBS)
-cpptest-cxx98$(EXEEXT): $(cpptest_cxx98_OBJECTS) $(cpptest_cxx98_DEPENDENCIES) 
+cpptest-cxx98$(EXEEXT): $(cpptest_cxx98_OBJECTS) $(cpptest_cxx98_DEPENDENCIES)
 	@rm -f cpptest-cxx98$(EXEEXT)
 	$(CXXLINK) $(cpptest_cxx98_LDFLAGS) $(cpptest_cxx98_OBJECTS) $(cpptest_cxx98_LDADD) $(LIBS)
-cpptest-gnuxx98$(EXEEXT): $(cpptest_gnuxx98_OBJECTS) $(cpptest_gnuxx98_DEPENDENCIES) 
+cpptest-gnuxx98$(EXEEXT): $(cpptest_gnuxx98_OBJECTS) $(cpptest_gnuxx98_DEPENDENCIES)
 	@rm -f cpptest-gnuxx98$(EXEEXT)
 	$(CXXLINK) $(cpptest_gnuxx98_LDFLAGS) $(cpptest_gnuxx98_OBJECTS) $(cpptest_gnuxx98_LDADD) $(LIBS)
-ctest$(EXEEXT): $(ctest_OBJECTS) $(ctest_DEPENDENCIES) 
+ctest$(EXEEXT): $(ctest_OBJECTS) $(ctest_DEPENDENCIES)
 	@rm -f ctest$(EXEEXT)
 	$(LINK) $(ctest_LDFLAGS) $(ctest_OBJECTS) $(ctest_LDADD) $(LIBS)
-ctest-c89$(EXEEXT): $(ctest_c89_OBJECTS) $(ctest_c89_DEPENDENCIES) 
+ctest-c89$(EXEEXT): $(ctest_c89_OBJECTS) $(ctest_c89_DEPENDENCIES)
 	@rm -f ctest-c89$(EXEEXT)
 	$(LINK) $(ctest_c89_LDFLAGS) $(ctest_c89_OBJECTS) $(ctest_c89_LDADD) $(LIBS)
-ctest-c94$(EXEEXT): $(ctest_c94_OBJECTS) $(ctest_c94_DEPENDENCIES) 
+ctest-c94$(EXEEXT): $(ctest_c94_OBJECTS) $(ctest_c94_DEPENDENCIES)
 	@rm -f ctest-c94$(EXEEXT)
 	$(LINK) $(ctest_c94_LDFLAGS) $(ctest_c94_OBJECTS) $(ctest_c94_LDADD) $(LIBS)
-ctest-c99$(EXEEXT): $(ctest_c99_OBJECTS) $(ctest_c99_DEPENDENCIES) 
+ctest-c99$(EXEEXT): $(ctest_c99_OBJECTS) $(ctest_c99_DEPENDENCIES)
 	@rm -f ctest-c99$(EXEEXT)
 	$(LINK) $(ctest_c99_LDFLAGS) $(ctest_c99_OBJECTS) $(ctest_c99_LDADD) $(LIBS)
-ctest-gnu89$(EXEEXT): $(ctest_gnu89_OBJECTS) $(ctest_gnu89_DEPENDENCIES) 
+ctest-gnu89$(EXEEXT): $(ctest_gnu89_OBJECTS) $(ctest_gnu89_DEPENDENCIES)
 	@rm -f ctest-gnu89$(EXEEXT)
 	$(LINK) $(ctest_gnu89_LDFLAGS) $(ctest_gnu89_OBJECTS) $(ctest_gnu89_LDADD) $(LIBS)
-ctest-gnu99$(EXEEXT): $(ctest_gnu99_OBJECTS) $(ctest_gnu99_DEPENDENCIES) 
+ctest-gnu99$(EXEEXT): $(ctest_gnu99_OBJECTS) $(ctest_gnu99_DEPENDENCIES)
 	@rm -f ctest-gnu99$(EXEEXT)
 	$(LINK) $(ctest_gnu99_LDFLAGS) $(ctest_gnu99_OBJECTS) $(ctest_gnu99_LDADD) $(LIBS)
-decode$(EXEEXT): $(decode_OBJECTS) $(decode_DEPENDENCIES) 
+decode$(EXEEXT): $(decode_OBJECTS) $(decode_DEPENDENCIES)
 	@rm -f decode$(EXEEXT)
 	$(LINK) $(decode_LDFLAGS) $(decode_OBJECTS) $(decode_LDADD) $(LIBS)
-explist$(EXEEXT): $(explist_OBJECTS) $(explist_DEPENDENCIES) 
+explist$(EXEEXT): $(explist_OBJECTS) $(explist_DEPENDENCIES)
 	@rm -f explist$(EXEEXT)
 	$(LINK) $(explist_LDFLAGS) $(explist_OBJECTS) $(explist_LDADD) $(LIBS)
-export$(EXEEXT): $(export_OBJECTS) $(export_DEPENDENCIES) 
+export$(EXEEXT): $(export_OBJECTS) $(export_DEPENDENCIES)
 	@rm -f export$(EXEEXT)
 	$(LINK) $(export_LDFLAGS) $(export_OBJECTS) $(export_LDADD) $(LIBS)
-glyph$(EXEEXT): $(glyph_OBJECTS) $(glyph_DEPENDENCIES) 
+glyph$(EXEEXT): $(glyph_OBJECTS) $(glyph_DEPENDENCIES)
 	@rm -f glyph$(EXEEXT)
 	$(LINK) $(glyph_LDFLAGS) $(glyph_OBJECTS) $(glyph_LDADD) $(LIBS)
-osc$(EXEEXT): $(osc_OBJECTS) $(osc_DEPENDENCIES) 
+osc$(EXEEXT): $(osc_OBJECTS) $(osc_DEPENDENCIES)
 	@rm -f osc$(EXEEXT)
 	$(LINK) $(osc_LDFLAGS) $(osc_OBJECTS) $(osc_LDADD) $(LIBS)
-proxy-test$(EXEEXT): $(proxy_test_OBJECTS) $(proxy_test_DEPENDENCIES) 
+proxy-test$(EXEEXT): $(proxy_test_OBJECTS) $(proxy_test_DEPENDENCIES)
 	@rm -f proxy-test$(EXEEXT)
 	$(LINK) $(proxy_test_LDFLAGS) $(proxy_test_OBJECTS) $(proxy_test_LDADD) $(LIBS)
-sliced2pes$(EXEEXT): $(sliced2pes_OBJECTS) $(sliced2pes_DEPENDENCIES) 
+sliced2pes$(EXEEXT): $(sliced2pes_OBJECTS) $(sliced2pes_DEPENDENCIES)
 	@rm -f sliced2pes$(EXEEXT)
 	$(LINK) $(sliced2pes_LDFLAGS) $(sliced2pes_OBJECTS) $(sliced2pes_LDADD) $(LIBS)
-test-dvb_demux$(EXEEXT): $(test_dvb_demux_OBJECTS) $(test_dvb_demux_DEPENDENCIES) 
+test-dvb_demux$(EXEEXT): $(test_dvb_demux_OBJECTS) $(test_dvb_demux_DEPENDENCIES)
 	@rm -f test-dvb_demux$(EXEEXT)
 	$(CXXLINK) $(test_dvb_demux_LDFLAGS) $(test_dvb_demux_OBJECTS) $(test_dvb_demux_LDADD) $(LIBS)
-test-dvb_mux$(EXEEXT): $(test_dvb_mux_OBJECTS) $(test_dvb_mux_DEPENDENCIES) 
+test-dvb_mux$(EXEEXT): $(test_dvb_mux_OBJECTS) $(test_dvb_mux_DEPENDENCIES)
 	@rm -f test-dvb_mux$(EXEEXT)
 	$(CXXLINK) $(test_dvb_mux_LDFLAGS) $(test_dvb_mux_OBJECTS) $(test_dvb_mux_LDADD) $(LIBS)
-test-hamm$(EXEEXT): $(test_hamm_OBJECTS) $(test_hamm_DEPENDENCIES) 
+test-hamm$(EXEEXT): $(test_hamm_OBJECTS) $(test_hamm_DEPENDENCIES)
 	@rm -f test-hamm$(EXEEXT)
 	$(CXXLINK) $(test_hamm_LDFLAGS) $(test_hamm_OBJECTS) $(test_hamm_LDADD) $(LIBS)
-test-raw_decoder$(EXEEXT): $(test_raw_decoder_OBJECTS) $(test_raw_decoder_DEPENDENCIES) 
+test-raw_decoder$(EXEEXT): $(test_raw_decoder_OBJECTS) $(test_raw_decoder_DEPENDENCIES)
 	@rm -f test-raw_decoder$(EXEEXT)
 	$(CXXLINK) $(test_raw_decoder_LDFLAGS) $(test_raw_decoder_OBJECTS) $(test_raw_decoder_LDADD) $(LIBS)
-test-vps$(EXEEXT): $(test_vps_OBJECTS) $(test_vps_DEPENDENCIES) 
+test-vps$(EXEEXT): $(test_vps_OBJECTS) $(test_vps_DEPENDENCIES)
 	@rm -f test-vps$(EXEEXT)
 	$(LINK) $(test_vps_LDFLAGS) $(test_vps_OBJECTS) $(test_vps_LDADD) $(LIBS)
-ttxfilter$(EXEEXT): $(ttxfilter_OBJECTS) $(ttxfilter_DEPENDENCIES) 
+ttxfilter$(EXEEXT): $(ttxfilter_OBJECTS) $(ttxfilter_DEPENDENCIES)
 	@rm -f ttxfilter$(EXEEXT)
 	$(LINK) $(ttxfilter_LDFLAGS) $(ttxfilter_OBJECTS) $(ttxfilter_LDADD) $(LIBS)
-unicode$(EXEEXT): $(unicode_OBJECTS) $(unicode_DEPENDENCIES) 
+unicode$(EXEEXT): $(unicode_OBJECTS) $(unicode_DEPENDENCIES)
 	@rm -f unicode$(EXEEXT)
 	$(LINK) $(unicode_LDFLAGS) $(unicode_OBJECTS) $(unicode_LDADD) $(LIBS)
 

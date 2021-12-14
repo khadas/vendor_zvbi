@@ -17,8 +17,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -92,7 +92,7 @@ highlight(struct vbi_search *s, cache_page *vtp,
 
 		for (j = 0; j < 40; acp++, j++) {
 			int offset = hp - first;
- 
+
 			if (offset >= me) {
 				s->row[0] = i;
 				s->col[0] = j;
@@ -368,7 +368,7 @@ fprintf(stderr, "exec: %x/%x; %d, %d; '%c%c%c...'\n",
 
 /**
  * @param search vbi_search context.
- * 
+ *
  * Delete the search context created by vbi_search_new().
  */
 void
@@ -403,9 +403,9 @@ ucs2_strlen(const void *string)
 
 /**
  * @param vbi Initialized vbi decoding context.
- * @param pgno 
+ * @param pgno
  * @param subno Page and subpage number of the first (forward) or
- *   last (backward) page to visit. Optional @c VBI_ANY_SUBNO. 
+ *   last (backward) page to visit. Optional @c VBI_ANY_SUBNO.
  * @param pattern The Unicode (UCS-2, <em>not</em> UTF-16) search
  *   pattern, a 0-terminated string.
  * @param casefold Boolean, search case insensitive.
@@ -414,11 +414,11 @@ ucs2_strlen(const void *string)
  *   \c NULL. Shall return @c FALSE to abort the search. @a pg is valid
  *   for display (e. g. @a pg->pgno), do <em>not</em> call
  *   vbi_unref_page() or modify this page.
- * 
+ *
  * Allocate a vbi_search context and prepare for searching
  * the Teletext page cache. The context must be freed with
  * vbi_search_delete().
- * 
+ *
  * Regular expression searching supports the standard set
  * of operators and constants, with these extensions:
  *

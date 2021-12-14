@@ -301,7 +301,7 @@ __u64 b = 2;
   ], [AC_DEFINE(HAVE_S64_U64, 1,
 		[Define if asm/types.h defines __s64 and __u64])
       AC_MSG_RESULT(yes)],
-  [AC_MSG_RESULT(no)]) 
+  [AC_MSG_RESULT(no)])
 fi
 
 dnl
@@ -342,9 +342,9 @@ else
     "${prefix}/share/locale", [ld])
 fi
 
-dnl 
+dnl
 dnl Build docs from the sources if Doxygen is installed.
-dnl 
+dnl
 AC_ARG_WITH([doxygen],
   AS_HELP_STRING([--without-doxygen],
 		 [Disable building of API documentation]),,

@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -40,12 +40,25 @@
 #include "conv.h"
 #include "vbi.h" /* asprintf */
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
+#define LOG_TAG    "ZVBI"
+#ifdef ANDROID
+#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define LOGE(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#else
+#define LOGI(...) printf(__VA_ARGS__)
+#define LOGE(...) printf(__VA_ARGS__)
+#endif
+
 extern const char _zvbi_intl_domainname[];
 
 /**
  * @addtogroup Export Exporting formatted Teletext and Closed Caption pages
  * @ingroup HiDec
- * 
+ *
  * Once libzvbi received, decoded and formatted a Teletext or Closed
  * Caption page you will want to render it on screen, print it as
  * text or store it in various formats.
@@ -92,7 +105,7 @@ extern const char _zvbi_intl_domainname[];
 /**
  * @addtogroup Render Teletext and Closed Caption page render functions
  * @ingroup Export
- * 
+ *
  * These are functions to render Teletext and Closed Caption pages
  * directly into memory, essentially a more direct interface to the
  * functions of some important export modules.
@@ -103,7 +116,7 @@ static vbi_export_class *vbi_export_modules;
 
 /**
  * @param new_module Static pointer to initialized vbi_export_class structure.
- * 
+ *
  * Registers a new export module.
  */
 void
@@ -167,8 +180,8 @@ initialize(void)
  * Helper function for export modules, since iconv seems
  * undecided what it really wants (not every iconv supports
  * UCS-2LE/BE).
- * 
- * @return 
+ *
+ * @return
  * 1 if iconv "UCS-2" is BE on this machine, 0 if LE,
  * -1 if unknown.
  */
@@ -200,89 +213,89 @@ vbi_ucs2be(void)
  *  This is old stuff, we'll see if it's still needed.
  */
 
-#if 0 
+#if 0
 
 static char *
 hexnum(char *buf, unsigned int num)
 {
-    char *p = buf + 5;
+	char *p = buf + 5;
 
-    num &= 0xffff;
-    *--p = 0;
-    do
-    {
+	num &= 0xffff;
+	*--p = 0;
+	do
+	{
 	*--p = "0123456789abcdef"[num % 16];
 	num /= 16;
-    } while (num);
-    return p;
+	} while (num);
+	return p;
 }
 
 static char *
 adjust(char *p, char *str, char fill, int width, int deq)
 {
-    int c, l = width - strlen(str);
+	int c, l = width - strlen(str);
 
-    while (l-- > 0)
+	while (l-- > 0)
 	*p++ = fill;
-    while ((c = *str++)) {
+	while ((c = *str++)) {
 	if (deq && strchr(" /?*", c))
-    	    c = '_';
+		c = '_';
 	*p++ = c;
-    }
-    return p;
+	}
+	return p;
 }
 
 char *
 vbi_export_mkname(vbi_export *e, char *fmt,
 	int pgno, int subno, char *usr)
 {
-    char bbuf[1024];
-    char *s = bbuf;
+	char bbuf[1024];
+	char *s = bbuf;
 
-    while ((*s = *fmt++))
+	while ((*s = *fmt++))
 	if (*s++ == '%')
 	{
-	    char buf[32], buf2[32];
-	    int width = 0;
+		char buf[32], buf2[32];
+		int width = 0;
 
-	    s--;
-	    while (*fmt >= '0' && *fmt <= '9')
+		s--;
+		while (*fmt >= '0' && *fmt <= '9')
 		width = width*10 + *fmt++ - '0';
 
-	    switch (*fmt++)
-	    {
+		switch (*fmt++)
+		{
 		case '%':
-		    s = adjust(s, "%", '%', width, 0);
-		    break;
+			s = adjust(s, "%", '%', width, 0);
+			break;
 		case 'e':	// extension
-		    s = adjust(s, e->mod->extension, '.', width, 1);
-		    break;
+			s = adjust(s, e->mod->extension, '.', width, 1);
+			break;
 		case 'n':	// network label
-		    s = adjust(s, e->network.label, ' ', width, 1);
-		    break;
+			s = adjust(s, e->network.label, ' ', width, 1);
+			break;
 		case 'p':	// pageno[.subno]
-		    if (subno)
+			if (subno)
 			s = adjust(s,strcat(strcat(hexnum(buf, pgno),
 				"-"), hexnum(buf2, subno)), ' ', width, 0);
-		    else
+			else
 			s = adjust(s, hexnum(buf, pgno), ' ', width, 0);
-		    break;
+			break;
 		case 'S':	// subno
-		    s = adjust(s, hexnum(buf, subno), '0', width, 0);
-		    break;
+			s = adjust(s, hexnum(buf, subno), '0', width, 0);
+			break;
 		case 'P':	// pgno
-		    s = adjust(s, hexnum(buf, pgno), '0', width, 0);
-		    break;
+			s = adjust(s, hexnum(buf, pgno), '0', width, 0);
+			break;
 		case 's':	// user strin
-		    s = adjust(s, usr, ' ', width, 0);
-		    break;
-		//TODO: add date, ...
-	    }
+			s = adjust(s, usr, ' ', width, 0);
+			break;
+		//TODO: add date,
+		}
 	}
-    s = strdup(bbuf);
-    if (! s)
+	s = strdup(bbuf);
+	if (! s)
 	vbi_export_error_printf(e, "out of memory");
-    return s;
+	return s;
 }
 
 #endif /* OLD STUFF */
@@ -290,11 +303,11 @@ vbi_export_mkname(vbi_export *e, char *fmt,
 static vbi_option_info
 generic_options[] = {
 	VBI_OPTION_STRING_INITIALIZER
-	  ("creator", NULL, PACKAGE " " VERSION, NULL),
+	("creator", NULL, PACKAGE " " VERSION, NULL),
 	VBI_OPTION_STRING_INITIALIZER
-	  ("network", NULL, "", NULL),
+	("network", NULL, "", NULL),
 	VBI_OPTION_BOOL_INITIALIZER
-	  ("reveal", NULL, FALSE, NULL)
+	("reveal", NULL, FALSE, NULL)
 };
 
 #define GENERIC (sizeof(generic_options) / sizeof(generic_options[0]))
@@ -337,10 +350,10 @@ vbi_export_info_enum(int index)
 /**
  * @param keyword Export module identifier as in vbi_export_info and
  *           vbi_export_new().
- * 
+ *
  * Similar to vbi_export_info_enum(), but this function attempts to find an
  * export module by keyword.
- * 
+ *
  * @return
  * Static pointer to a vbi_export_info structure, @c NULL if the named export
  * module has not been found.
@@ -492,7 +505,7 @@ option_string(vbi_export *e, const char *s2)
 			string = s;
 
 			while (*s && *s != quote
-			       && (quote || (*s != ',' && *s != ';')))
+				&& (quote || (*s != ',' && *s != ';')))
 				s++;
 			if (*s)
 				*s++ = 0;
@@ -517,15 +530,15 @@ option_string(vbi_export *e, const char *s2)
  * @param keyword Export module identifier as in vbi_export_info.
  * @param errstr If not @c NULL this function stores a pointer to an error
  *   description here. You must free() this string when no longer needed.
- * 
+ *
  * Creates a new export module instance to export a vbi_page in
  * the respective module format. As a special service you can
  * initialize options by appending to the @param keyword like this:
- * 
+ *
  * @code
  * vbi_export_new ("keyword; quality=75.5, comment=\"example text\"");
  * @endcode
- * 
+ *
  * @return
  * Pointer to a newly allocated vbi_export object which must be
  * freed by calling vbi_export_delete(). @c NULL is returned and
@@ -546,8 +559,8 @@ vbi_export_new(const char *keyword, char **errstr)
 		keyword = "";
 
 	for (keylen = 0; keyword[keylen] && keylen < (sizeof(key) - 1)
-		     && keyword[keylen] != ';' && keyword[keylen] != ','; keylen++)
-		     key[keylen] = keyword[keylen];
+			&& keyword[keylen] != ';' && keyword[keylen] != ','; keylen++)
+		key[keylen] = keyword[keylen];
 	key[keylen] = 0;
 
 	for (xc = vbi_export_modules; xc; xc = xc->next)
@@ -596,7 +609,7 @@ vbi_export_new(const char *keyword, char **errstr)
 /**
  * @param export Pointer to a vbi_export object previously allocated with
  *	     vbi_export_new(). Can be @c NULL.
- * 
+ *
  * This function frees all resources associated with the vbi_export
  * object.
  */
@@ -761,7 +774,7 @@ vbi_export_option_get(vbi_export *export, const char *keyword,
  * entry number (int), all other options by value. If necessary it will
  * be replaced by the closest value possible. Use function
  * vbi_export_option_menu_set() to set options with menu
- * by menu entry.  
+ * by menu entry.
  *
  * @return
  * @c TRUE on success, otherwise the option is not changed.
@@ -814,13 +827,13 @@ vbi_export_option_set(vbi_export *export, const char *keyword, ...)
  * @param export Pointer to a initialized vbi_export object.
  * @param keyword Keyword identifying the option, as in vbi_option_info.
  * @param entry A place to store the current menu entry.
- * 
+ *
  * Similar to vbi_export_option_get() this function queries the current
  * value of the named option, but returns this value as number of the
  * corresponding menu entry. Naturally this must be an option with
  * menu.
- * 
- * @return 
+ *
+ * @return
  * @c TRUE on success, otherwise @a value remained unchanged.
  */
 vbi_bool
@@ -884,12 +897,12 @@ vbi_export_option_menu_get(vbi_export *export, const char *keyword,
  * @param export Pointer to a initialized vbi_export object.
  * @param keyword Keyword identifying the option, as in vbi_option_info.
  * @param entry Menu entry to be selected.
- * 
+ *
  * Similar to vbi_export_option_set() this function sets the value of
  * the named option, however it does so by number of the corresponding
  * menu entry. Naturally this must be an option with menu.
  *
- * @return 
+ * @return
  * @c TRUE on success, otherwise the option is not changed.
  */
 vbi_bool
@@ -974,7 +987,7 @@ _vbi_export_grow_buffer_space	(vbi_export *		e,
 		return FALSE;
 
 	if (capacity >= min_space
-	    && offset <= capacity - min_space)
+		&& offset <= capacity - min_space)
 		return TRUE;
 
 	if (unlikely (offset > SIZE_MAX - min_space))
@@ -984,7 +997,7 @@ _vbi_export_grow_buffer_space	(vbi_export *		e,
 		char *old_data;
 
 		/* Not enough buffer space. Change to TARGET_ALLOC
-		   to calculate the actually needed amount. */
+			to calculate the actually needed amount. */
 
 		old_data = e->buffer.data;
 
@@ -995,10 +1008,10 @@ _vbi_export_grow_buffer_space	(vbi_export *		e,
 		e->buffer.capacity = 0;
 
 		success = _vbi_grow_vector_capacity ((void **)
-						     &e->buffer.data,
-						     &e->buffer.capacity,
-						     offset + min_space,
-						     element_size);
+							&e->buffer.data,
+							&e->buffer.capacity,
+							offset + min_space,
+							element_size);
 		if (unlikely (!success))
 			goto failed;
 
@@ -1009,10 +1022,10 @@ _vbi_export_grow_buffer_space	(vbi_export *		e,
 		return TRUE;
 	} else {
 		success = _vbi_grow_vector_capacity ((void **)
-						     &e->buffer.data,
-						     &e->buffer.capacity,
-						     offset + min_space,
-						     element_size);
+							&e->buffer.data,
+							&e->buffer.capacity,
+							offset + min_space,
+							element_size);
 		if (likely (success))
 			return TRUE;
 	}
@@ -1560,13 +1573,13 @@ vbi_export_printf		(vbi_export *		e,
  * @param buffer Output buffer.
  * @param buffer_size Size of the output buffer in bytes.
  * @param pg Page to be exported.
- * 
+ *
  * This function writes the @a pg contents, converted to the format
  * selected with vbi_export_new(), into the @a buffer.
  *
  * You can call this function repeatedly, it does not change the state
  * of the vbi_export or vbi_page structure.
- * 
+ *
  * @returns
  * On success the function returns the actual number of bytes stored in
  * the buffer. If @a buffer_size is too small it returns the required
@@ -1639,14 +1652,14 @@ vbi_export_mem			(vbi_export *		e,
  * @param buffer_size The amount of data stored in the output buffer,
  *    in bytes, will be stored here. @a buffer_size can be @c NULL.
  * @param pg Page to be exported.
- * 
+ *
  * This function writes the @a pg contents, converted to the format
  * selected with vbi_export_new(), into a newly allocated buffer. You
  * must free() this buffer when it is no longer needed.
  *
  * You can call this function repeatedly, it does not change the state
  * of the vbi_export or vbi_page structure.
- * 
+ *
  * @returns
  * On success the function returns the address of the allocated buffer.
  * On failure it returns @c NULL, and @a buffer and @a buffer_size
@@ -1707,7 +1720,7 @@ vbi_export_alloc		(vbi_export *		e,
  * @param e Initialized vbi_export object.
  * @param fp Buffered i/o stream to write to.
  * @param pg Page to be exported.
- * 
+ *
  * This function writes the @a pg contents, converted to the format
  * selected with the vbi_export_new() function, into the stream @a fp.
  * The caller is responsible for opening and closing the stream. Don't
@@ -1716,7 +1729,7 @@ vbi_export_alloc		(vbi_export *		e,
  *
  * You can call this function repeatedly, it does not change the state
  * of the vbi_export or vbi_page structure.
- * 
+ *
  * @returns
  * @c FALSE on failure, @c TRUE on success.
  */
@@ -1801,14 +1814,14 @@ xopen				(const char *		name,
  * @param e Initialized vbi_export object.
  * @param name File to be created.
  * @param pg Page to be exported.
- * 
+ *
  * Writes the @a pg contents, converted to the format selected with
  * vbi_export_new(), into a new file with the given @a name. When an
  * error occurs after the file was opened, the function deletes the file.
- * 
+ *
  * You can call this function repeatedly, it does not change the state
  * of the vbi_export or vbi_page structure.
- * 
+ *
  * @returns
  * @c FALSE on failure, @c TRUE on success.
  */
@@ -1892,8 +1905,8 @@ vbi_export_file			(vbi_export *		e,
 /**
  * @param export Pointer to a initialized vbi_export object.
  * @param templ See printf().
- * @param ... See printf(). 
- * 
+ * @param ... See printf().
+ *
  * Store an error description in the @a export object. Including the current
  * error description (to append or prepend) is safe.
  */
@@ -1917,7 +1930,7 @@ vbi_export_error_printf(vbi_export *export, const char *templ, ...)
 
 /**
  * @param export Pointer to a initialized vbi_export object.
- * 
+ *
  * Similar to vbi_export_error_printf this function stores an error
  * description in the @a export object, after examining the errno
  * variable and choosing an appropriate message. Only export
@@ -1935,7 +1948,7 @@ vbi_export_write_error(vbi_export *export)
 		snprintf(t = buf, sizeof(buf),
 			_("Error while writing file '%s'"), export->name);
 	else
- 		t = _("Error while writing file");
+		t = _("Error while writing file");
 
 	if (errno) {
 		vbi_export_error_printf(export, "%s: Error %d, %s", t,
@@ -1968,7 +1981,7 @@ module_name			(vbi_export *		export)
 /**
  * @param export Pointer to a initialized vbi_export object.
  * @param keyword Name of the unknown option.
- * 
+ *
  * Store an error description in the @a export object.
  */
 void
@@ -1982,7 +1995,7 @@ vbi_export_unknown_option(vbi_export *export, const char *keyword)
  * @param export Pointer to a initialized vbi_export object.
  * @param keyword Name of the unknown option.
  * @param ... Invalid value, type depending on the option.
- * 
+ *
  * Store an error description in the @a export object.
  */
 void
@@ -2033,13 +2046,13 @@ vbi_export_invalid_option(vbi_export *export, const char *keyword, ...)
  * @param d If non-zero, store pointer to allocated string here. When *d
  *   is non-zero, free(*d) the old string first.
  * @param s String to be duplicated.
- * 
+ *
  * Helper function for export modules.
  *
  * Same as the libc strdup(), except for @a d argument and setting
  * the @a export error string on failure.
- * 
- * @return 
+ *
+ * @return
  * @c NULL on failure, pointer to malloc()ed string otherwise.
  */
 char *
@@ -2065,8 +2078,8 @@ vbi_export_strdup(vbi_export *export, char **d, const char *s)
 
 /**
  * @param export Pointer to a initialized vbi_export object.
- * 
- * @return 
+ *
+ * @return
  * After an export function failed, this function returns a pointer
  * to a more detailed error description. Do not free this string. It
  * remains valid until the next call of an export function.

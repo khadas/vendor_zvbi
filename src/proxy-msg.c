@@ -14,8 +14,8 @@
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
- *  License along with this library; if not, write to the 
- *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ *  License along with this library; if not, write to the
+ *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA  02110-1301  USA.
  */
 
@@ -32,7 +32,7 @@
  *    Both UNIX domain and IPv4 and IPv6 sockets are implemented, but
  *    the latter ones are currently not officially supported.
  */
- 
+
 /*
  *  $Id: proxy-msg.c,v 1.20 2008/02/19 00:35:21 mschimek Exp $
  *
@@ -155,8 +155,8 @@ typedef uint64_t __u64;
 #include "videodev.h"
 #endif
 
-#define dprintf1(fmt, arg...)    do {if (proxy_msg_trace >= 1) fprintf(stderr, "proxy_msg: " fmt, ## arg);} while(0)
-#define dprintf2(fmt, arg...)    do {if (proxy_msg_trace >= 2) fprintf(stderr, "proxy_msg: " fmt, ## arg);} while(0)
+#define dprintf1(fmt, arg...)    do {if (proxy_msg_trace >= 1) fprintf(stderr, "proxy_msg: " fmt, ## arg);} while (0)
+#define dprintf2(fmt, arg...)    do {if (proxy_msg_trace >= 2) fprintf(stderr, "proxy_msg: " fmt, ## arg);} while (0)
 static int proxy_msg_trace = 0;
 
 
@@ -573,8 +573,8 @@ vbi_bool vbi_proxy_msg_handle_read( VBIPROXY_MSG_STATE * pIO,
          }
          else if ((len < 0) && (errno != EAGAIN) && (errno != EINTR))
          {  /* network error -> close the connection */
-   	    dprintf1("handle_io: read error on fd %d: len=%ld, %s\n",
-		     pIO->sock_fd, (long) len, strerror(errno));
+            dprintf1("handle_io: read error on fd %d: len=%ld, %s\n",
+            pIO->sock_fd, (long) len, strerror(errno));
             result = FALSE;
          }
          else if (errno == EAGAIN)

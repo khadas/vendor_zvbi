@@ -2051,7 +2051,7 @@ static vbi_bool vbi_proxyd_take_message( PROXY_CLNT *req, VBIPROXY_MSG * pMsg )
                if ( vbi_proxyd_take_service_req(req, pBody->connect_req.services,
                                                      pBody->connect_req.strict,
                                                      req->msg_buf.body.connect_rej.errorstr) )
-               { 
+               {
                   /* open & service initialization succeeded -> reply with confirm */
                   vbi_proxy_msg_fill_magics(&req->msg_buf.body.connect_cnf.magics);
                   strlcpy((char *) req->msg_buf.body.connect_cnf.dev_vbi_name,
@@ -2215,7 +2215,7 @@ static vbi_bool vbi_proxyd_take_message( PROXY_CLNT *req, VBIPROXY_MSG * pMsg )
             if (pBody->chn_notify_req.notify_flags & VBI_PROXY_CHN_FAIL)
             {
                // XXX TODO: ignore if client hasn't got the token
-               //           else inform scheduler: 
+               //           else inform scheduler:
             }
             if (pBody->chn_notify_req.notify_flags & VBI_PROXY_CHN_FLUSH)
             {
@@ -2697,7 +2697,7 @@ static void vbi_proxyd_init( void )
    {
       if (fork() > 0)
          exit(0);
-      close(0); 
+      close(0);
       open("/dev/null", O_RDONLY, 0);
 
       if (opt_debug_level == 0)

@@ -32,7 +32,10 @@
 #include "lang.h"
 #ifdef ANDROID
 #include <android/log.h>
+#endif
+
 #define LOG_TAG    "ZVBI"
+#ifdef ANDROID
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
@@ -408,8 +411,6 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 		if (0xF8000019UL & (1 << (c & 31))) {
 			if (n > 0) {
 				assert(n < 14);
-				/* Ugly change */
-
 				for (i = 0; i < 13; i++)
 					if (c == national_subset[0][i])
 						return national_subset[n][i];

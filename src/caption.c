@@ -189,7 +189,7 @@ xds_decoder(vbi_decoder *vbi, int _class, int type,
 	switch (_class) {
 	case XDS_CURRENT: /* 0 */
 	case XDS_FUTURE: /* 1 */
-		if (!(vbi->event_mask & (VBI_EVENT_ASPECT | VBI_EVENT_PROG_INFO | VBI_EVENT_RATING))){
+		if (!(vbi->event_mask & (VBI_EVENT_ASPECT | VBI_EVENT_PROG_INFO | VBI_EVENT_RATING))) {
 			XDS_SEP_DEBUG("vbi->event_mask & VBI_EVENT_ASPECT | VBI_EVENT_PROG_INFO");
 			return;
 		}
@@ -352,7 +352,7 @@ xds_decoder(vbi_decoder *vbi, int _class, int type,
 				pi->rating.id = r;
 				pi->rating.dlsv = dlsv;
 			}
-			if (vbi->event_mask & VBI_EVENT_RATING){
+			if (vbi->event_mask & VBI_EVENT_RATING) {
 				e.type = VBI_EVENT_RATING;
 				e.ev.prog_info = pi;
 				caption_send_event(vbi, &e);
@@ -503,7 +503,7 @@ xds_decoder(vbi_decoder *vbi, int _class, int type,
 			printf("[type %d cycle %08x class %d neq %d]\n",
 			       type, vbi->cc.info_cycle[_class], _class, neq);
 
-		if (neq){ /* first occurence of this type with this data */
+		if (neq) { /* first occurence of this type with this data */
 			vbi->cc.info_cycle[_class] |= 1 << type;
 		}
 		else if (vbi->cc.info_cycle[_class] & (1 << type)) {
@@ -711,9 +711,9 @@ xds_separator(vbi_decoder *vbi, uint8_t *buf)
 		if (!sp)
 			return;
 
-		if ((sp->count < 2) || (sp->count >= 32 + 2)) {
-			XDS_SEP_DEBUG("XDS packet length overflow, discard %d/0x%02x\n",
-			     	(sp - cc->sub_packet[0]) / elements(cc->sub_packet[0]),
+		if ((sp->count < 2) || (sp->count >= sizeof(sp->buffer))) {
+			XDS_SEP_DEBUG("XDS packet length overflow, discard %zu/0x%02zx\n",
+				(sp - cc->sub_packet[0]) / elements(cc->sub_packet[0]),
 				(sp - cc->sub_packet[0]) % elements(cc->sub_packet[0]));
 
 			sp->count = 0;
@@ -789,7 +789,7 @@ update(cc_channel *ch)
 static void
 word_break(struct caption *cc, cc_channel *ch, int upd)
 {
-	cc = cc;
+	(void)cc;
 
 	/*
 	 *  Add a leading and trailing space.
@@ -1780,7 +1780,7 @@ vbi_caption_init(vbi_decoder *vbi)
 		memcpy(&ch->pg[2], &ch->pg[0], sizeof(ch->pg[2]));
 	}
 
-       	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 2; i++) {
 		cc->transp_space[i].foreground = VBI_WHITE;
 		cc->transp_space[i].background = VBI_BLACK;
 		cc->transp_space[i].unicode = 0x0020;
@@ -1825,7 +1825,7 @@ vbi_fetch_cc_page(vbi_decoder *vbi, vbi_page *pg, vbi_pgno pgno, vbi_bool reset)
 	cc_channel *ch = vbi->cc.channel + ((pgno - 1) & 7);
 	vbi_page *spg;
 
-	reset = reset;
+	(void)reset;
 
 	if (pgno < 1 || pgno > 8)
 		return FALSE;
