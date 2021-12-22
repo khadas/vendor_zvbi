@@ -30,6 +30,8 @@ $(OUTPUT) : $(OBJS)
 
 install:
 	-install -m 555 ${OUTPUT} $(INSTALL_DIR)
+	-install -m 644 $(LOCAL_PATH)/src/libzvbi.h $(STAGING_DIR)/usr/include/
+	-install -m 644 $(LOCAL_PATH)/src/dtvcc.h $(STAGING_DIR)/usr/include/
 
 clean:
 	@rm -f $(OBJS)
