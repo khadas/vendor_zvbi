@@ -9,7 +9,7 @@ AMADEC_C_INCLUDES =
 
 SRC_FILES = $(wildcard src/*.c)
 
-CFLAGS   := -c -Wall -shared -fPIC -Wno-unknown-pragmas -Wno-format -O3 -fexceptions -fnon-call-exceptions
+CFLAGS   := -c -Wall -shared -fPIC -Wno-unknown-pragmas -O3 -fexceptions -fnon-call-exceptions
 
 LOCAL_C_INCLUDES := -I $(LOCAL_PATH)
 LOCAL_C_INCLUDES += -I $(LOCAL_PATH)/../aml_dvb-1.0/include/am_adp
