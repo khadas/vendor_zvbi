@@ -1022,6 +1022,7 @@ caption_command(vbi_decoder *vbi, struct caption *cc,
 			roll = ch->row1 - row1;
 			if (roll > 0) {
 				roll_up(ch, ch->row1 - row1);
+				row=ch->row;
 				update(ch);
 			}
 		}
