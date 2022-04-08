@@ -126,6 +126,11 @@ vbi_send_event(vbi_decoder *vbi, vbi_event *ev);
 static void
 dtvcc_get_visible_windows(struct dtvcc_service *ds, int *cnt, struct dtvcc_window **windows);
 
+
+static vbi_bool
+dtvcc_define_window(struct dtvcc_decoder *dc, struct dtvcc_service *ds, uint8_t *buf);
+
+
 /* EIA 608-B decoder. */
 
 static int
@@ -2476,6 +2481,16 @@ dtvcc_stream_event		(struct dtvcc_decoder *	dc,
 	cc_timestamp_reset (&dw->timestamp_c0);
 }
 
+#define SARNOFF_FOOTBALL_708_DEFAULT_HEADER
+
+static vbi_bool dtvcc_default_command	(struct dtvcc_decoder * dc,
+				struct dtvcc_service * ds)
+{
+	uint8_t dw[7] = {0x98, 0x39, 0x0c, 0x19, 0x62, 0x20, 0x0};
+	dtvcc_define_window (dc, ds, dw);
+	return TRUE;
+}
+
 static vbi_bool
 dtvcc_put_char			(struct dtvcc_decoder *	dc,
 				 struct dtvcc_service *	ds,
@@ -2487,9 +2502,21 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	(void)dc; /* unused */
 
 	dw = ds->curr_window;
+
+#ifdef SARNOFF_FOOTBALL_708_DEFAULT_HEADER
+	//now sarnoff football.ts first line cc not set dtvcc_command, and when stream play from head
+	//sequence number will change, and call dtvcc_reset();so here dw will be null, this line cc will
+	//lost, so we set default command for workaround
+	if (NULL == dw && c == 0x3e) {
+		AM_DEBUG(0, "debug-cc window null! First frame is not set window command, try set default!");
+		dtvcc_default_command(dc, ds);
+		dw = ds->curr_window;
+	}
+#endif
+
 	if (NULL == dw) {
 		ds->error_line = __LINE__;
-		//AM_DEBUG(1, "================ window null !!!!!");
+		AM_DEBUG(0, "debug-cc Error! Dtvcc Window null !");
 		return FALSE;
 	}
 	dw->latest_cmd_cr = 0;
@@ -3715,6 +3742,7 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 
 	if (0x10 != c) {
 		/* C0/C1 control code. */
+		//AM_DEBUG(0, "debug-cc dtvcc command c:%x", c);
 		return dtvcc_command (dc, ds, se_length,
 				      buf, n_bytes);
 	}

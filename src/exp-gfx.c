@@ -62,6 +62,8 @@
 #define PSCPL (psymbol_width / TCW * psymbol_height / TCH)
 
 
+#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+
 /* Closed Caption character cell dimensions */
 
 #define CCW 16
@@ -669,8 +671,23 @@ vbi_draw_vt_page_region(vbi_page *pg,
 		return;
 	}
 
-	snprintf (page_no_buf, sizeof (page_no_buf),
-		  "P%x    ", pg->pgno);
+	#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+		if (pg->pgno < 0) {
+			LOGI("nwpushuai do not display page number pg->pgno:%d ", pg->pgno);
+		} else if ((pg->pgno >0x99) && (pg->pgno <0x900)) {
+			snprintf (page_no_buf, sizeof (page_no_buf), "P%x", pg->pgno);
+		} else	if((pg->pgno >0) && (pg->pgno <0x10)){
+			snprintf (page_no_buf, sizeof (page_no_buf), "P%x--", pg->pgno);
+		} else	if(pg->pgno == 0){
+			pg->pgno = 0x100;
+			snprintf (page_no_buf, sizeof (page_no_buf), "P%x", pg->pgno);
+		} else {
+			snprintf (page_no_buf, sizeof (page_no_buf), "P%x-", pg->pgno);
+		}
+	#else
+		snprintf (page_no_buf, sizeof (page_no_buf),
+				"P%x    ", pg->pgno);
+	#endif
 
 	if (0) {
 		int i, j;
@@ -700,7 +717,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	}
 #endif
 
-	if (time)
+	if (time && strlen (time) != 0)
 	{
 		for (i=0; i<8; i++)
 			pg->text[32+i].unicode = _vbi_to_ascii(time[i]);
@@ -812,14 +829,25 @@ vbi_draw_vt_page_region(vbi_page *pg,
 				pen.pal8[1] = ac->foreground;
 				if (row == 0)
 				{
-					if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE)
-					{
-				        ac->opacity = VBI_OPAQUE;
-						if (width - count <= 7)
+					#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+						if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE && pg->pgno > 0)
 						{
-							unicode = _vbi_to_ascii(page_no_buf[width - count]);
+							ac->opacity = VBI_OPAQUE;
+							if (width - count <= 7)
+							{
+								unicode = _vbi_to_ascii(page_no_buf[width - count]);
+							}
 						}
-					}
+					#else
+						if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE && pg->pgno > 0)
+						{
+							ac->opacity = VBI_OPAQUE;
+							if (width - count <= 7)
+							{
+								unicode = _vbi_to_ascii(page_no_buf[width - count]);
+							}
+						}
+					#endif
 				}
 			}
 			else
@@ -929,20 +957,44 @@ vbi_draw_vt_page_region(vbi_page *pg,
 				pen.rgba[0] &= 0x00FFFFFF;
 			}
 
-			if (mode == 1)//Display only page number
+			if (mode == 1 && pg->pgno > 0)//Display only page number
 			{
-				if ((row == 0 && (width - count > 3)) ||
-					//(row == 0 && (count == width)) ||
-					(row>0))
-				{
-					pen.rgba[0] = 0x00FFFFFF;
-					pen.rgba[1] = 0x00FFFFFF;
-					unicode = 0x20;
-					ac->size = VBI_NORMAL_SIZE;
-					ac->italic = 0;
-					ac->underline = 0;
-					ac->bold = 0;
-				}
+				#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+					if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE && row == 0 && (width - count > 3) && pg->pgno > 0)
+					{
+						pen.rgba[0] = 0x00FFFFFF;
+						pen.rgba[1] = 0x00FFFFFF;
+						unicode = 0x20;
+						ac->size = VBI_NORMAL_SIZE;
+						ac->italic = 0;
+						ac->underline = 0;
+						ac->bold = 0;
+					} else if ((row == 0 && (width - count > 3)) ||
+						//(row == 0 && (count == width)) ||
+						(row>0))
+					{
+						pen.rgba[0] = 0x00FFFFFF;
+						pen.rgba[1] = 0x00FFFFFF;
+						unicode = 0x20;
+						ac->size = VBI_NORMAL_SIZE;
+						ac->italic = 0;
+						ac->underline = 0;
+						ac->bold = 0;
+					}
+				#else
+					if ((row == 0 && (width - count > 3)) ||
+						//(row == 0 && (count == width)) ||
+						(row>0))
+					{
+						pen.rgba[0] = 0x00FFFFFF;
+						pen.rgba[1] = 0x00FFFFFF;
+						unicode = 0x20;
+						ac->size = VBI_NORMAL_SIZE;
+						ac->italic = 0;
+						ac->underline = 0;
+						ac->bold = 0;
+					}
+				#endif
 			}
 			else if (mode == 2) //Display only clock
 			{

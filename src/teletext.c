@@ -50,6 +50,9 @@
 //teletext graphics subtitle blackground
 //#define TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
 
+#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+#define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+
 
 extern const char _zvbi_intl_domainname[];
 
@@ -249,8 +252,17 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 			pg->text[LAST_ROW + ii + k] = ac;
 			pg->nav_index[ii + k] = i;
 		}
-
+		#ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+		if (vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
+			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
+			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) >=vbi_bcd2dec(0x1) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) <= vbi_bcd2dec(0x8)) {
+			pg->nav_link[i].pgno = vtp->data.lop.link[i].pgno;
+		}else{
+			pg->nav_link[i].pgno = vbi_dec2bcd(vbi_bcd2dec(vbi->vt.current_pgno)+i+1);
+		}
+		#else
 		pg->nav_link[i].pgno = vtp->data.lop.link[i].pgno;
+		#endif
 		pg->nav_link[i].subno = vtp->data.lop.link[i].subno;
 	}
 	pg->have_flof = FALSE;
@@ -299,6 +311,16 @@ flof_links(vbi_page *pg, cache_page *vtp)
 static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp) {
     if (vbi->vt.current_pgno == pg->pgno) {
         int temp_pgno = vbi->vt.current_pgno;
+        #ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+        for (int i = 0; i < 4; i++) {
+            if (!(vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
+                    vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
+                    vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) >=vbi_bcd2dec(0x1) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) <= vbi_bcd2dec(0x8))) {
+                vtp->data.lop.link[i].pgno = vbi_dec2bcd(vbi_bcd2dec(temp_pgno)+i+1);
+            }
+        }
+        #endif
+        LOGI("current_pgno:0x%x, red:0x%x, green:0x%x, yellow:0x%x blue:0x%x \n",temp_pgno, vtp->data.lop.link[0].pgno,vtp->data.lop.link[1].pgno,vtp->data.lop.link[2].pgno,vtp->data.lop.link[3].pgno);
         int subsarray[36]; //36 is the size of the vtp->data.lop.link
         int length = 36;
         vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
@@ -1313,7 +1335,7 @@ character_set_designation(struct vbi_font_descr **font,
 
 		if (VALID_CHARACTER_SET(charset_code)) {
 			LOGI("VALID_CHARACTER_SET 1 i:%d charset_code:%d",i,charset_code);
-			if (0x10 == charset_code) charset_code = 0x24;
+			//if (0x10 == charset_code) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
 		}
 
@@ -1321,7 +1343,7 @@ character_set_designation(struct vbi_font_descr **font,
 
 		if (VALID_CHARACTER_SET(charset_code)) {
 			LOGI("VALID_CHARACTER_SET 2 i:%d charset_code:%d",i,charset_code);
-			if ( 0x14 == charset_code ) charset_code = 0x24;
+			//if ( 0x14 == charset_code ) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
 			LOGI("pgno %x font %d charset_code %d national %d final %d",
 				vtp->pgno, i, ext->charset_code[i], vtp->national, charset_code);
@@ -2819,7 +2841,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				break;
 			}
 
-			if (!inside_box && (vtp->flags  & 0xc000))
+			if (!inside_box && (vtp->flags  & 0xc000) && !(row == 0 && column < 4))
 			{
 				 ac.unicode = 0x20;
 				 LOGI("pgno %x row %d, col %d, inside_box", pg->pgno, row, column);
@@ -2932,12 +2954,20 @@ vbi_format_vt_page(vbi_decoder *vbi,
 			}
 
 			//keep bitmap subtitle first info bar data for project special requirement
-#ifdef TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
-			if (row == 0 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
-				pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
-				pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
-			}
-#endif
+			#ifdef TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
+				if (row == 0 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
+					pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
+					pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
+				}
+			#endif
+
+			//keep bitmap subtitle page number data for project special requirement
+			#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+				if (row == 0 && column < 4 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
+					pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
+					pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
+				}
+			#endif
 		}
 
 

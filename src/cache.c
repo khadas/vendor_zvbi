@@ -71,6 +71,9 @@
 #  define CACHE_CONSISTENCY 0
 #endif
 
+#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+#define INVALID_SUBPAGE_NUMBER 0x255
+
 static void
 set_errstr			(vbi_cache *		ca,
 				 const char *		templ,
@@ -1114,14 +1117,24 @@ page_by_pgno			(vbi_cache *		ca,
 			cache_page_dump (cp, stderr);
 			fputc ('\n', stderr);
 		}
-
-		if (cp->pgno == pgno
-		    && (cp->subno & subno_mask) == subno
-		    && (!cn || cp->network == cn)) {
-			/* Find faster next time. */
-			add_head (hash_list, unlink_node (&cp->hash_node));
-			return cp;
-		}
+		#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+			LOGI("page_by_pgno cp->pgno:0x%x pgno:0x%x subno_mask:0x%x cp->subno:0x%x subno:0x%x", cp->pgno, pgno, subno_mask, cp->subno, subno);
+			if (cp->pgno == pgno
+				&& ((cp->subno & subno_mask) == subno || subno == INVALID_SUBPAGE_NUMBER)
+				&& (!cn || cp->network == cn)) {
+				/* Find faster next time. */
+				add_head (hash_list, unlink_node (&cp->hash_node));
+				return cp;
+			}
+		#else
+			if (cp->pgno == pgno
+				&& (cp->subno & subno_mask) == subno
+				&& (!cn || cp->network == cn)) {
+				/* Find faster next time. */
+				add_head (hash_list, unlink_node (&cp->hash_node));
+				return cp;
+			}
+		#endif
 	}
 
 	return NULL;
