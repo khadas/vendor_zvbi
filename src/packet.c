@@ -2616,7 +2616,7 @@ vbi_teletext_set_default_region(vbi_decoder *vbi, int default_region)
 
 	vbi->vt.region = default_region;
 
-	for (i = 0x100; i <= 0x800; i += 0x100) {
+	for (i = 0x100; i <= 0x899; i += 0x1) {
 		struct ttx_extension *ext;
 
 		ext = &cache_network_magazine (vbi->cn, i)->extension;
