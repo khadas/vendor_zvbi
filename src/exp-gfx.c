@@ -41,6 +41,7 @@
 #include "wstfont2.xbm"
 #include "ccfont2.xbm"
 #include "psymbol.xbm"
+#include "reveal_icon.xbm"
 
 #ifdef ANDROID
 #include <android/log.h>
@@ -60,6 +61,7 @@
 
 #define TCPL (wstfont2_width / TCW * wstfont2_height / TCH)
 #define PSCPL (psymbol_width / TCW * psymbol_height / TCH)
+#define RVCPL (reveal_icon_width / TCW * reveal_icon_height / TCH)
 
 
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
@@ -752,8 +754,23 @@ vbi_draw_vt_page_region(vbi_page *pg,
 				unicode = 0x0020;
 			else
 				unicode = ac->unicode;
-
 			if (pause == 1)
+			{
+				if (row == 0)
+				{
+					if (count >= width - 3)
+					{
+						if (count == width - 1)
+							unicode = 0x18;
+						else if (count == width - 2)
+							unicode = 0x19;
+						else
+							unicode = 0x20;
+					}
+				}
+			}
+
+			if (reveal == 1)
 			{
 				if (row == 0)
 				{
@@ -1027,6 +1044,17 @@ vbi_draw_vt_page_region(vbi_page *pg,
 							draw_blank(canvas_type, canvas, rowstride,
 									((canvas_type == 1) ? pen.pal8[0]: pen.rgba[0]),
 									TCW, TCH);
+					} else if ((reveal == 1) && (unicode == 0x18 || unicode == 0x19)) {
+						draw_char (canvas_type,
+								   canvas,
+								   rowstride,
+								   (uint8_t *) &pen,
+								   (uint8_t *) reveal_icon_bits,
+								   RVCPL, TCW, TCH,
+								   unicode - 0x18,
+								   0,
+								   0,
+								   0);
 					} else if ((pause == 1) && (unicode == 0x18 || unicode == 0x19)) {
 						draw_char (canvas_type,
 								   canvas,
