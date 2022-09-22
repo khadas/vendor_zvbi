@@ -52,6 +52,7 @@
 
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+#define BLOCK_TOP_NAVIGATION_BAR
 
 
 extern const char _zvbi_intl_domainname[];
@@ -3076,10 +3077,14 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					flof_navigation_bar(vbi, pg, vtp);
 				    draw_subpage_line (vbi, pg, vtp);
 				}
-			} else if (vbi->cn->have_top) {
+			}
+			#ifndef BLOCK_TOP_NAVIGATION_BAR
+			else if (vbi->cn->have_top) {
 				top_navigation_bar(vbi, pg, vtp);
 				draw_subpage_line (vbi, pg, vtp);
-			} else if (ENABLE_PAGE_BAR && vbi->vt.use_subtitleserver) {
+			}
+			#endif
+			else if (ENABLE_PAGE_BAR && vbi->vt.use_subtitleserver) {
 				int len =0;
 				int temp_pgno = vbi->vt.current_pgno;
 				int temp_subpg = 1;
