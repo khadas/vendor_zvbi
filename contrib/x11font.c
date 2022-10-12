@@ -112,13 +112,17 @@ int
 main ()
 {
     print_font("teletext.bdf","ets","teletext",0,(uint8_t *) wstfont2_bits,
-	       TCW,TCH,TCPL,1448,unicode_wstfont2,357);
+        TCW,TCH,TCPL,1448,unicode_wstfont2,357);
     print_font("teletexti.bdf","ets","teletext",1,(uint8_t *) wstfont2_bits,
-	       TCW,TCH,TCPL,1449,unicode_wstfont2,357);
+        TCW,TCH,TCPL,1449,unicode_wstfont2,357);
     print_font("caption.bdf","ets","caption",0,(uint8_t *) ccfont2_bits,
-	       CCW,CCH,CCPL,120,unicode_ccfont2,15);
+        CCW,CCH,CCPL,120,unicode_ccfont2,15);
     print_font("captioni.bdf","ets","caption",1,(uint8_t *) ccfont2_bits,
-	       CCW,CCH,CCPL,120,unicode_ccfont2,15 + 4 * 32);
+        CCW,CCH,CCPL,120,unicode_ccfont2,15 + 4 * 32);
+    print_font("teletext.bdf","ets","teletext",0,(uint8_t *) bwstfont2_bits,
+        TCW,TCH,BTCPL,1448,unicode_bwstfont2,357);
+    print_font("teletexti.bdf","ets","teletext",1,(uint8_t *) bwstfont2_bits,
+        TCW,TCH,BTCPL,1449,unicode_bwstfont2,357);
     return 0;
 }
 

@@ -40,6 +40,9 @@ extern void		vbi_draw_vt_page_region(vbi_page *pg, vbi_pixfmt fmt,
 						int reveal, int flash_on,
 						int subtitle, int mode,
 						int transparent, int pause, char* time, int subno);
+
+vbi_bool is_change_character_table;
+extern void		vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable);
 /**
  * @param pg Source page.
  * @param fmt Target format. For now only VBI_PIXFMT_RGBA32_LE (vbi_rgba) permitted.

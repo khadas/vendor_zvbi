@@ -39,6 +39,7 @@
 #include "vt.h" /* VBI_TRANSPARENT_BLACK */
 
 #include "wstfont2.xbm"
+#include "bwstfont2.xbm"
 #include "ccfont2.xbm"
 #include "psymbol.xbm"
 #include "reveal_icon.xbm"
@@ -60,6 +61,7 @@
 #define TCH 10
 
 #define TCPL (wstfont2_width / TCW * wstfont2_height / TCH)
+#define BTCPL (bwstfont2_width / TCW * bwstfont2_height / TCH)
 #define PSCPL (psymbol_width / TCW * psymbol_height / TCH)
 #define RVCPL (reveal_icon_width / TCW * reveal_icon_height / TCH)
 
@@ -104,6 +106,17 @@ init_gfx(void)
 
 	memcpy(ccfont2_bits, t, ccfont2_width * ccfont2_height / 8);
 	free(t);
+
+	if (!(t = malloc(bwstfont2_width * bwstfont2_height / 8)))
+		exit(EXIT_FAILURE);
+
+	for (p = t, i = 0; i < TCH; i++)
+		for (j = 0; j < bwstfont2_height; p += bwstfont2_width / 8, j += TCH)
+			memcpy(p, bwstfont2_bits + (j + i) * bwstfont2_width / 8,
+				bwstfont2_width / 8);
+
+	memcpy(bwstfont2_bits, t, bwstfont2_width * bwstfont2_height / 8);
+	free (t);
 }
 
 /**
@@ -120,6 +133,89 @@ init_gfx(void)
  */
 static unsigned int
 unicode_wstfont2(unsigned int c, int italic)
+{
+	static const unsigned short specials[] = {
+		0x01B5, 0x2016, 0x01CD, 0x01CE, 0x0229, 0x0251, 0x02DD, 0x02C6,
+		0x02C7, 0x02C9, 0x02CA, 0x02CB, 0x02CD, 0x02CF, 0x02D8, 0x02D9,
+		0x02DA, 0x02DB, 0x02DC, 0x2014, 0x2018, 0x2019, 0x201C,	0x201D,
+		0x20A0, 0x2030, 0x20AA, 0x2122, 0x2126, 0x215B, 0x215C, 0x215D,
+		0x215E, 0x2190, 0x2191, 0x2192, 0x2193, 0x25A0, 0x266A, 0xE800,
+		0xE75F };
+	const unsigned int invalid = 357;
+	unsigned int i;
+
+	if (c < 0x0180) {
+		if (c < 0x0080) {
+			if (c < 0x0020)
+				return invalid;
+			else /* %3 Basic Latin (ASCII) 0x0020 ... 0x007F */
+				c = c - 0x0020 + 0 * 32;
+		} else if (c < 0x00A0)
+			return invalid;
+		else /* %3 Latin-1 Supplement, Latin Extended-A 0x00A0 ... 0x017F */
+			c = c - 0x00A0 + 3 * 32;
+	} else if (c < 0xEE00) {
+		if (c < 0x0460) {
+			if (c < 0x03D0) {
+				if (c < 0x0370)
+					goto special;
+				else /* %5 Greek 0x0370 ... 0x03CF */
+					c = c - 0x0370 + 12 * 32;
+			} else if (c < 0x0400)
+				return invalid;
+			else /* %5 Cyrillic 0x0400 ... 0x045F */
+				c = c - 0x0400 + 15 * 32;
+		} else if (c < 0x0620) {
+			if (c < 0x05F0) {
+				if (c < 0x05D0)
+					return invalid;
+				else /* %6 Hebrew 0x05D0 ... 0x05EF */
+					return c - 0x05D0 + 18 * 32;
+			} else if (c < 0x0600)
+				return invalid;
+			else /* %6 Arabic 0x0600 ... 0x061F */
+				return c - 0x0600 + 19 * 32;
+		} else if (c >= 0xE600 && c < 0xE740)
+			return c - 0xE600 + 19 * 32; /* %6 Arabic (TTX) */
+		else
+			goto special;
+	} else if (c < 0xEF00) { /* %3 G1 Graphics */
+		return (c ^ 0x20) - 0xEE00 + 23 * 32;
+	} else if (c < 0xF000) { /* %4 G3 Graphics */
+		return c - 0xEF20 + 27 * 32;
+	} else /* 0xF000 ... 0xF7FF reserved for DRCS */
+		return invalid;
+
+	if (italic)
+		return c + 31 * 32;
+	else
+		return c;
+special:
+	for (i = 0; i < sizeof(specials) / sizeof(specials[0]); i++)
+		if (specials[i] == c) {
+			if (italic)
+				return i + 41 * 32;
+			else
+				return i + 10 * 32;
+		}
+
+	return invalid;
+}
+
+/**
+ * @internal
+ * @param c Unicode.
+ * @param italic @c TRUE to switch to slanted character set (doesn't affect
+ *          Hebrew and Arabic). If this is a G1 block graphic character
+ *          switch to separated block mosaic set.
+ *
+ * Translate Unicode character to glyph number in bwstfont2 image.
+ *
+ * @return
+ * Glyph number.
+ */
+static unsigned int
+unicode_bwstfont2(unsigned int c, int italic)
 {
 	static const unsigned short specials[] = {
 		0x01B5, 0x2016, 0x01CD, 0x01CE, 0x0229, 0x0251, 0x02DD, 0x02C6,
@@ -613,6 +709,12 @@ vbi_draw_cc_page_region(vbi_page *pg,
 	}
 }
 
+
+void
+vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable) {
+	LOGI("vbi_teletext_set_change_character_table isChangeCharacterTable: %d", isChangeCharacterTable);
+	is_change_character_table = isChangeCharacterTable;
+}
 /**
  * @param pg Source page.
  * @param fmt Target format. For now only VBI_PIXFMT_RGBA32_LE (vbi_rgba) and
@@ -1067,7 +1169,9 @@ vbi_draw_vt_page_region(vbi_page *pg,
 								   0,
 								   0);
 					} else {
-						draw_char (canvas_type,
+						//Use is_change_character_table flag to judge
+						if (!is_change_character_table) {
+							draw_char (canvas_type,
 								canvas,
 								rowstride,
 								(uint8_t *) &pen,
@@ -1077,6 +1181,18 @@ vbi_draw_vt_page_region(vbi_page *pg,
 								ac->bold,
 								ac->underline << 9 /* cell row 9 */,
 								ac->size);
+						} else {
+							draw_char (canvas_type,
+								canvas,
+								rowstride,
+								(uint8_t *) &pen,
+								(uint8_t *) bwstfont2_bits,
+								BTCPL, TCW, TCH,
+								unicode_bwstfont2 (unicode, ac->italic),
+								ac->bold,
+								ac->underline << 9 /* cell row 9 */,
+								ac->size);
+			}
 					}
 			}
 
@@ -1540,10 +1656,18 @@ static void
 draw_char_vt_indexed(uint8_t * canvas, int rowstride,  uint8_t * pen,
 		int unicode, vbi_char *ac)
 {
-	draw_char(sizeof(*canvas), canvas, rowstride,
+	//Use is_change_character_table flag to judge
+	if (!is_change_character_table) {
+		draw_char(sizeof(*canvas), canvas, rowstride,
 			pen, (uint8_t *) wstfont2_bits, TCPL, TCW, TCH,
 			unicode_wstfont2(unicode, ac->italic), ac->bold,
 			ac->underline << 9 /* cell row 9 */, ac->size);
+	} else {
+		draw_char(sizeof(*canvas), canvas, rowstride,
+			pen, (uint8_t *) bwstfont2_bits, BTCPL, TCW, TCH,
+			unicode_bwstfont2(unicode, ac->italic), ac->bold,
+			ac->underline << 9 /* cell row 9 */, ac->size);
+	}
 }
 
 static void

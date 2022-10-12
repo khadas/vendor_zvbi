@@ -1855,6 +1855,7 @@ typedef enum {
 
 
 extern void		vbi_teletext_set_default_region(vbi_decoder *vbi, int default_region);
+extern void		vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable);
 extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
 
 extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
