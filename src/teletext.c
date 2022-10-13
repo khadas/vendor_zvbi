@@ -121,33 +121,54 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 	memset(&bc, 0, sizeof(bc));
 	memset(&ac, 0, sizeof(ac));
 	memset(&cc, 0, sizeof(cc));
-	ac.foreground	= VBI_WHITE;
-	ac.background	= VBI_MAGENTA;
 	ac.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
 	ac.unicode	= 0x0020;
 
-	bc.foreground	= VBI_WHITE;
-	bc.background	= VBI_MAGENTA;
 	bc.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
 	bc.unicode	= 0x0020;
 
-	cc.foreground	= VBI_WHITE;
-	cc.background	= VBI_MAGENTA;
 	cc.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
 	cc.unicode	= 0x0020;
-
+	if (vbi->vt.mix_video_mode) {
+		ac.foreground = VBI_GREEN;
+		bc.foreground = VBI_GREEN;
+		cc.foreground = VBI_GREEN;
+		ac.background = VBI_BLACK;
+		bc.background = VBI_BLACK;
+		cc.background = VBI_BLACK;
+	} else {
+		ac.foreground = VBI_WHITE;
+		bc.foreground = VBI_WHITE;
+		cc.foreground = VBI_WHITE;
+		ac.background = VBI_MAGENTA;
+		bc.background = VBI_MAGENTA;
+		cc.background = VBI_MAGENTA;
+	}
 	for (i = 0; i < EXT_COLUMNS; i++) {
 		pg->text[LAST_LAST_ROW + i] = bc;
 	}
+
 	for (i = 0; (vtp->data.lop.link[i].subno > 0) && (vtp->data.lop.link[i].subno != SUBPAGE_MASK); i++) {
-		if (vbi->vt.current_subno == vtp->data.lop.link[i].subno) {
-			bc.background = VBI_RED;
-			ac.background = VBI_RED;
-			cc.background = VBI_RED;
+		if (vbi->vt.mix_video_mode) {
+			if (vbi->vt.current_subno == vtp->data.lop.link[i].subno) {
+				ac.foreground = VBI_RED;
+				bc.foreground = VBI_RED;
+				cc.foreground = VBI_RED;
+			} else {
+				ac.foreground = VBI_MAGENTA;
+				bc.foreground = VBI_MAGENTA;
+				cc.foreground = VBI_MAGENTA;
+			}
 		} else {
-			bc.background = VBI_MAGENTA;
-			ac.background = VBI_MAGENTA;
-			cc.background = VBI_MAGENTA;
+			if (vbi->vt.current_subno == vtp->data.lop.link[i].subno) {
+				ac.background = VBI_RED;
+				bc.background = VBI_RED;
+				cc.background = VBI_RED;
+			} else {
+				ac.background = VBI_MAGENTA;
+				bc.background = VBI_MAGENTA;
+				cc.background = VBI_MAGENTA;
+			}
 		}
 		if ((vtp->data.lop.link[i].subno >=0 ) && (vtp->data.lop.link[i].subno < 256)) {
 			iii = i*3 + 3;
@@ -183,19 +204,53 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 				n += 'A' - '9';
 			ac.unicode = n;
 		}
-		if (vtp->data.lop.link[i].subno <  256) {
-			ac.foreground = VBI_BLACK;
-			bc.foreground = VBI_BLACK;
-			pg->text[LAST_LAST_ROW + iii -1] = ac;
-			pg->text[LAST_LAST_ROW + iii ] = bc;
+
+		if (vbi->vt.mix_video_mode) {
+			if (vbi->vt.current_subno != vtp->data.lop.link[i].subno) {
+				if (vtp->data.lop.link[i].subno <  256) {
+					ac.foreground = VBI_MAGENTA;
+					bc.foreground = VBI_MAGENTA;
+					pg->text[LAST_LAST_ROW + iii -1] = ac;
+					pg->text[LAST_LAST_ROW + iii ] = bc;
+				} else if (vbi->vt.current_subno != vtp->data.lop.link[i].subno) {
+					ac.foreground = VBI_MAGENTA;
+					bc.foreground = VBI_MAGENTA;
+					cc.foreground = VBI_MAGENTA;
+					pg->text[LAST_LAST_ROW + iii -2] = ac;
+					pg->text[LAST_LAST_ROW + iii - 1] = bc;
+					pg->text[LAST_LAST_ROW + iii ] = cc;
+				}
+			} else if (vbi->vt.current_subno == vtp->data.lop.link[i].subno){
+				if (vtp->data.lop.link[i].subno <  256) {
+					ac.foreground = VBI_RED;
+					bc.foreground = VBI_RED;
+					pg->text[LAST_LAST_ROW + iii -1] = ac;
+					pg->text[LAST_LAST_ROW + iii ] = bc;
+				} else if (vbi->vt.current_subno != vtp->data.lop.link[i].subno) {
+					ac.foreground = VBI_RED;
+					bc.foreground = VBI_RED;
+					cc.foreground = VBI_RED;
+					pg->text[LAST_LAST_ROW + iii -2] = ac;
+					pg->text[LAST_LAST_ROW + iii - 1] = bc;
+					pg->text[LAST_LAST_ROW + iii ] = cc;
+				}
+			}
 		} else {
-			ac.foreground = VBI_BLACK;
-			bc.foreground = VBI_BLACK;
-			cc.foreground = VBI_BLACK;
-			pg->text[LAST_LAST_ROW + iii -2] = ac;
-			pg->text[LAST_LAST_ROW + iii - 1] = bc;
-			pg->text[LAST_LAST_ROW + iii ] = cc;
+			if (vtp->data.lop.link[i].subno <  256) {
+				ac.foreground = VBI_BLACK;
+				bc.foreground = VBI_BLACK;
+				pg->text[LAST_LAST_ROW + iii -1] = ac;
+				pg->text[LAST_LAST_ROW + iii ] = bc;
+			} else {
+				ac.foreground = VBI_BLACK;
+				bc.foreground = VBI_BLACK;
+				cc.foreground = VBI_BLACK;
+				pg->text[LAST_LAST_ROW + iii -2] = ac;
+				pg->text[LAST_LAST_ROW + iii - 1] = bc;
+				pg->text[LAST_LAST_ROW + iii ] = cc;
+			}
 		}
+
 	}
 }
 
@@ -243,7 +298,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				n += 'A' - '9';
 
 			ac.unicode = n;
-			if (vbi->vt.use_subtitleserver) {
+			if (vbi->vt.use_subtitleserver && !vbi->vt.mix_video_mode) {
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;//flof_link_col[i];
 			} else {
@@ -455,8 +510,13 @@ top_navigation_bar(vbi_decoder *vbi, vbi_page *pg,
 
 	memset(&ac, 0, sizeof(ac));
 
-	ac.foreground	= 32 + VBI_WHITE;
-	ac.background	= 32 + VBI_BLACK;
+	if (vbi->vt.mix_video_mode) {
+		ac.foreground	= VBI_WHITE;
+		ac.background	= VBI_BLACK;
+	} else {
+		ac.foreground	= 32 + VBI_WHITE;
+		ac.background	= 32 + VBI_BLACK;
+	}
 	ac.opacity	= pg->page_opacity[1];
 	ac.unicode	= 0x0020;
 
@@ -1118,6 +1178,10 @@ void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_boo
 	vbi->vt.use_subtitleserver = useSubtitleserver;
 }
 
+extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, vbi_bool mixVideoMode)
+{
+	vbi->vt.mix_video_mode = mixVideoMode;
+}
 
 vbi_bool
 vbi_get_sub_info(vbi_decoder *vbi, vbi_pgno pgno, int *subs, int *len)
@@ -2834,7 +2898,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				break;
 
 			case 0x1D:		/* new background */
-				ac.background = ext->background_clut + (ac.foreground & 7);
+				if (vbi->vt.mix_video_mode) {
+					ac.background = ext->background_clut; //+ (ac.foreground & 7);
+				}else{
+					ac.background = ext->background_clut + (ac.foreground & 7);
+				}
 				break;
 
 			case 0x1E:		/* hold mosaic */
