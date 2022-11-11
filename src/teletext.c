@@ -53,6 +53,7 @@
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
 #define BLOCK_TOP_NAVIGATION_BAR
+//#define UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
 
 
 extern const char _zvbi_intl_domainname[];
@@ -290,7 +291,13 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 
 	for (i = 0; i < 4; i++) {
 		ii = i * 10 + 3;
-
+		#ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+		if (!(vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
+			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
+			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) >=vbi_bcd2dec(0x1) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) <= vbi_bcd2dec(0x8))) {
+			vtp->data.lop.link[i].pgno = vbi_dec2bcd(vbi_bcd2dec(vbi->vt.current_pgno)+i+1);
+		}
+		#endif
 		for (k = 0; k < 3; k++) {
 			n = ((vtp->data.lop.link[i].pgno >> ((2 - k) * 4)) & 15) + '0';
 
@@ -302,23 +309,18 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;//flof_link_col[i];
 			} else {
+				#ifdef UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
+				ac.background = flof_link_col[i];
+				ac.foreground = VBI_BLACK;
+				#else
 				ac.foreground = flof_link_col[i];
+				#endif
 			}
 
 			pg->text[LAST_ROW + ii + k] = ac;
 			pg->nav_index[ii + k] = i;
 		}
-		#ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
-		if (vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
-			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
-			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) >=vbi_bcd2dec(0x1) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) <= vbi_bcd2dec(0x8)) {
-			pg->nav_link[i].pgno = vtp->data.lop.link[i].pgno;
-		}else{
-			pg->nav_link[i].pgno = vbi_dec2bcd(vbi_bcd2dec(vbi->vt.current_pgno)+i+1);
-		}
-		#else
 		pg->nav_link[i].pgno = vtp->data.lop.link[i].pgno;
-		#endif
 		pg->nav_link[i].subno = vtp->data.lop.link[i].subno;
 	}
 	pg->have_flof = FALSE;
