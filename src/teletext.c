@@ -2972,16 +2972,18 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 			case 0x0A:		/* end box */
 				if (column < (COLUMNS - 1)
-				    && vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0a)
-					//ac.opacity = pg->page_opacity[row > 0]; // SWPL-96972
+				    && vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0a
+				    && pg->page_opacity[row > 0] != VBI_SEMI_TRANSPARENT)
+					 ac.opacity = pg->page_opacity[row > 0]; // SWPL-96972
 				inside_box = 0;
 				break;
 
 			case 0x0B:		/* start box */
 				if (column < (COLUMNS - 1)
-				    && vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0b)
+					&& vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0b
+					&& pg->page_opacity[row > 0] != VBI_SEMI_TRANSPARENT)
 				{
-					//ac.opacity = pg->boxed_opacity[row > 0]; // SWPL-96972
+					ac.opacity = pg->boxed_opacity[row > 0]; // SWPL-96972
 					ac.unicode = 0x20;
 				}
 				inside_box = 1;
