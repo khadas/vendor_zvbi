@@ -142,6 +142,12 @@ vbi_capture_v4l2_new		(const char *		dev_name,
 		/* asprintf (errstr, _("Cannot identify '%s': %s."),
 		             dev_name, strerror (errno)); */
 
+/*
+ * The tool thinks the CLEAR() function is out of bounds,
+ * But the #define CLEAR(var) memset(&(var), 0,sizeof(var));
+ * function is not out of bounds
+ */
+/* coverity[Out-of-bounds] */
 		v4l2_delete (&v->capture);
 
 		if (errstr == &error) {
@@ -169,6 +175,7 @@ vbi_capture_v4l2_new		(const char *		dev_name,
 		error = NULL;
 	}
 
+	free (v);
 	return NULL;
 }
 

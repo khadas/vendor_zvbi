@@ -729,7 +729,9 @@ unham_top_page_link		(struct ttx_page_link *	pl,
 
 	switch ((enum ttx_top_page_function) n4[7]) {
 	case TOP_PAGE_FUNCTION_AIT:
-		pl->function = PAGE_FUNCTION_AIT;
+		if (pl) {
+			pl->function = PAGE_FUNCTION_AIT;
+		}
 		break;
 
 	case TOP_PAGE_FUNCTION_MPT:
@@ -1541,7 +1543,9 @@ store_lop(vbi_decoder *vbi, const cache_page *vtp)
 	 *  A little. Maybe this should be optional.
 	 */
 	if (event.ev.ttx_page.roll_header) {
-		int r, c, i;
+		int r = 0;
+		int c = 0;
+		int i = 0;
 		if (vbi->vt.header_page.pgno == 0) {
 			/* First page after channel switch */
 			r = same_header(vtp->pgno, (uint8_t*)vtp->data.lop.raw[0] + 8,

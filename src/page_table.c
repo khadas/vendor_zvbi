@@ -213,15 +213,15 @@ vbi_page_table_next_subpage	(const vbi_page_table *pt,
 				 vbi_pgno *		pgno,
 				 vbi_subno *		subno)
 {
-	vbi_pgno last_pgno;
-	vbi_pgno last_subno;
-	vbi_pgno next_pgno;
-	vbi_pgno next_subno;
-	vbi_pgno min_pgno;
-	vbi_subno min_subno;
-	uint32_t mask;
-	unsigned int offset;
-	unsigned int i;
+	vbi_pgno last_pgno = 0;
+	vbi_pgno last_subno = 0;
+	vbi_pgno next_pgno = 0;
+	vbi_pgno next_subno = 0;
+	vbi_pgno min_pgno = 0;
+	vbi_subno min_subno = 0;
+	uint32_t mask = 0;
+	unsigned int offset = 0;
+	unsigned int i = 0;
 
 	assert (NULL != pt);
 	assert (NULL != pgno);

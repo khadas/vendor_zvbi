@@ -831,7 +831,7 @@ print_vfmt			(vbi_capture_v4l2 *	v,
 {
 	if (0 == (v->log.mask & VBI_LOG_INFO))
 		return;
-
+/*
 	_vbi_log_printf (v->log.fn, v->log.user_data,
 			 VBI_LOG_INFO, __FUNCTION__,
 			 "%sformat %08x [%c%c%c%c], %d Hz, %d bpl, offs %d, "
@@ -848,7 +848,7 @@ print_vfmt			(vbi_capture_v4l2 *	v,
 			 vfmt->fmt.vbi.start[0] + vfmt->fmt.vbi.count[0] - 1,
 			 vfmt->fmt.vbi.start[1],
 			 vfmt->fmt.vbi.start[1] + vfmt->fmt.vbi.count[1] - 1,
-			 vfmt->fmt.vbi.flags);
+			 vfmt->fmt.vbi.flags); */
 }
 
 static unsigned int
@@ -1493,6 +1493,7 @@ vbi_capture_v4l2k_new		(const char *		dev_name,
 		error = NULL;
 	}
 
+	free (v);
 	return NULL;
 }
 

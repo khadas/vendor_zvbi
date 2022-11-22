@@ -542,6 +542,13 @@ vbi_capture_dvb_new2		(const char *		device_name,
 
  failed:
 	if (NULL != dvb) {
+
+/*
+ * The tool thinks the CLEAR() function is out of bounds,
+ * But the #define CLEAR(var) memset(&(var), 0,sizeof(var));
+ * function is not found out of bounds
+ */
+/* coverity[Overrun] */
 		dvb_delete (&dvb->capture);
 		dvb = NULL;
 	}

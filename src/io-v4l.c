@@ -1329,6 +1329,7 @@ io_error:
 		error = NULL;
 	}
 
+	free (v);
 	return NULL;
 }
 
