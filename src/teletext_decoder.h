@@ -76,7 +76,7 @@ struct teletext {
 	vbi_subno current_subno;
 	vbi_bool subtitle;
 	vbi_bool use_subtitleserver;
-	vbi_bool mix_video_mode;
+	int mix_video_mode;
 	vbi_submode subtitleMode;
 	int goto_page;
 };
@@ -95,7 +95,8 @@ extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
  * @{
  */
 extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_bool useSubtitleserver);
-extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, vbi_bool mixVideoMode);
+extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode);
+extern int vbi_get_subtitle_mix_video_flag(vbi_decoder *vbi);
 extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
 extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,

@@ -53,6 +53,9 @@
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
 #define BLOCK_TOP_NAVIGATION_BAR
+
+#define TT2_MIX_TRANSPARENT 1
+
 //#define UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
 
 
@@ -130,7 +133,7 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 
 	cc.opacity	= VBI_OPAQUE;//pg->page_opacity[1];
 	cc.unicode	= 0x0020;
-	if (vbi->vt.mix_video_mode) {
+	if (vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT) {
 		ac.foreground = VBI_GREEN;
 		bc.foreground = VBI_GREEN;
 		cc.foreground = VBI_GREEN;
@@ -150,7 +153,7 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 	}
 
 	for (i = 0; (vtp->data.lop.link[i].subno > 0) && (vtp->data.lop.link[i].subno != SUBPAGE_MASK); i++) {
-		if (vbi->vt.mix_video_mode) {
+		if (vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT) {
 			if (vbi->vt.current_subno == vtp->data.lop.link[i].subno) {
 				ac.foreground = VBI_RED;
 				bc.foreground = VBI_RED;
@@ -206,7 +209,7 @@ static inline void flof_subpage_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *
 			ac.unicode = n;
 		}
 
-		if (vbi->vt.mix_video_mode) {
+		if (vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT) {
 			if (vbi->vt.current_subno != vtp->data.lop.link[i].subno) {
 				if (vtp->data.lop.link[i].subno <  256) {
 					ac.foreground = VBI_MAGENTA;
@@ -305,7 +308,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				n += 'A' - '9';
 
 			ac.unicode = n;
-			if (vbi->vt.use_subtitleserver && !vbi->vt.mix_video_mode) {
+			if (vbi->vt.use_subtitleserver && !(vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT)) {
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;//flof_link_col[i];
 			} else {
@@ -512,7 +515,7 @@ top_navigation_bar(vbi_decoder *vbi, vbi_page *pg,
 
 	memset(&ac, 0, sizeof(ac));
 
-	if (vbi->vt.mix_video_mode) {
+	if (vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT) {
 		ac.foreground	= VBI_WHITE;
 		ac.background	= VBI_BLACK;
 	} else {
@@ -1180,9 +1183,14 @@ void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_boo
 	vbi->vt.use_subtitleserver = useSubtitleserver;
 }
 
-extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, vbi_bool mixVideoMode)
+extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode)
 {
 	vbi->vt.mix_video_mode = mixVideoMode;
+}
+
+int vbi_get_subtitle_mix_video_flag(vbi_decoder *vbi)
+{
+	return vbi->vt.mix_video_mode;
 }
 
 vbi_bool
@@ -2900,7 +2908,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				break;
 
 			case 0x1D:		/* new background */
-				if (vbi->vt.mix_video_mode) {
+				if (vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT) {
 					ac.background = ext->background_clut; //+ (ac.foreground & 7);
 				}else{
 					ac.background = ext->background_clut + (ac.foreground & 7);

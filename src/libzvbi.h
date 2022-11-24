@@ -1860,7 +1860,8 @@ extern void		vbi_teletext_set_level(vbi_decoder *vbi, int level);
 
 extern void vbi_teletext_set_current_page(vbi_decoder *vbi, vbi_pgno pgno, vbi_subno subno);
 extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_bool useSubtitleserver);
-extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, vbi_bool mixVideoMode);
+extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode);
+extern int vbi_get_subtitle_mix_video_flag(vbi_decoder *vbi);
 extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
 					  vbi_pgno pgno, vbi_subno subno,
