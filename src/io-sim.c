@@ -2641,8 +2641,15 @@ vbi_capture_sim_new		(int			scanning,
 	return &sim->cap;
 
  failure:
+/*
+ * The tool thinks the CLEAR() function is out of bounds,
+ * But the #define CLEAR(var) memset(&(var), 0,sizeof(var));
+ * function is not out of bounds
+ */
+/* coverity[Out-of-bounds] */
 	sim_delete (&sim->cap);
 
+	free (sim);
 	return NULL;
 }
 

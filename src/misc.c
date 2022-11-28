@@ -427,6 +427,7 @@ _vbi_log_vprintf		(vbi_log_fn		log_fn,
 	}
 
 	errno = saved_errno;
+	vbi_free (msg_buffer);
 }
 
 /** @internal */

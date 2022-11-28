@@ -101,7 +101,7 @@ _vbi_pfc_demux_decode		(vbi_pfc_demux *	dx,
 	col = 3;
 
 	while (col < 42) {
-		int bs;
+		int bs = 0;
 
 		if (dx->left > 0) {
 			unsigned int size;
@@ -156,11 +156,13 @@ _vbi_pfc_demux_decode		(vbi_pfc_demux *	dx,
 			col = bp + 4; /* 2 pmag, 1 bp, 1 bs */
 			bs = vbi_unham8 (buffer[col - 1]);
 		} else {
-			while (FILLER_BYTE ==
-			       (bs = vbi_unham8 (buffer[col++]))) {
-				if (col >= 42) {
-					/* No more data in this packet. */
-					return TRUE;
+			if (col < 42) {
+				while (FILLER_BYTE ==
+					(bs = vbi_unham8 (buffer[col++]))) {
+					if (col >= 42) {
+						/* No more data in this packet. */
+						return TRUE;
+					}
 				}
 			}
 		}
