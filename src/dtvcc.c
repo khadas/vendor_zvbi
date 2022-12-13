@@ -3685,6 +3685,49 @@ dtvcc_command			(struct dtvcc_decoder *	dc,
 	}
 }
 
+/* when deal with cc frame which has no 0xff but 0xfe, ignore first error char info
+ * refer to euc-kr range */
+static unsigned int
+dtvcc_ignore_invalid_data (unsigned int c)
+{
+		unsigned int valid_data = 0;
+		unsigned int high_data = (c >> 8) & 0xff;
+		unsigned int low_data = c & 0xff;
+
+	vbi_bool valid_low_data, valid_high_data;
+	valid_low_data = valid_high_data = ((high_data <= 0xa0) ||
+					(high_data >= 0xad && high_data <= 0xaf) ||
+					(high_data == 0xfe || high_data == 0xff));
+
+		if (high_data) {
+				if (high_data >= 0xa1 || high_data <= 0xfd) {
+			if (low_data >= 0xa1 && low_data <= 0xfe) {
+				valid_data = c;
+			} else {
+				if (valid_high_data) {
+					valid_data = c;
+				} else {
+					valid_data = low_data;
+				}
+			}
+				} else {
+						if (valid_low_data) {
+								valid_data = c;
+						} else {
+								valid_data = high_data;
+						}
+				}
+		} else {
+		if (valid_low_data) {
+						valid_data = c;
+				} else {
+						valid_data = 0;
+				}
+		}
+		AM_DEBUG(0, "debug-cc cc data:%x, invalid_data %x", c, valid_data);
+		return valid_data;
+}
+
 static vbi_bool
 dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 				 struct dtvcc_service *	ds,
@@ -3693,9 +3736,10 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 				 unsigned int		n_bytes)
 {
 	unsigned int c;
+	unsigned int valid_data;
 
 	c = buf[0];
-	AM_DEBUG(AM_DEBUG_LEVEL, "debug-cc decode_se c:%x,n_bytes:%d", c, n_bytes);
+	AM_DEBUG(0, "debug-cc decode_se c:%x,n_bytes:%d", c, n_bytes);
 
 	/*fix no 0x18 byte pair*/
 	if (!dc->has_dtvstart_header) {
@@ -3704,6 +3748,15 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 			c = buf[0]<<8|buf[1];
 			AM_DEBUG(0, "debug-cc warning!Adjust to c:%x", c);
 			dc->first_valid_data = FALSE;
+
+
+			/* check cc data valid */
+			valid_data = dtvcc_ignore_invalid_data(c);
+			c = valid_data;
+			if (c == 0x2a || c == 0x2e || !c) {
+				//AM_DEBUG(0, "debug-cc warning! error info, need delete %x", c);
+				return TRUE;
+			}
 			return dtvcc_put_char (dc, ds, c);
 		}
 
@@ -3711,11 +3764,19 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 		if (n_bytes == 1 && dc->first_valid_data) {
 			*se_length = 1;
 			dc->first_valid_data = FALSE;
+
+
+			/* check cc data valid */
+			valid_data = dtvcc_ignore_invalid_data(c);
+			c = valid_data;
+
 			AM_DEBUG(0, "debug-cc warning!Adjust one byte c:%x", c);
 			switch (c) {
-				case 0xdd:
-					c = 0xb9 << 8 | c;
-					return dtvcc_put_char (dc, ds, c);
+				case 0:
+					return TRUE;
+				case 0x2a:
+					//AM_DEBUG(0, "debug-cc warning! error info, need delete %x", c);
+					return TRUE;
 			}
 		}
 	}
@@ -4727,15 +4788,38 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 		case DTVCC_START:
 			dtvcc = TRUE;
 			j = td->dtvcc.packet_size;
-			if (j > 0) {
-				/* End of DTVCC packet. */
-				dtvcc_decode_packet (&td->dtvcc,
-						     &now, pts);
-			}
+
 			if (!cc_valid) {
 				/* No new data. */
-				td->dtvcc.packet_size = 0;
+				if (j > 0) {
+					if (dtvcc_have_start_header(buf, cc_count)) {
+						/* new frame has 0xff, as new frame to deal with */
+						dtvcc_decode_packet (&td->dtvcc,
+								     &now, pts);
+						td->dtvcc.packet_size = 0;
+						dtvcc = FALSE;
+						AM_DEBUG(0, "debug-cc case1 %d", j);
+					} else if (calc_packet_code_byte(&td->dtvcc, buf, cc_count) > 1) {
+						/* new frame has 0xfe, as last cc frame continuous frame to deal with */
+						AM_DEBUG(0, "debug-cc case2 %d", j);
+						break;
+					} else {
+						/* new frame has no 0xfe & 0xff */
+						td->dtvcc.packet_size = 0;
+						dtvcc = FALSE;
+						AM_DEBUG(0, "debug-cc case3 %d", j);
+					}
+				} else {
+					/* new frame as new frame*/
+					td->dtvcc.packet_size = 0;
+					dtvcc = FALSE;
+				}
 			} else {
+				if (j > 0) {
+					/* End of DTVCC packet. */
+					dtvcc_decode_packet (&td->dtvcc,
+							     &now, pts);
+				}
 				td->dtvcc.has_dtvstart_header = TRUE;
 				td->dtvcc.packet[0] = cc_data_1;
 				td->dtvcc.packet[1] = cc_data_2;
