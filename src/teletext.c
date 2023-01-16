@@ -2923,7 +2923,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 			if (!inside_box && (vtp->flags  & 0xc000) && !(row == 0 && column < 4))
 			{
 				 ac.unicode = 0x20;
-				 LOGI("pgno %x row %d, col %d, inside_box", pg->pgno, row, column);
+				 //LOGI("pgno %x row %d, col %d, inside_box", pg->pgno, row, column);
 			}
 			else if (raw <= 0x1F) {
 				ac.unicode = (hold & mosaic) ? held_mosaic_unicode : 0x0020;
@@ -2934,7 +2934,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				} else {
 					if (row == 0 && column < 1) {
 						ac.unicode = 0x50;
-						LOGI("raw:%0x mosaic:%d\n", raw,mosaic);
+						//LOGI("raw:%0x mosaic:%d\n", raw,mosaic);
 					} else {
 						ac.unicode = vbi_teletext_unicode(font->G0,font->subset, raw);
 					}
