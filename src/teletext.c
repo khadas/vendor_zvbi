@@ -2829,7 +2829,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		}
 	} else {
 		snprintf (buf, sizeof (buf),
-			"P%x	   ", vtp->pgno);
+			"P%x	   ", vbi->vt.goto_page);
 	}
 	/* Level 1 formatting */
 
