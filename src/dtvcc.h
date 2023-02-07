@@ -340,6 +340,7 @@ struct dtvcc_window_style {
 	enum edge			border_type;
 	dtvcc_color			border_color;
 	vbi_bool			need_rollup;
+	unsigned int			curr_row;
 };
 
 struct dtvcc_window {
@@ -452,6 +453,8 @@ struct dtvcc_decoder {
 	int                             flash_state;
 	int curr_data_pgno;
 	int lang_kor;
+	/*dtv defind window command have 7 valid bytes, while some not have enough command data.*/
+	vbi_bool dtvcc_no_whole_command_data;
 	vbi_bool has_dtvstart_header;
 	vbi_bool first_valid_data;/*maybe fe b4 eb, no 0x18 */
 
