@@ -130,6 +130,8 @@ dtvcc_get_visible_windows(struct dtvcc_service *ds, int *cnt, struct dtvcc_windo
 static vbi_bool
 dtvcc_define_window(struct dtvcc_decoder *dc, struct dtvcc_service *ds, uint8_t *buf);
 
+static vbi_bool
+dtvcc_default_command           (struct dtvcc_decoder * dc, struct dtvcc_service * ds);
 
 /* EIA 608-B decoder. */
 
@@ -2482,7 +2484,7 @@ dtvcc_stream_event		(struct dtvcc_decoder *	dc,
 }
 
 #define SARNOFF_FOOTBALL_708_DEFAULT_HEADER
-
+/*
 static vbi_bool dtvcc_default_command	(struct dtvcc_decoder * dc,
 				struct dtvcc_service * ds)
 {
@@ -2490,7 +2492,7 @@ static vbi_bool dtvcc_default_command	(struct dtvcc_decoder * dc,
 	dtvcc_define_window (dc, ds, dw);
 	return TRUE;
 }
-
+*/
 static vbi_bool
 dtvcc_put_char			(struct dtvcc_decoder *	dc,
 				 struct dtvcc_service *	ds,
@@ -2521,6 +2523,9 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	}
 	dw->latest_cmd_cr = 0;
 
+	if (dw->curr_pen.text_tag == TEXT_TAG_NOT_DISPLAYABLE ||
+		dw->curr_pen.text_tag == TEXT_TAG_EXPLETIVE)
+		return TRUE;
 	column = dw->curr_column;
 	row = dw->curr_row;
 	AM_DEBUG(AM_DEBUG_LEVEL, "debug-cc row:%d, column:%d, dw->column:%d, c:%x", row ,column, dw->column_count, c);
@@ -2989,31 +2994,31 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 		{
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0, 0
+			OPACITY_SOLID, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_TRANSPARENT, EDGE_NONE, 0, 0
+			OPACITY_TRANSPARENT, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_CENTER, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0, 0
+			OPACITY_SOLID, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0, 0
+			OPACITY_SOLID, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_LEFT, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_TRANSPARENT, EDGE_NONE, 0, 0
+			OPACITY_TRANSPARENT, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_CENTER, DIR_LEFT_RIGHT, DIR_BOTTOM_TOP,
 			TRUE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0, 0
+			OPACITY_SOLID, FALSE, EDGE_NONE, 0, FALSE, 0
 		}, {
 			JUSTIFY_LEFT, DIR_TOP_BOTTOM, DIR_RIGHT_LEFT,
 			FALSE, DISPLAY_EFFECT_SNAP, 0, 0, 0,
-			OPACITY_SOLID, EDGE_NONE, 0, 0
+			OPACITY_SOLID, FALSE, EDGE_NONE, 0, FALSE, 0
 		}
 	};
 	static const struct dtvcc_pen_style pen_styles [7] = {
@@ -3022,27 +3027,27 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
 			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 1, OFFSET_NORMAL, FALSE,
+			PEN_SIZE_STANDARD, FONT_STYLE_MONO_SERIF, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
 			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 2, OFFSET_NORMAL, FALSE,
+			PEN_SIZE_STANDARD, FONT_STYLE_MONO_SERIF, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
 			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 3, OFFSET_NORMAL, FALSE,
+			PEN_SIZE_STANDARD, FONT_STYLE_PROP_SERIF, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
 			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 4, OFFSET_NORMAL, FALSE,
+			PEN_SIZE_STANDARD, FONT_STYLE_MONO_SANS, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
 			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 3, OFFSET_NORMAL, FALSE,
-			FALSE, EDGE_UNIFORM, 0x3F, OPACITY_SOLID,
-			0, OPACITY_TRANSPARENT, 0x00, FALSE, FALSE
+			PEN_SIZE_STANDARD, FONT_STYLE_PROP_SANS, OFFSET_NORMAL, FALSE,
+			FALSE, EDGE_NONE, 0x3F, OPACITY_SOLID,
+			0x00, OPACITY_SOLID, 0, FALSE, FALSE
 		}, {
-			PEN_SIZE_STANDARD, 4, OFFSET_NORMAL, FALSE,
+			PEN_SIZE_STANDARD, FONT_STYLE_MONO_SERIF, OFFSET_NORMAL, FALSE,
 			FALSE, EDGE_UNIFORM, 0x3F, OPACITY_SOLID,
 			0, OPACITY_TRANSPARENT, 0x00, FALSE, FALSE
 		}
@@ -3154,7 +3159,7 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 		return TRUE;
 
 	/* Has to be something, no? */
-	dw->curr_pen.text_tag = TEXT_TAG_NOT_DISPLAYABLE;
+	dw->curr_pen.text_tag = TEXT_TAG_DIALOG;//TEXT_TAG_NOT_DISPLAYABLE;
 
 	dw->curr_column = 0;
 	dw->curr_row = 0;
@@ -3357,11 +3362,13 @@ dtvcc_carriage_return		(struct dtvcc_decoder *	dc,
 			dw->curr_column = 0;
 			if (row + 1 < dw->row_count) {
 				dw->curr_row = row + 1;
+				dw->style.need_rollup = FALSE;
 				break;
 			} else {
-			// carriage return + print[left->rignth] + scroll botoom->top = roll up
-			dw->style.need_rollup = TRUE;
-			AM_DEBUG(0, "CR: rollup");
+				// carriage return + print[left->rignth] + scroll botoom->top = roll up
+				dw->style.need_rollup = TRUE;
+				dw->style.curr_row = dw->curr_row;
+				AM_DEBUG(0, "CR: rollup");
 			}
 		}
 		dw->streamed >>= 1;
@@ -3593,6 +3600,17 @@ dtvcc_delay_cmd (struct dtvcc_decoder *	dc,
 	}
 	return TRUE;
 }
+
+static vbi_bool
+dtvcc_default_command           (struct dtvcc_decoder * dc,
+				struct dtvcc_service * ds)
+{
+	uint8_t dw[7] = {0x99, 0x38, 0x3b, 0x2, 0x1, 0x1d, 0x9};
+	dtvcc_define_window (dc, ds, dw);
+	dtvcc_display_windows (dc, ds, 0x89, 0x2);
+	return TRUE;
+}
+
 
 static vbi_bool
 dtvcc_command			(struct dtvcc_decoder *	dc,
@@ -4640,6 +4658,39 @@ dtvcc_have_start_header(const uint8_t * buf, int cc_count)
 	return FALSE;
 }
 
+static vbi_bool
+dtvcc_no_whole_command_data(const uint8_t * buf, int cc_count)
+{
+	unsigned int b0;
+	unsigned int cc_data_1;
+	unsigned int cc_data_2;
+	vbi_bool has_style_header = 0;
+	vbi_bool has_style_info = 0;
+	for (int i = 0; i < cc_count - 1; ++i) {/*last byte is 0xff, so minus 1*/
+		b0 = buf[3 + i * 3];
+		cc_data_1 = buf[4 + i * 3];
+		cc_data_2 = buf[5 + i * 3];
+		if (cc_data_1 == 0x99 && cc_data_2 == 0x38) {//99 38: DFx DefineWindow
+			//AM_DEBUG(0, "debug-cccc have style header, continue!");
+			has_style_header = TRUE;
+			continue;
+		}
+
+		if (has_style_header && (b0 == 0xfe)) {
+			has_style_info = TRUE;
+			continue;
+		}
+	}
+
+	if (has_style_header && !has_style_info) {
+		AM_DEBUG(0, "debug-cc Warning!no find whole command data, need set default command!");
+		return TRUE;
+	}
+	AM_DEBUG(0, "debug-cc no need set default command!");
+
+	return FALSE;
+}
+
 /*korean q-tone is timing signal for advertisment, it start with 0f byte following with
   style data.so we detect one frame if include 0f byte to judge q-tone.*/
 static vbi_bool
@@ -4667,6 +4718,7 @@ dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
 
 //#define KOREAN_CALC_708_CC_HEADER
 #define KOREAN_DETECT_Q_TONE_DATA
+#define CALC_708_CC_HEADER
 /* Note pts may be < 0 if no PTS was received. */
 void
 tvcc_decode_data			(struct tvcc_decoder *td,
@@ -4749,6 +4801,11 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 
 		case DTVCC_DATA:
 			j = td->dtvcc.packet_size;
+#ifdef CALC_708_CC_HEADER
+			if (cc_valid && b0 == 0xfe && !td->dtvcc.dtvcc_no_whole_command_data) {
+				td->dtvcc.dtvcc_no_whole_command_data = dtvcc_no_whole_command_data(buf, cc_count);
+			}
+#endif
 			if (j <= 0) {
 				/* Missed packet start. */
 #ifdef KOREAN_CALC_708_CC_HEADER
@@ -4829,8 +4886,8 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 			break;
 		}
 	}
-	if (pgno != -1)
-	    notify_curr_data_pgno(td, pgno);
+	//if (pgno != -1)
+	//    notify_curr_data_pgno(td, pgno);
 
 	update_service_status_internal(td);
 	update_display(td);
