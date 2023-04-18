@@ -2982,7 +2982,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				if (column < (COLUMNS - 1)
 				    && vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0a
 				    && pg->page_opacity[row > 0] != VBI_SEMI_TRANSPARENT)
-					 ac.opacity = pg->page_opacity[row > 0]; // SWPL-96972
+					 if (vtp->flags & (C5_NEWSFLASH | C6_SUBTITLE)) ac.opacity = pg->page_opacity[row > 0]; // SWPL-120022 SWPL-96972 SWPL-100989
 				inside_box = 0;
 				break;
 
@@ -2991,7 +2991,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					&& vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0b
 					&& pg->page_opacity[row > 0] != VBI_SEMI_TRANSPARENT)
 				{
-					ac.opacity = pg->boxed_opacity[row > 0]; // SWPL-96972
+					if (vtp->flags & (C5_NEWSFLASH | C6_SUBTITLE)) ac.opacity = pg->boxed_opacity[row > 0]; // SWPL-120022 SWPL-96972 SWPL-100989
 					ac.unicode = 0x20;
 				}
 				inside_box = 1;
