@@ -2818,18 +2818,18 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	//snprintf (buf, sizeof (buf),
 	if (vbi->vt.use_subtitleserver) {
 		if ((vbi->vt.goto_page >0x99) && (vbi->vt.goto_page <0x900)) {
-			snprintf (buf, sizeof (buf), "P%x	   ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%x    ", vbi->vt.goto_page);
 		} else	if((vbi->vt.goto_page >0) && (vbi->vt.goto_page <0x10)){
 			snprintf (buf, sizeof (buf), "P%x--    ", vbi->vt.goto_page);
 		} else	if(vbi->vt.goto_page == 0){
 			  vbi->vt.goto_page = 0x100;
-			snprintf (buf, sizeof (buf), "P%x	 ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%x    ", vbi->vt.goto_page);
 		} else {
-			snprintf (buf, sizeof (buf), "P%x-	 ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%x-    ", vbi->vt.goto_page);
 		}
 	} else {
 		snprintf (buf, sizeof (buf),
-			"P%x	   ", vbi->vt.goto_page);
+			"P%x    ", vbi->vt.goto_page);
 	}
 	/* Level 1 formatting */
 
@@ -2982,7 +2982,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				if (column < (COLUMNS - 1)
 				    && vbi_unpar8 (vtp->data.lop.raw[0][i]) == 0x0a
 				    && pg->page_opacity[row > 0] != VBI_SEMI_TRANSPARENT)
-					 if (vtp->flags & (C5_NEWSFLASH | C6_SUBTITLE)) ac.opacity = pg->page_opacity[row > 0]; // SWPL-120022 SWPL-96972 SWPL-100989
+					if (vtp->flags & (C5_NEWSFLASH | C6_SUBTITLE)) ac.opacity = pg->page_opacity[row > 0]; // SWPL-120022 SWPL-96972 SWPL-100989
 				inside_box = 0;
 				break;
 
