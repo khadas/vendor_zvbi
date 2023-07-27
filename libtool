@@ -77,7 +77,7 @@ build_os=linux-gnu
 # An echo program that does not interpret backslashes.
 echo="echo"
 
-# The archiver.
+# The archive.
 AR="ar"
 AR_FLAGS="cru"
 
@@ -6912,7 +6912,7 @@ build_os=linux-gnu
 # An echo program that does not interpret backslashes.
 echo="echo"
 
-# The archiver.
+# The archive.
 AR="ar"
 AR_FLAGS="cru"
 

@@ -2839,7 +2839,7 @@ case $host_os in
 
     # When large executables or shared objects are built, AIX ld can
     # have problems creating the table of contents.  If linking a library
-    # or program results in "error TOC overflow" add -mminimal-toc to
+    # or program results in "error TOC overflow" add -minimal-toc to
     # CXXFLAGS/CFLAGS for g++/gcc.  In the cases where that is not
     # enough to fix the problem, add -Wl,-bbigtoc to LDFLAGS.
 
@@ -3497,10 +3497,10 @@ case $host_os in
 	  *)
 	    # The C++ compiler is used as linker so we must use $wl
 	    # flag to pass the commands to the underlying system
-	    # linker. We must also pass each convience library through
+	    # linker. We must also pass each convince library through
 	    # to the system linker between allextract/defaultextract.
 	    # The C++ compiler will combine linker options so we
-	    # cannot just pass the convience library names through
+	    # cannot just pass the convince library names through
 	    # without $wl.
 	    # Supported since Solaris 2.6 (maybe 2.5.1?)
 	    _LT_AC_TAGVAR(whole_archive_flag_spec, $1)='${wl}-z ${wl}allextract`for conv in $convenience\"\"; do test -n \"$conv\" && new_convenience=\"$new_convenience,$conv\"; done; $echo \"$new_convenience\"` ${wl}-z ${wl}defaultextract'
@@ -4151,7 +4151,7 @@ build_os=$build_os
 # An echo program that does not interpret backslashes.
 echo=$lt_echo
 
-# The archiver.
+# The archive.
 AR=$lt_AR
 AR_FLAGS=$lt_AR_FLAGS
 
@@ -5486,7 +5486,7 @@ EOF
 
       # When large executables or shared objects are built, AIX ld can
       # have problems creating the table of contents.  If linking a library
-      # or program results in "error TOC overflow" add -mminimal-toc to
+      # or program results in "error TOC overflow" add -minimal-toc to
       # CXXFLAGS/CFLAGS for g++/gcc.  In the cases where that is not
       # enough to fix the problem, add -Wl,-bbigtoc to LDFLAGS.
 
@@ -5875,7 +5875,7 @@ EOF
       solaris2.[[0-5]] | solaris2.[[0-5]].*) ;;
       *)
  	# The compiler driver will combine linker options so we
- 	# cannot just pass the convience library names through
+ 	# cannot just pass the convince library names through
  	# without $wl, iff we do not link with $LD.
  	# Luckily, gcc supports the same syntax we need for Sun Studio.
  	# Supported since Solaris 2.6 (maybe 2.5.1?)
@@ -6709,7 +6709,7 @@ AU_DEFUN([jm_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
 # Check to see how make treats includes.
 AC_DEFUN([AM_MAKE_INCLUDE],
 [am_make=${MAKE-make}
-cat > confinc << 'END'
+cat > confine << 'END'
 am__doit:
 	@echo done
 .PHONY: am__doit
@@ -6720,7 +6720,7 @@ am__include="#"
 am__quote=
 _am_result=none
 # First try GNU make style include.
-echo "include confinc" > confmf
+echo "include confine" > confmf
 # We grep out `Entering directory' and `Leaving directory'
 # messages which can occur if `w' ends up in MAKEFLAGS.
 # In particular we don't look at `^make:' because GNU make might
@@ -6733,7 +6733,7 @@ if test "`$am_make -s -f confmf 2> /dev/null | grep -v 'ing directory'`" = "done
 fi
 # Now try BSD make style include.
 if test "$am__include" = "#"; then
-   echo '.include "confinc"' > confmf
+   echo '.include "confine"' > confmf
    if test "`$am_make -s -f confmf 2> /dev/null`" = "done"; then
       am__include=.include
       am__quote="\""
@@ -6743,7 +6743,7 @@ fi
 AC_SUBST([am__include])
 AC_SUBST([am__quote])
 AC_MSG_RESULT([$_am_result])
-rm -f confinc confmf
+rm -f confine confmf
 ])
 
 # Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-

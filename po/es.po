@@ -530,7 +530,7 @@ msgid ""
 "driver bug."
 msgstr ""
 "%s (%s) no tiene un interfaz de lectura, posiblemente un dispositivo\n"
-"de sólo salida o un fallo del controlador."
+"de sólo saliva o un fallo del controlador."
 
 #: src/proxy-client.c:153
 msgid "Server hostname not configured."

@@ -25,7 +25,7 @@ msgid ""
 "image size."
 msgstr ""
 "Si avvicina alle proporzioni dell'immagine in modo simile ad una reale TV. "
-"Questo raddoppierà la dimensione dell'immagine."
+"Questo raddoppierà la dimensions dell'immagine."
 
 #: src/exp-gfx.c:801
 msgid "Include transparency"
@@ -73,12 +73,12 @@ msgstr "Esporta questa pagina come immagine XPM"
 #: src/exp-gfx.c:1795
 #, c-format
 msgid "Unable to allocate %d byte buffer."
-msgstr "Impossibile allocare il buffer di %d byte."
+msgstr "Impossible allocate il buffer di %d byte."
 
 #: src/exp-gfx.c:1801
 #, c-format
 msgid "Unable to allocate %d KB image buffer."
-msgstr "Impossibile allocare il buffer di %d KB per l'immagine."
+msgstr "Impossible allocate il buffer di %d KB per l'immagine."
 
 #: src/exp-gfx.c:1865
 msgid "PNG"
@@ -276,7 +276,7 @@ msgstr "La pagina non è in cache, spiacente."
 
 #: src/exp-vtx.c:105
 msgid "Cannot export this page, not displayable."
-msgstr "Impossibile esportare questa pagina, non visualizzabile."
+msgstr "Impossible esportare questa pagina, non visualizzabile."
 
 #: src/exp-vtx.c:142
 msgid ""
@@ -299,13 +299,13 @@ msgstr "Modulo di esportazione sconosciuto '%s'."
 #, c-format
 msgid "Cannot initialize export module '%s', probably lack of memory."
 msgstr ""
-"Impossibile inizializzare il modulo di esportazione '%s', probabile mancanza "
+"Impossible inizializzare il modulo di esportazione '%s', probable mancanza "
 "di memoria."
 
 #: src/export.c:1841
 #, c-format
 msgid "Cannot create file '%s': %s."
-msgstr "Impossibile creare il file '%s': %s."
+msgstr "Impossible creare il file '%s': %s."
 
 #: src/export.c:1936
 #, c-format
@@ -354,19 +354,19 @@ msgstr "Memoria virtuale esaurita."
 #: src/io-bktr.c:217
 #, c-format
 msgid "Cannot open '%s': %s."
-msgstr "Impossibile aprire '%s': %s."
+msgstr "Impossible aprire '%s': %s."
 
 #: src/io-bktr.c:273 src/io-v4l.c:758 src/io-v4l.c:1118 src/io-v4l2k.c:1182
 #, c-format
 msgid "Sorry, %s (%s) cannot capture any of the requested data services."
 msgstr ""
-"Spiacente, %s (%s) impossibile catturare ognuno dei servizi di dati "
+"Spiacente, %s (%s) Impossible catturare ognuno dei servizi di dati "
 "richiesto."
 
 #: src/io-bktr.c:314 src/io-v4l.c:175 src/io-v4l2k.c:617
 #, c-format
 msgid "Not enough memory to allocate vbi capture buffer (%d KB)."
-msgstr "Non abbastanza memoria per allocare il buffer di cattura vbi (%d KB)."
+msgstr "Non abbastanza memoria per allocate il buffer di cattura vbi (%d KB)."
 
 #: src/io-bktr.c:391
 msgid "BKTR driver interface not compiled."
@@ -375,12 +375,12 @@ msgstr "Interfaccia del driver BKTR non compilata."
 #: src/io-v4l.c:809 src/io-v4l2k.c:1027
 #, c-format
 msgid "Cannot initialize %s (%s), the device is already in use."
-msgstr "Impossibile inizializzare %s (%s), il dispositivo è già in uso."
+msgstr "Impossible inizializzare %s (%s), il dispositivo è già in uso."
 
 #: src/io-v4l.c:823
 #, c-format
 msgid "Could not set the vbi capture parameters for %s (%s): %s."
-msgstr "Impossibile impostare i paramentri di cattura vbi per %s (%s): %s."
+msgstr "Impossible impostare i paramentri di cattura vbi per %s (%s): %s."
 
 #: src/io-v4l.c:961 src/io-v4l2k.c:1131
 #, c-format
@@ -394,7 +394,7 @@ msgstr ""
 #: src/io-v4l.c:1014
 #, c-format
 msgid "Cannot capture with %s (%s), has no standard vbi interface."
-msgstr "Impossibile catturare con %s (%s), non ha un'interfaccia vbi standard."
+msgstr "Impossible catturare con %s (%s), non ha un'interfaccia vbi standard."
 
 #: src/io-v4l.c:1034
 #, c-format
@@ -402,14 +402,14 @@ msgid ""
 "Cannot identify %s (%s), reported vbi frame size suggests this is not a bttv "
 "driver."
 msgstr ""
-"Impossibile identificare %s (%s), la dimensione del frame vbi riportata "
+"Impossible identificare %s (%s), la dimensions del frame vbi riportata "
 "suggerisce che questo non è un driver bttv."
 
 #: src/io-v4l.c:1051 src/io-v4l.c:1289
 #, c-format
 msgid "Cannot set or determine current videostandard of %s (%s)."
 msgstr ""
-"Impossibile impostare o determinare lo standard video corrente di %s (%s)."
+"Impossible impostare o determinare lo standard video corrente di %s (%s)."
 
 #: src/io-v4l.c:1090 src/io-v4l2k.c:1146
 #, c-format
@@ -417,13 +417,13 @@ msgid ""
 "Cannot capture the requested data services with %s (%s), the sampling "
 "frequency %.2f MHz is too low."
 msgstr ""
-"Impossibile catturare il servizio di dati richiesto con %s (%s), la "
+"Impossible catturare il servizio di dati richiesto con %s (%s), la "
 "frequenza di campionamento %.2f MHz è troppo bassa."
 
 #: src/io-v4l.c:1207 src/io-v4l2.c:130 src/io-v4l2k.c:1374
 #, c-format
 msgid "Cannot open '%s': %d, %s."
-msgstr "Impossibile aprire '%s': %d, %s."
+msgstr "Impossible aprire '%s': %d, %s."
 
 #: src/io-v4l.c:1224 src/io-v4l.c:1233
 msgid "driver unknown"
@@ -450,7 +450,7 @@ msgstr "Interfaccia del drvier V4L2 non compilata."
 #: src/io-v4l2k.c:210
 #, c-format
 msgid "Cannot request streaming i/o buffers from %s (%s): %s."
-msgstr "Impossibile richiedere i buffer di streaming i/o da %s (%s): %s."
+msgstr "Impossible richiedere i buffer di streaming i/o da %s (%s): %s."
 
 #: src/io-v4l2k.c:214 src/io-v4l2k.c:1036
 msgid "Possibly a driver bug."
@@ -480,7 +480,7 @@ msgstr ""
 #: src/io-v4l2k.c:308
 #, c-format
 msgid "Cannot enqueue streaming i/o buffer #%d to %s (%s): %s."
-msgstr "Impossibile accodare il buffer di streaming i/o #%d a %s (%s): %s."
+msgstr "Impossible accodare il buffer di streaming i/o #%d a %s (%s): %s."
 
 #: src/io-v4l2k.c:312 src/io-v4l2k.c:763 src/io-v4l2k.c:788
 msgid "Probably a driver bug."
@@ -489,12 +489,12 @@ msgstr "Probabilmente un bug del driver."
 #: src/io-v4l2k.c:759 src/io-v4l2k.c:785
 #, c-format
 msgid "Cannot query current videostandard of %s (%s): %s."
-msgstr "Impossibile interrogare lo standard video corrente di %s (%s): %s."
+msgstr "Impossible interrogare lo standard video corrente di %s (%s): %s."
 
 #: src/io-v4l2k.c:893
 #, c-format
 msgid "Cannot query current vbi parameters of %s (%s): %s."
-msgstr "Impossibile interrogare i parametri vbi correnti di %s (%s): %s."
+msgstr "Impossible interrogare i parametri vbi correnti di %s (%s): %s."
 
 #: src/io-v4l2k.c:935
 #, fuzzy, c-format
@@ -502,13 +502,13 @@ msgid ""
 "Sorry, %s (%s) cannot capture any of the requested data services with "
 "scanning %d."
 msgstr ""
-"Spiacente, %s (%s) impossibile catturare ognuno dei servizi di dati "
+"Spiacente, %s (%s) Impossible catturare ognuno dei servizi di dati "
 "richiesto con [scanning] %d."
 
 #: src/io-v4l2k.c:1033
 #, c-format
 msgid "Could not set the vbi capture parameters for %s (%s): %d, %s."
-msgstr "Impossibile impostare i paramentri di cattura vbi per %s (%s): %d, %s."
+msgstr "Impossible impostare i paramentri di cattura vbi per %s (%s): %d, %s."
 
 #: src/io-v4l2k.c:1079
 #, c-format
@@ -520,7 +520,7 @@ msgstr ""
 #: src/io-v4l2k.c:1394
 #, c-format
 msgid "Cannot identify '%s': %d, %s."
-msgstr "Impossibile identificare '%s': %d, %s."
+msgstr "Impossible identificare '%s': %d, %s."
 
 #: src/io-v4l2k.c:1396
 msgid "Probably not a v4l2 device."
@@ -568,7 +568,7 @@ msgstr "Interfaccia del client proxy non compilata."
 #: src/proxy-msg.c:1240
 #, c-format
 msgid "Cannot create socket: %s."
-msgstr "Impossibile creare la socket: %s."
+msgstr "Impossible creare la socket: %s."
 
 #: src/proxy-msg.c:1248
 #, c-format
@@ -591,7 +591,7 @@ msgstr "Errore I/O della socket: %s."
 #: src/proxy-msg.c:1315
 #, c-format
 msgid "Cannot connect to server: %s."
-msgstr "Impossibile connettersi al server: %s."
+msgstr "Impossible connettersi al server: %s."
 
 #. TRANSLATORS: Title of TOP Index page,
 #. for now please Latin-1 or ASCII only
@@ -601,4 +601,4 @@ msgid "TOP Index"
 msgstr "Indice TOP"
 
 #~ msgid "Cannot identify '%s': %s."
-#~ msgstr "Impossibile identificare '%s': %s."
+#~ msgstr "Impossible identificare '%s': %s."

@@ -406,7 +406,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 						    rating),
 				 lhour, lmin, ehour, emin);
 
-			/* program name: buffer[10 ... 31] (xdump'ed) */
+			/* program name: buffer[10 ... 31] (dump) */
 
 			break;
 		}
@@ -732,7 +732,7 @@ _vbi_xds_packet_dump		(const vbi_xds_packet *	xp,
 					 tune_channel);
 			}
 
-			/* channel id: buffer[2 or 4 ... 31] (xdump'ed) */
+			/* channel id: buffer[2 or 4 ... 31] (dump) */
 
 			fputc (')', fp);
 

@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include "am_iconv.h"
+#include "iconv.h"
 #include "lang.h"
 #include "export.h"
 #include "teletext_decoder.h"

@@ -36,7 +36,10 @@
 #include "vbi.h"
 #ifdef ANDROID
 #include <android/log.h>
-#include "am_debug.h"
+#define AM_DEBUG(_level,_fmt...) \
+    do {\
+        __android_log_print(ANDROID_LOG_INFO,"ZVBI",_fmt);\
+    } while (0)
 #else
 //for buildroot begin
 #undef AM_DEBUG
@@ -1022,7 +1025,6 @@ caption_command(vbi_decoder *vbi, struct caption *cc,
 			roll = ch->row1 - row1;
 			if (roll > 0) {
 				roll_up(ch, ch->row1 - row1);
-				row=ch->row;
 				update(ch);
 			}
 		}

@@ -1,3 +1,54 @@
+// TODO: link dvb
+// *** THIS PACKAGE HAS SPECIAL LICENSING CONDITIONS.  PLEASE
+//     CONSULT THE OWNERS AND opensource-licensing@google.com BEFORE
+//     DEPENDING ON IT IN YOUR PROJECT. ***
+package {
+    default_applicable_licenses: [
+        "vendor_amlogic_reference_external_libzvbi_src_license",
+    ],
+}
+
+// Added automatically by a large-scale-change that took the approach of
+// 'apply every license found to every target'. While this makes sure we respect
+// every license restriction, it may not be entirely correct.
+//
+// e.g. GPL in an MIT project might only apply to the contrib/ directory.
+//
+// Please consider splitting the single license below into multiple licenses,
+// taking care not to lose any license_kind information, and overriding the
+// default license using the 'licenses: [...]' property on targets as needed.
+//
+// For unused files, consider creating a 'fileGroup' with "//visibility:private"
+// to attach the license to, and including a comment whether the files may be
+// used in the current project.
+//
+// large-scale-change included anything that looked like it might be a license
+// text as a license_text. e.g. LICENSE, NOTICE, COPYING etc.
+//
+// Please consider removing redundant or irrelevant files from 'license_text:'.
+// See: http://go/android-license-faq
+license {
+    name: "vendor_amlogic_reference_external_libzvbi_src_license",
+    visibility: [":__subpackages__"],
+    license_kinds: [
+        "SPDX-license-identifier-Apache-2.0",
+        "SPDX-license-identifier-BSD",
+        "SPDX-license-identifier-FTL",
+        "SPDX-license-identifier-GPL",
+        "SPDX-license-identifier-GPL-2.0",
+        "SPDX-license-identifier-LGPL",
+        "SPDX-license-identifier-LGPL-2.1",
+        "SPDX-license-identifier-MIT",
+        "legacy_by_exception_only", // by exception only
+        "legacy_notice",
+        "legacy_unencumbered",
+    ],
+    license_text: [
+        "COPYING",
+        "COPYING.LIB",
+    ],
+}
+
 cc_library_static {
     vendor_available: true,
     name: "libzvbi_static",
@@ -47,6 +98,11 @@ cc_library_static {
     ],
 
     cflags: [
+        "-Werror", // Must keep this, never allow remove this flag!
+        "-Wno-unused-parameter",
+        "-Wno-unused-function",
+        "-Wno-unused-variable",
+        "-Wno-invalid-source-encoding", // not throw this when saw utf8 name
         "-D_REENTRANT",
         "-D_GNU_SOURCE",
         "-DENABLE_DVB=1",
@@ -56,24 +112,19 @@ cc_library_static {
         "-DPACKAGE=\"zvbi\"",
         "-DVERSION=\"0.2.33\"",
         "-DANDROID",
+        "-Wno-error=tautological-pointer-compare",
     ],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
 
     arch: {
         arm: {
             instruction_set: "arm",
         },
+        arm64: {
+            enabled: true,
+        },
     },
 
-    // TODO: include library
-    include_dirs: [
-        "vendor/amlogic/common/external/dvb/include/am_adp",
-        "vendor/amlogic/common/external/dvb/include/am_mw",
-        "vendor/amlogic/common/external/icu/icu4c/source/common",
-        //"external/icu/libandroidicu/include/",
-        //"external/icu/android_icu4c/include",
-        //"external/icu/icu4c/source/common",
-    ],
+    export_include_dirs: ["src"],
     shared_libs: [
        "liblog",
     ],
@@ -82,16 +133,31 @@ cc_library_static {
 cc_library_shared {
     vendor: true,
     name: "libzvbi",
+    compile_multilib: "both",
+
+    arch: {
+        arm: {
+            instruction_set: "arm",
+        },
+        arm64: {
+            enabled: true,
+        },
+        x86: {
+            enabled: false,
+        },
+        x86_64: {
+            enabled: false,
+        },
+    },
+
     shared_libs: [
        "liblog",
     ],
+
     export_include_dirs: ["src"],
+
     whole_static_libs: [
        "libzvbi_static",
     ],
-    static_libs: [
-       "libicui18n_product",
-       "libicuuc_product",
-       "libicuuc_stubdata_product",
-    ],
+
 }

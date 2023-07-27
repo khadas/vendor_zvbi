@@ -35,7 +35,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include "am_iconv.h"
+#include "iconv.h"
 #include "export.h"
 #include "conv.h"
 #include "vbi.h" /* asprintf */

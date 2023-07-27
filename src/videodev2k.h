@@ -451,7 +451,7 @@ struct v4l2_jpegcompression
 				 * you do, leave them untouched.
 				 * Inluding less markers will make the
 				 * resulting code smaller, but there will
-				 * be fewer aplications which can read it.
+				 * be fewer applications which can read it.
 				 * The presence of the APP and COM marker
 				 * is influenced by APP_len and COM_len
 				 * ONLY, not by this property! */
@@ -461,7 +461,7 @@ struct v4l2_jpegcompression
 #define V4L2_JPEG_MARKER_DRI (1<<5)    /* Define Restart Interval */
 #define V4L2_JPEG_MARKER_COM (1<<6)    /* Comment segment */
 #define V4L2_JPEG_MARKER_APP (1<<7)    /* App segment, driver will
-					* allways use APP0 */
+					* always use APP0 */
 };
 
 /*

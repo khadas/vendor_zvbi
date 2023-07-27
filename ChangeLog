@@ -899,7 +899,7 @@
 
 	* contrib/ntsc-cc.c: Added a caption channel filter.
 	* contrib/ntsc-cc.c, test/capture.c, test/decode.c:
-	* test/ttxfilter.c, test/sliced2pes.c: Explicitely fflush output
+	* test/ttxfilter.c, test/sliced2pes.c: Explicitly fflush output
 	  buffers to ensure real time output of CC/XDS data.
 
 2006-09-27    <mschimek@users.sf.net>
@@ -2254,7 +2254,7 @@
 
 2002-01-12	Imported libzvbi into Zapping CVS <mschimek@users.sf.net>
 
-	* Renamed to libzvbi to avoid a name conflict. VBI is an ubiquitious
+	* Renamed to libzvbi to avoid a name conflict. VBI is an ubiquitous
 	  acronym and there are at least two other libvbi's around.
 	* libzvbi.h: Now generated at compile time, so we can keep public
 	  and private definitions together, autodocs are filtered out.

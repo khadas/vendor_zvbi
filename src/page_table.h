@@ -174,7 +174,7 @@ vbi_page_table_add_pages	(vbi_page_table *	pt,
  * single page) the subpage number zero is transmitted.
  *
  * Use this function to match page @a pgno regardless if it has
- * subpages. Do not explicitely add subpage zero of page @a pgno
+ * subpages. Do not explicitly add subpage zero of page @a pgno
  * (with vbi_page_table_add_subpage()) unless you want to match
  * @a pgno only if it has no subpages, as subpage lookups are
  * considerably less efficient.

@@ -191,7 +191,7 @@ ets_program_type[8][16] =
 		"informational/educational/school programmes",
 		"cartoons/puppets",
 		"education/science/factual topics (general)",
-		"nature/animals/environement",
+		"nature/animals/environment",
 		"technology/natural sciences",
 		"medicine/physiology/psychology",
 		"foreign countries/expeditions",

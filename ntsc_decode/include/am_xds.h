@@ -2,13 +2,11 @@
  *  Copyright C 2009 by Amlogic, Inc. All Rights Reserved.
  */
 /**\file
- * \brief TeletextÄ£¿é(version 2)
+ * \brief Teletext module(version 2)
  *
  * \author kui.zhang <kui.zhang@amlogic.com>
  * \date 2012-09-13: create the document
  ***************************************************************************/
-
-
 
 #ifndef _AM_XDS
 #define _AM_XDS

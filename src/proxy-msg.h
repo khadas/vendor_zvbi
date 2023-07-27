@@ -76,7 +76,7 @@
  * @ingroup Proxy
  * @brief Priority levels for channel switching (equivalent to enum v4l2_priority)
  *
- * These priorities are used to cooperativly resolve conflicts between
+ * These priorities are used to cooperatively resolve conflicts between
  * channel requests of multiple capture applications.  While a capture
  * application with a higher priority has opened a device, channel change
  * requests of applications with lower priority will fail with error "EBUSY".
@@ -167,7 +167,7 @@ typedef struct
 	uint8_t			is_valid;
         /**
          * Sub-priority for channel scheduling at "background" priority.
-         * You can use aribtrary values in the range 0 ... 256, but as
+         * You can use arbitrary values in the range 0 ... 256, but as
          * this value is only meaningful in relation to priorities used
          * by other clients, you should stick to the scale defined by
          * @ref VBI_CHN_SUBPRIO

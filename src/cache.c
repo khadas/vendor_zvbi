@@ -1324,6 +1324,11 @@ _vbi_cache_get_page		(vbi_cache *		ca,
 
 	assert (ca == cn->cache);
 
+
+	if (!ca ||!cn) {
+		LOGI("_vbi_cache_get_page ca or cn is NULL");
+		return NULL;
+	}
 	if (CACHE_CONSISTENCY)
 		assert (is_member (&ca->networks, &cn->node));
 
@@ -1370,6 +1375,11 @@ _vbi_cache_find_next_page       (vbi_cache * ca,
 
 	assert (NULL != ca);
 
+	if (!ca) {
+		LOGI("_vbi_cache_find_next_page ca is NULL");
+		return NULL;
+	}
+
 	if (pgno < 0x100 || pgno > 0x8FF || 0xFF == (pgno & 0xFF)) {
 		warning (&ca->log,
 			 "Invalid pgno 0x%x.", pgno);
@@ -1408,7 +1418,10 @@ _vbi_cache_find_next_page_2       (vbi_cache * ca,
 	int i, max_pgno = 0, min_pgno = 0x8FF;
 
 	assert (NULL != ca);
-
+	if (!ca) {
+		LOGI("_vbi_cache_find_next_page_2 ca is NULL");
+		return NULL;
+	}
 	if (pgno < 0x100 || pgno > 0x8FF || 0xFF == (pgno & 0xFF)) {
 		warning (&ca->log,
 			 "Invalid pgno 0x%x.", pgno);
@@ -1459,7 +1472,10 @@ _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len)
 
 	assert (NULL != ca);
 	assert (left >= 0);
-
+	if (!ca) {
+		LOGI("_vbi_cache_get_sub_info ca is NULL");
+		return FALSE;
+	}
 	if (pgno < 0x100 || pgno > 0x8FF || 0xFF == (pgno & 0xFF)) {
 		warning (&ca->log,
 			 "Invalid pgno 0x%x.", pgno);
@@ -1708,7 +1724,7 @@ _vbi_cache_put_page		(vbi_cache *		ca,
 
 		if (old_cp->ref_count > 0) {
 			/* This page is still in use. We remove it from
-			   the cache and mark it for deletion when unref'd.
+			   the cache and mark it for deletion when unref.
 			   old_cp->pri_node remains on ca->referenced. */
 			unlink_node (&old_cp->hash_node);
 

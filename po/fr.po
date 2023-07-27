@@ -104,7 +104,7 @@ msgstr "Couleur (CSS)"
 
 #: src/exp-html.c:124
 msgid "Store the page colors using CSS attributes"
-msgstr "Stocker cette page en utilisant les couleurs des attributs CSS"
+msgstr "Stocker cette page en utilisant les couleurs des attribute CSS"
 
 #: src/exp-html.c:126
 msgid "HTML header"
@@ -175,7 +175,7 @@ msgstr "KOI8-R (Russe et Bulgare)"
 
 #: src/exp-txt.c:87
 msgid "KOI8-U (Ukranian)"
-msgstr "KOI8-U (Ukrainien)"
+msgstr "KOI8-U (ukrainian)"
 
 #: src/exp-txt.c:88
 msgid "ISO-10646/UTF-8 (Unicode)"
@@ -195,7 +195,7 @@ msgstr "Vert"
 
 #: src/exp-txt.c:100
 msgid "Yellow"
-msgstr "Jaune"
+msgstr "Yellow"
 
 #: src/exp-txt.c:101
 msgid "Blue"
@@ -286,7 +286,7 @@ msgstr ""
 #: src/export.c:470
 #, c-format
 msgid "Invalid option string \"%s\"."
-msgstr "Chaîne d'option invalide \"%s\"."
+msgstr "Chaîne d'option invalid \"%s\"."
 
 #: src/export.c:558
 #, c-format
@@ -326,7 +326,7 @@ msgstr "Le module d'export '%s' na pas d'option '%s'."
 #: src/export.c:2027
 #, c-format
 msgid "Invalid argument %s for option %s of export module %s."
-msgstr "Argument invalide %s pour l'option %s du module d'export %s."
+msgstr "Argument invalid %s pour l'option %s du module d'export %s."
 
 #: src/export.c:2051
 #, c-format
@@ -386,7 +386,7 @@ msgid ""
 "libzvbi is too old."
 msgstr ""
 "%s (%s) présente un format inconnu d'échantillon vbi #%d. Ceci peut-être un "
-"bogue du pilote ou une librairies libzvbi trop vieille."
+"bogue du pilote ou une libraries libzvbi trop vieille."
 
 #: src/io-v4l.c:1014
 #, c-format
@@ -433,7 +433,7 @@ msgstr "%s (%s) n'est pas une entrée VBI brute."
 #: src/io-v4l.c:1259
 #, c-format
 msgid "%s (%s) does not support the select() function."
-msgstr "%s (%s) ne supporte pas la fonction select()."
+msgstr "%s (%s) ne supporte pas la function select()."
 
 #: src/io-v4l.c:1393 src/io-v4l.c:1438
 msgid "V4L driver interface not compiled."
@@ -470,7 +470,7 @@ msgstr "Demande de flux des tampons e/s #%d de %s (%s) à échoué : %s."
 #, c-format
 msgid "Memory mapping streaming i/o buffer #%d from %s (%s) failed: %s."
 msgstr ""
-"Organisation de la mémoire pour le flux des tampons e/s #%d de %s (%s) à "
+"Organization de la mémoire pour le flux des tampons e/s #%d de %s (%s) à "
 "échoué : %s."
 
 #: src/io-v4l2k.c:308
@@ -570,7 +570,7 @@ msgstr "Ne peut créer le socket : %s."
 #: src/proxy-msg.c:1248
 #, c-format
 msgid "Invalid hostname or port: %s."
-msgstr "Hostname invalide ou port : %s."
+msgstr "Hostname invalid ou port : %s."
 
 #: src/proxy-msg.c:1268
 msgid "Connection via TCP/IP failed, server not running or unreachable."

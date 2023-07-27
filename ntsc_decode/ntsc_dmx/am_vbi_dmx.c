@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Copyright C 2009 by Amlogic, Inc. All Rights Reserved.
+ *	Copyright C 2009 by Amlogic, Inc. All Rights Reserved.
  */
 /**\file
  * \brief
@@ -23,15 +23,15 @@
 
 #define DMX_SYNC
 
-#define DMX_BUF_SIZE       (4096)
+#define DMX_BUF_SIZE	   (4096)
 #define DMX_POLL_TIMEOUT   (200)
 
-#define DMX_DEV_COUNT      (2)
+#define DMX_DEV_COUNT	   (2)
 
 
-#define DMX_CHAN_ISSET_FILTER(chan,fid)    ((chan)->filter_mask[(fid)>>3]&(1<<((fid)&3)))
-#define DMX_CHAN_SET_FILTER(chan,fid)      ((chan)->filter_mask[(fid)>>3]|=(1<<((fid)&3)))
-#define DMX_CHAN_CLR_FILTER(chan,fid)      ((chan)->filter_mask[(fid)>>3]&=~(1<<((fid)&3)))
+#define DMX_CHAN_ISSET_FILTER(chan,fid)	   ((chan)->filter_mask[(fid)>>3]&(1<<((fid)&3)))
+#define DMX_CHAN_SET_FILTER(chan,fid)	   ((chan)->filter_mask[(fid)>>3]|=(1<<((fid)&3)))
+#define DMX_CHAN_CLR_FILTER(chan,fid)	   ((chan)->filter_mask[(fid)>>3]&=~(1<<((fid)&3)))
 
 
 /****************************************************************************
@@ -41,7 +41,7 @@
 
 extern const  AM_VBI_Driver_t linux_vbi_drv ;
 
-pthread_mutex_t am_gAdpLock  = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t am_gAdpLock	 = PTHREAD_MUTEX_INITIALIZER;
 
 static AM_VBI_Device_t dmx_devices[DMX_DEV_COUNT] =
 {
@@ -60,7 +60,7 @@ static AM_VBI_Device_t dmx_devices[DMX_DEV_COUNT] =
  * Static functions
  ***************************************************************************/
 
-/**\brief 根据设备号取得设备结构指针*/
+/**\brief Get the device structure pointer according to the device number*/
 static inline AM_ErrorCode_t dmx_get_dev(int dev_no, AM_VBI_Device_t **dev)
 {
 	if ((dev_no < 0) || (dev_no >= DMX_DEV_COUNT))
@@ -73,21 +73,21 @@ static inline AM_ErrorCode_t dmx_get_dev(int dev_no, AM_VBI_Device_t **dev)
 	return AM_SUCCESS;
 }
 
-/**\brief 根据设备号取得设备结构并检查设备是否已经打开*/
+/**\brief Get the device structure according to the device number and check if the device is open*/
 static inline AM_ErrorCode_t dmx_get_openned_dev(int dev_no, AM_VBI_Device_t **dev)
 {
 	int ret = (dmx_get_dev(dev_no, dev));
 
-	if (!(*dev)->openned)
+	if (!(*dev)->opened)
 	{
-		AM_DEBUG( "demux device %d has not been openned", dev_no);
+		AM_DEBUG( "demux device %d has not been opened", dev_no);
 		return AM_VBI_DMX_ERR_INVALID_DEV_NO;
 	}
 
 	return AM_SUCCESS;
 }
 
-/**\brief 根据ID取得对应filter结构，并检查设备是否在使用*/
+/**\brief Get the corresponding filter structure according to the ID, and check whether the device is in use*/
 static inline AM_ErrorCode_t dmx_get_used_filter(AM_VBI_Device_t *dev, int filter_id, AM_VBI_Filter_t **pf)
 {
 	AM_VBI_Filter_t *filter;
@@ -110,7 +110,7 @@ static inline AM_ErrorCode_t dmx_get_used_filter(AM_VBI_Device_t *dev, int filte
 	return AM_SUCCESS;
 }
 
-/**\brief 数据检测线程*/
+/**\brief data detection thread*/
 static void* dmx_data_thread(void *arg)
 {
 	AM_VBI_Device_t *dev = (AM_VBI_Device_t*)arg;
@@ -166,9 +166,9 @@ static void* dmx_data_thread(void *arg)
 				}
 				else
 				{
-					cb   = filter->cb;
+					cb	 = filter->cb;
 					data = filter->user_data;
-					ret  = dev->drv->read(dev, filter, sec_buf, &sec_len);
+					ret	 = dev->drv->read(dev, filter, sec_buf, &sec_len);
 				}
 #ifndef DMX_WAIT_CB
 				pthread_mutex_unlock(&dev->lock);
@@ -216,20 +216,20 @@ static void* dmx_data_thread(void *arg)
 	return NULL;
 }
 
-/**\brief 等待回调函数停止运行*/
+/**\brief wait for the callback function to stop running */
 static inline AM_ErrorCode_t dmx_wait_cb(AM_VBI_Device_t *dev)
 {
 #ifdef DMX_WAIT_CB
 	if (dev->thread != pthread_self())
 	{
-		while (dev->flags&DMX_FL_RUN_CB)
+		while (dev->flags & DMX_FL_RUN_CB)
 			pthread_cond_wait(&dev->cond, &dev->lock);
 	}
 #endif
 	return AM_SUCCESS;
 }
 
-/**\brief 停止Section过滤器*/
+/**\brief stop Section filter*/
 static AM_ErrorCode_t dmx_stop_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *filter)
 {
 	AM_ErrorCode_t ret = AM_SUCCESS;
@@ -252,7 +252,7 @@ static AM_ErrorCode_t dmx_stop_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *fil
 	return ret;
 }
 
-/**\brief 释放过滤器*/
+/**\brief release filter*/
 static int dmx_free_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *filter)
 {
 	AM_ErrorCode_t ret = AM_SUCCESS;
@@ -272,22 +272,22 @@ static int dmx_free_filter(AM_VBI_Device_t *dev, AM_VBI_Filter_t *filter)
 
 	if (ret == AM_SUCCESS)
 	{
-		filter->used=AM_FALSE;
+		filter->used = AM_FALSE;
 	}
 
 	return ret;
 }
 
-/****************************************************************************
+/**************************************************** ****************************
  * API functions
- ***************************************************************************/
+ **************************************************** ************************/
 
-/**\brief 打开解复用设备
- * \param dev_no 解复用设备号
- * \param[in] para 解复用设备开启参数
+/**\brief Open the demultiplexing device
+ * \param dev_no demultiplexing device number
+ * \param[in] para Demultiplexing device startup parameters
  * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
+ * - AM_SUCCESS success
+ * - other value error code (see am_dmx.h)
  */
 AM_ErrorCode_t AM_NTSC_DMX_Open(int dev_no, const AM_VBI_DMX_OpenPara_t *para)
 {
@@ -300,9 +300,9 @@ AM_ErrorCode_t AM_NTSC_DMX_Open(int dev_no, const AM_VBI_DMX_OpenPara_t *para)
 
 	pthread_mutex_lock(&am_gAdpLock);
 
-	if (dev->openned)
+	if (dev->opened)
 	{
-		AM_DEBUG( "demux device %d has already been openned", dev_no);
+		AM_DEBUG("demux device %d has already been opened", dev_no);
 		ret = AM_VBI_DMX_ERR_BUSY;
 		goto final;
 	}
@@ -331,7 +331,7 @@ AM_ErrorCode_t AM_NTSC_DMX_Open(int dev_no, const AM_VBI_DMX_OpenPara_t *para)
 
 	if (ret == AM_SUCCESS)
 	{
-		dev->openned = AM_TRUE;
+		dev->opened = AM_TRUE;
 	}
 final:
 	pthread_mutex_unlock(&am_gAdpLock);
@@ -339,11 +339,11 @@ final:
 	return ret;
 }
 
-/**\brief 关闭解复用设备
- * \param dev_no 解复用设备号
+/**\brief close the demultiplexing device
+ * \param dev_no demultiplexing device number
  * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
+ * - AM_SUCCESS success
+ * - other value error code (see am_dmx.h)
  */
 AM_ErrorCode_t AM_NTSC_DMX_Close(int dev_no)
 {
@@ -358,7 +358,7 @@ AM_ErrorCode_t AM_NTSC_DMX_Close(int dev_no)
 	dev->enable_thread = AM_FALSE;
 	pthread_join(dev->thread, NULL);
 
-	for (i=0; i<DMX_FILTER_COUNT; i++)
+	for (i = 0; i < DMX_FILTER_COUNT; i++)
 	{
 		dmx_free_filter(dev, &dev->filters[i]);
 	}
@@ -371,19 +371,19 @@ AM_ErrorCode_t AM_NTSC_DMX_Close(int dev_no)
 	pthread_mutex_destroy(&dev->lock);
 	pthread_cond_destroy(&dev->cond);
 
-	dev->openned = AM_FALSE;
+	dev->opened = AM_FALSE;
 
 	pthread_mutex_unlock(&am_gAdpLock);
 
 	return ret;
 }
 
-/**\brief 分配一个过滤器
- * \param dev_no 解复用设备号
- * \param[out] fhandle 返回过滤器句柄
+/**\brief assigns a filter
+ * \param dev_no demultiplexing device number
+ * \param[out] fhandle returns the filter handle
  * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
+ * - AM_SUCCESS success
+ * - other value error code (see am_dmx.h)
  */
 AM_ErrorCode_t AM_NTSC_DMX_AllocateFilter(int dev_no, int *fhandle)
 {
@@ -435,14 +435,13 @@ AM_ErrorCode_t AM_NTSC_DMX_AllocateFilter(int dev_no, int *fhandle)
 	return ret;
 }
 
-
-/**\brief 释放一个过滤器
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief release a filter
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_FreeFilter(int dev_no, int fhandle)
 {
 	AM_VBI_Device_t *dev;
@@ -467,13 +466,13 @@ AM_ErrorCode_t AM_NTSC_DMX_FreeFilter(int dev_no, int fhandle)
 	return ret;
 }
 
-/**\brief 让一个过滤器开始运行
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief start a filter
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_StartFilter(int dev_no, int fhandle)
 {
 	AM_DEBUG("AM_NTSC_DMX_StartFilter*************\n");
@@ -508,13 +507,13 @@ AM_ErrorCode_t AM_NTSC_DMX_StartFilter(int dev_no, int fhandle)
 	return ret;
 }
 
-/**\brief 停止一个过滤器
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief stop a filter
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_StopFilter(int dev_no, int fhandle)
 {
 	AM_VBI_Device_t *dev;
@@ -541,14 +540,14 @@ AM_ErrorCode_t AM_NTSC_DMX_StopFilter(int dev_no, int fhandle)
 	return ret;
 }
 
-/**\brief 设置一个过滤器的缓冲区大小
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \param size 缓冲区大小
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief Set a filter buffer size
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \param size buffer size
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_SetBufferSize(int dev_no, int fhandle, int size)
 {
 	AM_VBI_Device_t *dev;
@@ -576,15 +575,15 @@ AM_ErrorCode_t AM_NTSC_DMX_SetBufferSize(int dev_no, int fhandle, int size)
 	return ret;
 }
 
-/**\brief 取得一个过滤器对应的回调函数和用户参数
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \param[out] cb 返回过滤器对应的回调函数
- * \param[out] data 返回用户参数
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief Get the callback function and user parameters corresponding to a filter
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \param[out] cb returns the callback function corresponding to the filter
+  * \param[out] data returns user parameters
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_GetCallback(int dev_no, int fhandle, AM_DMX_DataCb *cb, void **data)
 {
 	AM_VBI_Device_t *dev;
@@ -611,15 +610,15 @@ AM_ErrorCode_t AM_NTSC_DMX_GetCallback(int dev_no, int fhandle, AM_DMX_DataCb *c
 	return ret;
 }
 
-/**\brief 设置一个过滤器对应的回调函数和用户参数
- * \param dev_no 解复用设备号
- * \param fhandle 过滤器句柄
- * \param[in] cb 回调函数
- * \param[in] data 回调函数的用户参数
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief Set the callback function and user parameters corresponding to a filter
+  * \param dev_no demultiplexing device number
+  * \param fhandle filter handle
+  * \param[in] cb callback function
+  * \param[in] data The user parameter of the callback function
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_SetCallback(int dev_no, int fhandle, AM_DMX_DataCb cb, void *data)
 {
 	AM_DEBUG("AM_NTSC_DMX_SetCallback fhandle = %d\n",fhandle);
@@ -647,13 +646,13 @@ AM_ErrorCode_t AM_NTSC_DMX_SetCallback(int dev_no, int fhandle, AM_DMX_DataCb cb
 	return ret;
 }
 
-/**\brief 设置解复用设备的输入源
- * \param dev_no 解复用设备号
- * \param src 输入源
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief Set the input source of the demux device
+  * \param dev_no demultiplexing device number
+  * \param src input source
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_SetSource(int dev_no, AM_VBI_DMX_Source_t src)
 {
 	AM_VBI_Device_t *dev;
@@ -685,12 +684,12 @@ AM_ErrorCode_t AM_NTSC_DMX_SetSource(int dev_no, AM_VBI_DMX_Source_t src)
 	return ret;
 }
 
-/**\brief DMX同步，可用于等待回调函数执行完毕
- * \param dev_no 解复用设备号
- * \return
- *   - AM_SUCCESS 成功
- *   - 其他值 错误代码(见am_dmx.h)
- */
+/**\brief DMX synchronization, which can be used to wait for the callback function to finish executing
+  * \param dev_no demultiplexing device number
+  * \return
+  * - AM_SUCCESS success
+  * - other value error code (see am_dmx.h)
+  */
 AM_ErrorCode_t AM_NTSC_DMX_Sync(int dev_no)
 {
 	AM_VBI_Device_t *dev;

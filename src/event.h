@@ -579,7 +579,7 @@ extern void		vbi_reset_prog_info(vbi_program_info *pi);
  * are set ev.ttx_page.raw_header is a pointer to the raw header data
  * (40 bytes), which remains valid until the event handler returns.
  * ev.ttx_page.pn_offset will be the offset (0 ... 37) of the three
- * digit page number in the raw or formatted header. Allways call
+ * digit page number in the raw or formatted header. Always call
  * vbi_fetch_vt_page() for proper translation of national characters
  * and character attributes, the raw header is only provided here
  * as a means to quickly detect changes.

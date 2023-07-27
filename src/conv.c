@@ -38,7 +38,7 @@
 
 #ifdef HAVE_ICONV
 
-#include "am_iconv.h"
+#include "iconv.h"
 
 struct _vbi_iconv_t {
 	iconv_t			icd;

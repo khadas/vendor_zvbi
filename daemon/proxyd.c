@@ -1127,7 +1127,7 @@ static vbi_bool vbi_proxyd_update_services( int dev_idx, PROXY_CLNT * p_new_req,
             result = vbi_proxyd_start_acq_thread(dev_idx);
       }
       else
-      {  /* no services set: not an error if clien't didn't request any */
+      {  /* no services set: not an error if client didn't request any */
          result = is_first;
       }
 

@@ -1208,7 +1208,7 @@ main				(int			argc,
 
 
 	init_helpers (argc, argv);
-	printf("zkinit_helpers\n");
+	printf("init_helpers\n");
 	option_in_file_format = FILE_FORMAT_SLICED;
 
 	#ifdef HAVE_GETOPT_LONG
@@ -1357,7 +1357,7 @@ main				(int			argc,
 	option_decode_caption = TRUE;
 	//option_in_file_name = argv[1];
 
-	printf("zkoption_decode_xds\n");
+	printf("option_decode_xds\n");
 	//printf("option_in_file_name%s\n",option_in_file_name);
 
 	if (0 != option_pfc_pgno) {

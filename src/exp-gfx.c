@@ -777,7 +777,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 
 	#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 		if (pg->pgno < 0) {
-			LOGI("nwpushuai do not display page number pg->pgno:%d ", pg->pgno);
+			LOGI("amlogic do not display page number pg->pgno:%d ", pg->pgno);
 		} else if ((pg->pgno >0x99) && (pg->pgno <0x900)) {
 			snprintf (page_no_buf, sizeof (page_no_buf), "P%x", pg->pgno);
 		} else	if((pg->pgno >0) && (pg->pgno <0x10)){
@@ -972,7 +972,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 			else
 			{
 				//In subtitle mode, page number position in color_map
-				// is unpredictable, so fix it to black background and white forground
+				// is unpredictable, so fix it to black background and white foreground
 				if (row == 0)
 				{
 					if (subtitle > 0)

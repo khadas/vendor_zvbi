@@ -3179,7 +3179,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				if (!(vbi->vt.subtitle)) {
 				    flof_navigation_bar(vbi, pg, vtp);
 				}
-				//only afer display page then display subpage bar
+				//only after display page then display subpage bar
 				//search state not display
 				draw_subpage_line (vbi, pg, vtp);
 

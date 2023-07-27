@@ -1455,7 +1455,7 @@ cc_misc_control_code		(struct cc_decoder *	cd,
 	   f = field (0 -> F1, 1 -> F2)
 	     -- EIA 608-B Section 8.4, 8.5. */
 
-	/* XXX The f flag is intended to detect accidential field
+	/* XXX The f flag is intended to detect accidental field
 	   swapping and we should use it for that purpose. */
 
 	switch (c2 & 15) {
@@ -3754,6 +3754,8 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 				 unsigned int		n_bytes)
 {
 	unsigned int c;
+	char* lang_korea;
+	lang_korea = strstr(dc->lang, "kor");
 	unsigned int valid_data;
 
 	c = buf[0];
@@ -3799,7 +3801,7 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 		}
 	}
 
-	if (unlikely (c == 0x18) /*&& lang_korea*/)
+	if (unlikely (c == 0x18) && lang_korea)
 	{
 		*se_length = 3;
 		c = buf[1]<<8|buf[2];
@@ -4691,7 +4693,7 @@ dtvcc_no_whole_command_data(const uint8_t * buf, int cc_count)
 	return FALSE;
 }
 
-/*korean q-tone is timing signal for advertisment, it start with 0f byte following with
+/*korean q-tone is timing signal for advertisement, it start with 0f byte following with
   style data.so we detect one frame if include 0f byte to judge q-tone.*/
 static vbi_bool
 dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
@@ -4710,7 +4712,7 @@ dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
 			break;
 		}
 	}
-	AM_DEBUG(0, "debug-cc has_q_tone_data:%d", has_q_tone_data);
+	//AM_DEBUG(0, "debug-cc has_q_tone_data:%d", has_q_tone_data);
 
 	return has_q_tone_data;
 }
@@ -4772,7 +4774,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 		cc_data_1 = buf[4 + i * 3];
 		cc_data_2 = buf[5 + i * 3];
 
-		AM_DEBUG(4,"cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
+		//AM_DEBUG(4,"cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
 
 #ifdef KOREAN_DETECT_Q_TONE_DATA
 		td->dtvcc.has_q_tone_data = dtvcc_detect_q_tone_data(buf, cc_count);
