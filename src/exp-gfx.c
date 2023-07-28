@@ -821,6 +821,13 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	}
 #endif
 
+	for (int i = 0; i < 8; ++i) {
+		if (time[i] == '\0') {
+			return;
+		}
+	}
+	time[8] = '\0';
+
 	if (time && strlen (time) != 0)
 	{
 		for (i=0; i<8; i++)
