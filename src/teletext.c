@@ -46,6 +46,9 @@
 #include <android/log.h>
 #endif
 
+#ifdef LINUX
+#define TELETEXT_DISPLAY_SUB_PGNO
+#endif
 
 //teletext graphics subtitle blackground
 //#define TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
@@ -2838,9 +2841,12 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	//bottom row of display row is used for displaying sub pg no.
 	//So skip it.
+	#ifndef TELETEXT_DISPLAY_SUB_PGNO
 	if (vbi->vt.use_subtitleserver && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
 		display_rows = 1;
 	}
+	#endif
+
 	for (row = 0; row < display_rows; row++) {
 		struct vbi_font_descr *font;
 		int mosaic_unicodes; /* 0xEE00 separate, 0xEE20 contiguous */
