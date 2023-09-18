@@ -56,6 +56,7 @@
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
 #define BLOCK_TOP_NAVIGATION_BAR
+#define FIX_NULL_FLOF_LINKS
 
 #define TT2_MIX_TRANSPARENT 1
 
@@ -332,11 +333,12 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 	pg->have_flof = FALSE;
 }
 
-static inline void
+static inline vbi_bool
 flof_links(vbi_page *pg, cache_page *vtp)
 {
 	vbi_char *acp = pg->text + LAST_ROW;
 	int i, j, k, col = -1, start = 0;
+	vbi_bool flof_links_flag = FALSE;
 
 	for (i = 0; i < COLUMNS + 1; i++) {
 		if (i == COLUMNS || (acp[i].foreground & 7) != col) {
@@ -356,8 +358,10 @@ flof_links(vbi_page *pg, cache_page *vtp)
 
 				pg->nav_link[k].pgno = vtp->data.lop.link[k].pgno;
 				pg->nav_link[k].subno = vtp->data.lop.link[k].subno;
+				flof_links_flag = TRUE;
 			} else if (k < 4) {
 				pg->nav_link[k].pgno = 0;
+				flof_links_flag = TRUE;
 			}
 
 			if (i >= COLUMNS)
@@ -370,6 +374,7 @@ flof_links(vbi_page *pg, cache_page *vtp)
 		if (start == i && acp[i].unicode == 0x0020)
 			start++;
 	}
+	return flof_links_flag;
 }
 
 static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp) {
@@ -3157,7 +3162,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					pg->nav_link[5].subno = vtp->data.lop.link[5].subno;
 				}
 				if (vtp->lop_packets & (1 << 24)) {
+					#ifdef FIX_NULL_FLOF_LINKS
+					if (!flof_links(pg, vtp)) flof_navigation_bar(vbi, pg, vtp);
+					#else
 					flof_links(pg, vtp);
+					#endif
 					draw_subpage_line (vbi, pg, vtp);
 				} else {
 					flof_navigation_bar(vbi, pg, vtp);
