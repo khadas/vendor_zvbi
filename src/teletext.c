@@ -53,6 +53,7 @@
 //teletext graphics subtitle blackground
 //#define TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
 
+#define EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR //The local enhancement data of the extended row is displayed in the color key label bar
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
 #define BLOCK_TOP_NAVIGATION_BAR
@@ -1796,7 +1797,11 @@ enhance(vbi_decoder *vbi,
 			 *  Row address triplets
 			 */
 			int s = p->data >> 5;
+			#ifdef EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR
+			int row = (p->address - COLUMNS) ? : (ROWS - 2);
+			#else
 			int row = (p->address - COLUMNS) ? : (ROWS - 1);
+			#endif
 			int column = 0;
 
 			if (pdc_hr)
