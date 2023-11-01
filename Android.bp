@@ -60,6 +60,7 @@ cc_library_static {
         "-DPACKAGE=\"zvbi\"",
         "-DVERSION=\"0.2.33\"",
         "-DANDROID",
+        "-DNEED_TELETEXT_USES_VECTOR_FONTS",
         "-Wno-error=tautological-pointer-compare",
     ],
 

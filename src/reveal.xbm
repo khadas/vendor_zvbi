@@ -1,7 +1,7 @@
-#define reveal_icon_width 24
-#define reveal_icon_height 10
+#define reveal_width 24
+#define reveal_height 10
 
-static char reveal_icon_bits[] = {
+static char reveal_bits[] = {
 	0x00,0x00,0x00,
 	0xFC,0xFF,0x3F,
 	0x02,0x00,0x40,

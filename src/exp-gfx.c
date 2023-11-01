@@ -38,11 +38,17 @@
 #include "exp-gfx.h"
 #include "vt.h" /* VBI_TRANSPARENT_BLACK */
 
+#ifdef NEED_TELETEXT_USES_VECTOR_FONTS
+#include "wstfont2_25.xbm"
+#include "reveal_25.xbm"
+#include "psymbol_25.xbm"
+#else
 #include "wstfont2.xbm"
+#include "reveal.xbm"
+#include "psymbol.xbm"
+#endif
 #include "bwstfont2.xbm"
 #include "ccfont2.xbm"
-#include "psymbol.xbm"
-#include "reveal_icon.xbm"
 
 #ifdef ANDROID
 #include <android/log.h>
@@ -55,15 +61,20 @@
 #define LOGE(...) printf(__VA_ARGS__)
 #endif
 
-/* Teletext character cell dimensions - hardcoded (DRCS) */
+#ifdef NEED_TELETEXT_USES_VECTOR_FONTS
+#define MULTIPLE 5
+#else
+#define MULTIPLE 1
+#endif
 
-#define TCW 12
-#define TCH 10
+/* Teletext character cell dimensions - hardcoded (DRCS) */
+#define TCW (12 * MULTIPLE)
+#define TCH (10 * MULTIPLE)
 
 #define TCPL (wstfont2_width / TCW * wstfont2_height / TCH)
 #define BTCPL (bwstfont2_width / TCW * bwstfont2_height / TCH)
 #define PSCPL (psymbol_width / TCW * psymbol_height / TCH)
-#define RVCPL (reveal_icon_width / TCW * reveal_icon_height / TCH)
+#define RVCPL (reveal_width / TCW * reveal_height / TCH)
 
 
 #define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
@@ -334,10 +345,17 @@ slant:
  * @return
  * Pixel @a i in plane @a p.
  */
+#ifndef NEED_TELETEXT_USES_VECTOR_FONTS
 #define peek(p, i)							\
 	((canvas_type == sizeof(uint8_t)) ? ((uint8_t *)(p))[i] :		\
 	 ((canvas_type == sizeof(uint16_t)) ? ((uint16_t *)(p))[i] :		\
 	  ((uint32_t *)(p))[i]))
+#else
+#define peek(p, i)							\
+	((canvas_type == sizeof(uint8_t)) ? ((uint8_t *)(p))[i] :		\
+	 ((canvas_type == sizeof(uint16_t)) ? ((uint64_t *)(p))[i] : 		\
+	  ((canvas_type == sizeof(uint32_t)) ? ((uint64_t *)(p))[i] : 0)))
+#endif
 
 /**
  * @internal
@@ -347,11 +365,17 @@ slant:
  *
  * Set pixel @a i in plane @a p to value @a v.
  */
+#ifndef NEED_TELETEXT_USES_VECTOR_FONTS
 #define poke(p, i, v)							\
 	((canvas_type == sizeof(uint8_t)) ? (((uint8_t *)(p))[i] = (v)) :	\
 	 ((canvas_type == sizeof(uint16_t)) ? (((uint16_t *)(p))[i] = (v)) :	\
 	  (((uint32_t *)(p))[i] = (v))))
-
+#else
+#define poke(p, i, v)                              \
+	((canvas_type == sizeof(uint8_t)) ? (((uint8_t *)(p))[i] = (v)) :	\
+	 (canvas_type == sizeof(uint16_t)) ? (((uint64_t *)(p))[i] = (v)) :		\
+	  ((canvas_type == sizeof(uint32_t)) ? (((uint64_t *)(p))[i] = (v)) : 0))
+#endif
 /**
  * @internal
  * @param canvas_type sizeof(char, short, int).
@@ -386,8 +410,8 @@ draw_char(int canvas_type, uint8_t *canvas, int rowstride,
 	int shift, x, y;
 
 	bold = !!bold;
-	assert(cw >= 8 && cw <= 16);
-	assert(ch >= 1 && cw <= 31);
+	assert(cw >= (8 * MULTIPLE) && cw <= (16 * MULTIPLE));
+	assert(ch >= (1 * MULTIPLE) && cw <= (31 * MULTIPLE));
 
 	x = glyph * cw;
 	shift = x & 7;
@@ -408,19 +432,21 @@ draw_char(int canvas_type, uint8_t *canvas, int rowstride,
 	}
 
 	for (y = 0; y < ch; underline >>= 1, y++) {
+		#ifndef NEED_TELETEXT_USES_VECTOR_FONTS
 		int bits = ~0;
-
+		#else
+		int64_t bits = ~0;
+		#endif
 		if (!(underline & 1)) {
-#ifdef __GNUC__
-#if defined (i386)
-			bits = (*((uint16_t *) src) >> shift);
-#else
-			/* unaligned/little endian */
-			bits = ((src[1] * 256 + src[0]) >> shift);
-#endif
-#else
-			bits = ((src[1] * 256 + src[0]) >> shift);
-#endif
+					#ifndef NEED_TELETEXT_USES_VECTOR_FONTS
+					bits = ((src[1] * 256 + src[0]) >> shift);
+					#else
+					if (MULTIPLE == 1) {
+						bits = (((int64_t)src[1] << 8 | (int64_t)src[0]) >> shift);
+					} else if (MULTIPLE == 5) {
+						bits = (((int64_t)src[7] << 56 | (int64_t)src[6] << 48 | (int64_t)src[5] << 40 | (int64_t)src[4] << 32 | (int64_t)src[3] << 24 | (int64_t)src[2] << 16 | (int64_t)src[1] << 8 | (int64_t)src[0]) >> shift);
+					}
+					#endif
 			bits |= bits << bold;
 		}
 
@@ -428,7 +454,6 @@ draw_char(int canvas_type, uint8_t *canvas, int rowstride,
 			case VBI_NORMAL_SIZE:
 				for (x = 0; x < cw; bits >>= 1, x++)
 					poke(canvas, x, peek(pen, bits & 1));
-
 				canvas += rowstride;
 
 				break;
@@ -490,7 +515,7 @@ draw_char(int canvas_type, uint8_t *canvas, int rowstride,
  * @param color Offset into color palette.
  * @param font Pointer to DRCS image. Each pixel is coded in four bits, an
  *   index into the color palette, and stored in LE order (i. e. first
- *   pixel 0x0F, second pixel 0xF0). Character size is 12 x 10 pixels,
+ *   pixel 0x0F, second pixel 0xF0). Character size is TCW x TCH pixels,
  *   60 bytes, without padding.
  * @param glyph Glyph number in font image, 0x00 ... 0x3F.
  * @param size Size of character, either NORMAL, DOUBLE_WIDTH (draws left
@@ -520,7 +545,7 @@ draw_drcs(int canvas_type, uint8_t *canvas, unsigned int rowstride,
 	switch (size) {
 		case VBI_NORMAL_SIZE:
 			for (y = 0; y < TCH; canvas += rowstride, y++)
-				for (x = 0; x < 12; src++, x += 2) {
+				for (x = 0; x < TCW; src++, x += 2) {
 					poke(canvas, x + 0, peek(pen, *src & 15));
 					poke(canvas, x + 1, peek(pen, *src >> 4));
 				}
@@ -531,7 +556,7 @@ draw_drcs(int canvas_type, uint8_t *canvas, unsigned int rowstride,
 
 		case VBI_DOUBLE_HEIGHT:
 			for (y = 0; y < TCH / 2; canvas += rowstride * 2, y++)
-				for (x = 0; x < 12; src++, x += 2) {
+				for (x = 0; x < TCW; src++, x += 2) {
 					col = peek(pen, *src & 15);
 					poke(canvas, x + 0, col);
 					poke(canvas, x + rowstride / canvas_type + 0, col);
@@ -544,7 +569,7 @@ draw_drcs(int canvas_type, uint8_t *canvas, unsigned int rowstride,
 
 		case VBI_DOUBLE_WIDTH:
 			for (y = 0; y < TCH; canvas += rowstride, y++)
-				for (x = 0; x < 12 * 2; src++, x += 4) {
+				for (x = 0; x < TCW * 2; src++, x += 4) {
 					col = peek(pen, *src & 15);
 					poke(canvas, x + 0, col);
 					poke(canvas, x + 1, col);
@@ -560,7 +585,7 @@ draw_drcs(int canvas_type, uint8_t *canvas, unsigned int rowstride,
 
 		case VBI_DOUBLE_SIZE:
 			for (y = 0; y < TCH / 2; canvas += rowstride * 2, y++)
-				for (x = 0; x < 12 * 2; src++, x += 4) {
+				for (x = 0; x < TCW * 2; src++, x += 4) {
 					col = peek(pen, *src & 15);
 					poke(canvas, x + 0, col);
 					poke(canvas, x + 1, col);
@@ -618,7 +643,7 @@ draw_blank(int canvas_type, uint8_t *canvas, unsigned int rowstride,
  * @param height Number of rows to draw, 1 ... pg->rows.
  *
  * Draw a subsection of a Closed Caption vbi_page. In this mode one
- * character occupies 16 x 26 pixels.
+ * character occupies CCW x CCH pixels.
  */
 void
 vbi_draw_cc_page_region(vbi_page *pg,
@@ -723,7 +748,7 @@ vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable) {
  *   an array of vbi_rgba or uint8_t), this must be at least
  *   @a rowstride * @a height * 10 bytes large.
  * @param rowstride @a canvas <em>byte</em> distance from line to line.
- *   If this is -1, pg->columns * 12 * sizeof(vbi_rgba) bytes will be assumed.
+ *   If this is -1, pg->columns * TCW * sizeof(vbi_rgba) bytes will be assumed.
  * @param column First source column, 0 ... pg->columns - 1.
  * @param row First source row, 0 ... pg->rows - 1.
  * @param width Number of columns to draw, 1 ... pg->columns.
@@ -735,7 +760,7 @@ vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable) {
  * @param subtitle If TRUE, draw subtitle mode teletext.
  *
  * Draw a subsection of a Teletext vbi_page. In this mode one
- * character occupies 12 x 10 pixels.  Note this function does
+ * character occupies TCW x TCH pixels.  Note this function does
  * not consider transparency (e.g. on boxed pages)
  */
 /*
@@ -836,9 +861,9 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	}
 
 	if (rowstride == -1)
-		rowstride = pg->columns * 12 * canvas_type;
+		rowstride = pg->columns * TCW * canvas_type;
 
-	row_adv = rowstride * 10 - width * 12 * canvas_type;
+	row_adv = rowstride * TCH - width * TCW * canvas_type;
 
 	conceal = !reveal;
 	off = !flash_on;
@@ -1159,7 +1184,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 								   canvas,
 								   rowstride,
 								   (uint8_t *) &pen,
-								   (uint8_t *) reveal_icon_bits,
+								   (uint8_t *) reveal_bits,
 								   RVCPL, TCW, TCH,
 								   unicode - 0x18,
 								   0,
@@ -1221,7 +1246,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
  * @param h
  *
  * @deprecated
- * Character cells are 12 x 10 for Teletext and 16 x 26 for Caption.
+ * Character cells are TCW x TCH for Teletext and CCW x CCH for Caption.
  * Page size is in vbi_page.
  */
 void
@@ -1236,7 +1261,7 @@ vbi_get_max_rendered_size(int *w, int *h)
  * @param h
  *
  * @deprecated
- * Character cells are 12 x 10 for Teletext and 16 x 26 for Caption.
+ * Character cells are TCW x TCH for Teletext and CCW x CCH for Caption.
  */
 void
 vbi_get_vt_cell_size(int *w, int *h)
