@@ -47,10 +47,12 @@ cc_library_static {
     ],
 
     cflags: [
+        "-Werror", // Must keep this, never allow remove this flag!
         "-Wno-unused-parameter",
         "-Wno-unused-function",
         "-Wno-unused-variable",
         "-Wno-invalid-source-encoding", // not throw this when saw utf8 name
+        "-Wno-error=tautological-pointer-compare",
         "-D_REENTRANT",
         "-D_GNU_SOURCE",
         "-DENABLE_DVB=1",
@@ -59,9 +61,15 @@ cc_library_static {
         "-DHAVE_ICONV=1",
         "-DPACKAGE=\"zvbi\"",
         "-DVERSION=\"0.2.33\"",
-        "-DANDROID",
+        "-DDEBUG_ANDROID",
+        "-DNEED_TELETEXT_FIX_NULL_FLOF_LINKS",
+        "-DNEED_TELETEXT_FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY",
+        "-DNEED_TELETEXT_BLOCK_TOP_NAVIGATION_BAR",
+        "-DNEED_TELETEXT_EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR",
+        "-DNEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND",
         "-DNEED_TELETEXT_USES_VECTOR_FONTS",
-        "-Wno-error=tautological-pointer-compare",
+        //"-DNEED_TELETEXT_UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND",
+        //"-DNEED_TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND", ////teletext graphics subtitle blackground
     ],
 
     arch: {

@@ -26,16 +26,8 @@
 #endif
 
 #include <errno.h>
-
 #include "version.h"
-#ifdef ANDROID
-#include <android/log.h>
-
-#define LOG_TAG    "ZVBI"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#endif
+#include "log_zvbi_android.h"
 
 
 #if 2 == VBI_VERSION_MINOR
@@ -71,7 +63,6 @@
 #  define CACHE_CONSISTENCY 0
 #endif
 
-#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 #define INVALID_SUBPAGE_NUMBER 0x255
 
 static void
@@ -1117,8 +1108,8 @@ page_by_pgno			(vbi_cache *		ca,
 			cache_page_dump (cp, stderr);
 			fputc ('\n', stderr);
 		}
-		#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
-			LOGI("page_by_pgno cp->pgno:0x%x pgno:0x%x subno_mask:0x%x cp->subno:0x%x subno:0x%x", cp->pgno, pgno, subno_mask, cp->subno, subno);
+		#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+			ALOGI("page_by_pgno cp->pgno:0x%x pgno:0x%x subno_mask:0x%x cp->subno:0x%x subno:0x%x", cp->pgno, pgno, subno_mask, cp->subno, subno);
 			if (cp->pgno == pgno
 				&& ((cp->subno & subno_mask) == subno || subno == INVALID_SUBPAGE_NUMBER)
 				&& (!cn || cp->network == cn)) {
@@ -1326,7 +1317,7 @@ _vbi_cache_get_page		(vbi_cache *		ca,
 
 
 	if (!ca ||!cn) {
-		LOGI("_vbi_cache_get_page ca or cn is NULL");
+		ALOGI("_vbi_cache_get_page ca or cn is NULL");
 		return NULL;
 	}
 	if (CACHE_CONSISTENCY)
@@ -1376,7 +1367,7 @@ _vbi_cache_find_next_page       (vbi_cache * ca,
 	assert (NULL != ca);
 
 	if (!ca) {
-		LOGI("_vbi_cache_find_next_page ca is NULL");
+		ALOGI("_vbi_cache_find_next_page ca is NULL");
 		return NULL;
 	}
 
@@ -1419,7 +1410,7 @@ _vbi_cache_find_next_page_2       (vbi_cache * ca,
 
 	assert (NULL != ca);
 	if (!ca) {
-		LOGI("_vbi_cache_find_next_page_2 ca is NULL");
+		ALOGI("_vbi_cache_find_next_page_2 ca is NULL");
 		return NULL;
 	}
 	if (pgno < 0x100 || pgno > 0x8FF || 0xFF == (pgno & 0xFF)) {
@@ -1473,7 +1464,7 @@ _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len)
 	assert (NULL != ca);
 	assert (left >= 0);
 	if (!ca) {
-		LOGI("_vbi_cache_get_sub_info ca is NULL");
+		ALOGI("_vbi_cache_get_sub_info ca is NULL");
 		return FALSE;
 	}
 	if (pgno < 0x100 || pgno > 0x8FF || 0xFF == (pgno & 0xFF)) {
@@ -1668,7 +1659,7 @@ _vbi_cache_put_page		(vbi_cache *		ca,
 	/* EN 300 706 Section A.1, E.2. */
 
 	if (0xFF == (cp->pgno & 0xFF)) {
-		LOGI ("Invalid pgno 0x%x.!!!", cp->pgno);
+		ALOGI ("Invalid pgno 0x%x.!!!", cp->pgno);
 		//return NULL;
 	}
 
@@ -1688,7 +1679,7 @@ _vbi_cache_put_page		(vbi_cache *		ca,
 
 			if (VBI_CLOCK_PAGE == page_type
 			    || subno >= 0x0100) {
-			    //LOGI("Clock page");
+			    //ALOGI("Clock page");
 				/* A clock page or a rolling page without
 				   subpages (Section A.1 Note 1).
 				   One version. */

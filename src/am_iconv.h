@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#ifdef ANDROID
+#ifdef DEBUG_ANDROID
 #include <malloc.h>
 #include <unicode/ucnv.h>
 #include <android/log.h>

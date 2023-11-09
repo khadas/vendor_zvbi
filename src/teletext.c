@@ -42,45 +42,12 @@
 #include "hamm.h"
 #include "lang.h"
 #include "teletext_decoder.h"
-#ifdef ANDROID
-#include <android/log.h>
-#endif
-
-#ifdef LINUX
-#define TELETEXT_DISPLAY_SUB_PGNO
-#endif
-
-//teletext graphics subtitle blackground
-//#define TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
-
-#define EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR //The local enhancement data of the extended row is displayed in the color key label bar
-#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
-#define FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
-#define BLOCK_TOP_NAVIGATION_BAR
-#define FIX_NULL_FLOF_LINKS
-
-#define TT2_MIX_TRANSPARENT 1
-
-//#define UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
-
-
-extern const char _zvbi_intl_domainname[];
-
 #include "intl-priv.h"
-
-#define LOG_TAG    "ZVBI"
-#ifdef ANDROID
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#endif
-
-#define SUBPAGE_NUMBER_FORMATE 16  //16 for the hexadecimal;10 for the decimal
+#include "log_zvbi_android.h"
 
 #ifndef TELETEXT_DEBUG
 #  define TELETEXT_DEBUG 0
 #endif
-
 #define printv(templ, args...)						\
 do {									\
 	if (TELETEXT_DEBUG)						\
@@ -94,6 +61,10 @@ do {									\
 #define LAST_LAST_ROW		((ROWS - 1) * EXT_COLUMNS)
 #define ENABLE_PAGE_BAR  TRUE
 #define SUBPAGE_MASK 0x3f7f
+#define SUBPAGE_NUMBER_FORMATE 16 // 16 for the hexadecimal;10 for the decimal
+#define TT2_MIX_TRANSPARENT 1
+
+extern const char _zvbi_intl_domainname[];
 extern vbi_bool
 _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len);
 extern vbi_bool
@@ -299,7 +270,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 
 	for (i = 0; i < 4; i++) {
 		ii = i * 10 + 3;
-		#ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+		#ifdef NEED_TELETEXT_FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
 		if (!(vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
 			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
 			vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) >=vbi_bcd2dec(0x1) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 8) & 0x00F) <= vbi_bcd2dec(0x8))) {
@@ -317,7 +288,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;//flof_link_col[i];
 			} else {
-				#ifdef UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
+				#ifdef NEED_TELETEXT_UNREMOVED_MIX_VIDEO_MODE_FOUR_COLOR_KEY_BACKGROUND
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;
 				#else
@@ -381,7 +352,7 @@ flof_links(vbi_page *pg, cache_page *vtp)
 static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp) {
     if (vbi->vt.current_pgno == pg->pgno) {
         int temp_pgno = vbi->vt.current_pgno;
-        #ifdef FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
+        #ifdef NEED_TELETEXT_FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY
         for (int i = 0; i < 4; i++) {
             if (!(vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) >= vbi_bcd2dec(0x0) && vbi_bcd2dec(vtp->data.lop.link[i].pgno & 0x00F) <= vbi_bcd2dec(0x9) &&
                     vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) >=vbi_bcd2dec(0x0) && vbi_bcd2dec((vtp->data.lop.link[i].pgno >> 4) & 0x00F) <= vbi_bcd2dec(0x9) &&
@@ -390,7 +361,7 @@ static inline void draw_subpage_line(vbi_decoder *vbi, vbi_page *pg, cache_page 
             }
         }
         #endif
-        LOGI("current_pgno:0x%x, red:0x%x, green:0x%x, yellow:0x%x blue:0x%x \n",temp_pgno, vtp->data.lop.link[0].pgno,vtp->data.lop.link[1].pgno,vtp->data.lop.link[2].pgno,vtp->data.lop.link[3].pgno);
+        ALOGI("current_pgno:0x%x, red:0x%x, green:0x%x, yellow:0x%x blue:0x%x \n",temp_pgno, vtp->data.lop.link[0].pgno,vtp->data.lop.link[1].pgno,vtp->data.lop.link[2].pgno,vtp->data.lop.link[3].pgno);
         int subsarray[36]; //36 is the size of the vtp->data.lop.link
         int length = 36;
         vbi_bool ret = vbi_get_sub_info(vbi, temp_pgno, subsarray, &length);
@@ -1415,10 +1386,10 @@ character_set_designation(struct vbi_font_descr **font,
 
 	for (i = 0; i < 2; i++) {
 		int charset_code = ext->charset_code[i];
-		LOGI("i:%d charset_code:%d",i,charset_code);
+		ALOGI("i:%d charset_code:%d",i,charset_code);
 
 		if (VALID_CHARACTER_SET(charset_code)) {
-			LOGI("VALID_CHARACTER_SET 1 i:%d charset_code:%d",i,charset_code);
+			ALOGI("VALID_CHARACTER_SET 1 i:%d charset_code:%d",i,charset_code);
 			//if (0x10 == charset_code) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
 		}
@@ -1426,10 +1397,10 @@ character_set_designation(struct vbi_font_descr **font,
 		charset_code = (charset_code & ~7) + vtp->national;
 
 		if (VALID_CHARACTER_SET(charset_code)) {
-			LOGI("VALID_CHARACTER_SET 2 i:%d charset_code:%d",i,charset_code);
+			ALOGI("VALID_CHARACTER_SET 2 i:%d charset_code:%d",i,charset_code);
 			//if ( 0x14 == charset_code ) charset_code = 0x24;
 			font[i] = vbi_font_descriptors + charset_code;
-			LOGI("pgno %x font %d charset_code %d national %d final %d",
+			ALOGI("pgno %x font %d charset_code %d national %d final %d",
 				vtp->pgno, i, ext->charset_code[i], vtp->national, charset_code);
 		}
 	}
@@ -1468,7 +1439,7 @@ resolve_obj_address		(vbi_decoder *		vbi,
 	packet = ((address >> 7) & 3);
 	i = ((address >> 5) & 3) * 3 + type;
 
-	LOGI("obj invocation, source page %03x/%04x, "
+	ALOGI("obj invocation, source page %03x/%04x, "
 		"pointer packet %d triplet %d\n", pgno, s1, packet + 1, i);
 
 	vtp = _vbi_cache_get_page (vbi->ca, vbi->cn, pgno, s1, 0x000F);
@@ -1797,7 +1768,7 @@ enhance(vbi_decoder *vbi,
 			 *  Row address triplets
 			 */
 			int s = p->data >> 5;
-			#ifdef EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR
+			#ifdef NEED_TELETEXT_EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR
 			int row = (p->address - COLUMNS) ? : (ROWS - 2);
 			#else
 			int row = (p->address - COLUMNS) ? : (ROWS - 1);
@@ -2215,7 +2186,7 @@ enhance(vbi_decoder *vbi,
 				break;
 
 			case 0x08:		/* modified G0 and G2 character set designation */
-				LOGI("modified G0 and G2 character set designation pgno %x %d", pg->pgno, pg->pgno);
+				ALOGI("modified G0 and G2 character set designation pgno %x %d", pg->pgno, pg->pgno);
 				if (max_level >= VBI_WST_LEVEL_2p5) {
 					if (column > active_column)
 						flush(column);
@@ -2230,7 +2201,7 @@ enhance(vbi_decoder *vbi,
 				break;
 
 			case 0x09:		/* G0 character */
-				LOGI("G0 character enhance pgno %x", pg->pgno);
+				ALOGI("G0 character enhance pgno %x", pg->pgno);
 				if (max_level >= VBI_WST_LEVEL_2p5 && p->data >= 0x20) {
 					if (column > active_column)
 						flush(column);
@@ -2282,7 +2253,7 @@ enhance(vbi_decoder *vbi,
 
 			case 0x0D:		/* drcs character invocation */
 			{
-				LOGI("drcs character enhance pgno %x", pg->pgno);
+				ALOGI("drcs character enhance pgno %x", pg->pgno);
 				int normal = p->data >> 6;
 				int offset = p->data & 0x3F;
 				enum ttx_page_function function;
@@ -2423,7 +2394,7 @@ enhance(vbi_decoder *vbi,
 			}
 
 			case 0x0F:		/* G2 character */
-				LOGI("G2 character enhance pgno %x data: 0x%x", pg->pgno, p->data);
+				ALOGI("G2 character enhance pgno %x data: 0x%x", pg->pgno, p->data);
 				if (p->data >= 0x20) {
 					if (column > active_column)
 						flush(column);
@@ -2442,7 +2413,7 @@ enhance(vbi_decoder *vbi,
 
 					unicode = vbi_teletext_composed_unicode(
 						p->mode - 0x10, p->data);
-					LOGI("G2 character diacritical marks pgno %x data 0x%x mode 0x%x unicode 0x%x",
+					ALOGI("G2 character diacritical marks pgno %x data 0x%x mode 0x%x unicode 0x%x",
 						 pg->pgno, p->data, p->mode, unicode);
 			store:
 					printv("enh row %d col %d print 0x%02x/0x%02x -> 0x%04x\n",
@@ -2751,7 +2722,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	    vtp->function != PAGE_FUNCTION_EACEM_TRIGGER)
 		return FALSE;
 
-	LOGI("Formatting page %03x/%04x flags %d pg=%p lev=%d rows=%d nav=%d",
+	ALOGI("Formatting page %03x/%04x flags %d pg=%p lev=%d rows=%d nav=%d",
 	       vtp->pgno, vtp->subno, vtp->flags, pg, max_level, display_rows, navigation);
 
 	memcpy(vtp->data.lop.raw[0]+32, vbi->vt.header+32, 8);
@@ -2781,12 +2752,12 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	if (vtp->x28_designations & 0x11)
 	{
-		LOGI("format_vt_page use ext_lop ext");
+		ALOGI("format_vt_page use ext_lop ext");
 		ext = &vtp->data.ext_lop.ext;
 	}
 	else
 	{
-		LOGI("format_vt_page use mag ext");
+		ALOGI("format_vt_page use mag ext");
 		ext = &mag->extension;
 	}
 
@@ -2851,12 +2822,11 @@ vbi_format_vt_page(vbi_decoder *vbi,
 
 	//bottom row of display row is used for displaying sub pg no.
 	//So skip it.
-	#ifndef TELETEXT_DISPLAY_SUB_PGNO
+	#ifndef NEED_TELETEXT_DISPLAY_SUB_PGNO
 	if (vbi->vt.use_subtitleserver && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno)) {
 		display_rows = 1;
 	}
 	#endif
-
 	for (row = 0; row < display_rows; row++) {
 		struct vbi_font_descr *font;
 		int mosaic_unicodes; /* 0xEE00 separate, 0xEE20 contiguous */
@@ -2939,7 +2909,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 			if (!inside_box && (vtp->flags  & 0xc000) && !(row == 0 && column < 4))
 			{
 				 ac.unicode = 0x20;
-				 //LOGI("pgno %x row %d, col %d, inside_box", pg->pgno, row, column);
+				 //ALOGI("pgno %x row %d, col %d, inside_box", pg->pgno, row, column);
 			}
 			else if (raw <= 0x1F) {
 				ac.unicode = (hold & mosaic) ? held_mosaic_unicode : 0x0020;
@@ -2950,7 +2920,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				} else {
 					if (row == 0 && column < 1) {
 						ac.unicode = 0x50;
-						//LOGI("raw:%0x mosaic:%d\n", raw,mosaic);
+						//ALOGI("raw:%0x mosaic:%d\n", raw,mosaic);
 					} else {
 						ac.unicode = vbi_teletext_unicode(font->G0,font->subset, raw);
 					}
@@ -3051,7 +3021,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 			}
 
 			//keep bitmap subtitle first info bar data for project special requirement
-			#ifdef TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
+			#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_BLACKGROUND
 				if (row == 0 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
 					pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
 					pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
@@ -3059,7 +3029,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 			#endif
 
 			//keep bitmap subtitle page number data for project special requirement
-			#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+			#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 				if (row == 0 && column < 4 && vbi->vt.subtitle && vbi->vt.subtitleMode == VBI_TELETEXT_BITMAP_SUB) {
 					pg->text[column].unicode = _vbi_to_ascii((unsigned)vtp->data.lop.raw[0][column]);
 					pg->subtitleMode = VBI_TELETEXT_BITMAP_SUBTITLE;
@@ -3130,7 +3100,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		}
 
 		if (vtp->x26_designations & 1) {
-			LOGI("pgno %x enhancement packets %08x\n",
+			ALOGI("pgno %x enhancement packets %08x\n",
 			       pg->pgno,vtp->x26_designations);
 			success = enhance(vbi, mag, ext, pg, vtp, LOCAL_ENHANCEMENT_DATA,
 				vtp->data.enh_lop.enh, elements(vtp->data.enh_lop.enh),
@@ -3167,7 +3137,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 					pg->nav_link[5].subno = vtp->data.lop.link[5].subno;
 				}
 				if (vtp->lop_packets & (1 << 24)) {
-					#ifdef FIX_NULL_FLOF_LINKS
+					#ifdef NEED_TELETEXT_FIX_NULL_FLOF_LINKS
 					if (!flof_links(pg, vtp)) flof_navigation_bar(vbi, pg, vtp);
 					#else
 					flof_links(pg, vtp);
@@ -3178,7 +3148,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 				    draw_subpage_line (vbi, pg, vtp);
 				}
 			}
-			#ifndef BLOCK_TOP_NAVIGATION_BAR
+			#ifndef NEED_TELETEXT_BLOCK_TOP_NAVIGATION_BAR
 			else if (vbi->cn->have_top) {
 				top_navigation_bar(vbi, pg, vtp);
 				draw_subpage_line (vbi, pg, vtp);
@@ -3212,7 +3182,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	column_41 (pg, ext);
 	if (ENABLE_PAGE_BAR && !(vbi->vt.subtitle) && (vbi->vt.current_pgno != pg->pgno) && vbi->vt.use_subtitleserver) {
 		vbi_char ac;
-		LOGI(" vtp->flags = 0x%x",vtp->flags);
+		ALOGI(" vtp->flags = 0x%x",vtp->flags);
 		memset(&ac, 0, sizeof(ac));
 		ac.foreground	= VBI_WHITE;
 		ac.background	= VBI_MAGENTA;

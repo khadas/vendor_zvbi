@@ -30,19 +30,8 @@
 #include <assert.h>
 
 #include "lang.h"
-#ifdef ANDROID
-#include <android/log.h>
-#endif
+#include "log_zvbi_android.h"
 
-#define LOG_TAG    "ZVBI"
-#ifdef ANDROID
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#define LOGE(...) printf(__VA_ARGS__)
-#endif
 
 /*
  *  Teletext font descriptors
@@ -404,7 +393,7 @@ vbi_teletext_unicode(vbi_character_set s, vbi_national_subset n, unsigned int c)
 	int i;
 
 	assert(c >= 0x20 && c <= 0x7F);
-	//LOGE("vbi_character_set %d vbi_national_subset %d unicode 0x%x", s, n, c);
+	//ALOGE("vbi_character_set %d vbi_national_subset %d unicode 0x%x", s, n, c);
 	switch (s) {
 	case LATIN_G0:
 		/* shortcut */

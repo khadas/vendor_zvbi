@@ -33,34 +33,10 @@
 
 #include "libzvbi.h"
 #include "dtvcc.h"
-
-#ifdef ANDROID
-#include <android/log.h>
-#ifndef TAG_EXT
-#define TAG_EXT
-#endif
-
-#define log_print(...) __android_log_print(ANDROID_LOG_INFO, "ZVBI" TAG_EXT, __VA_ARGS__)
-#define AM_DEBUG(_level,_fmt...) \
-	log_print(_fmt)
-#else
-//for buildroot begin
-#undef AM_DEBUG
-#define AM_DEBUG(_level,_fmt...) \
-	do {\
-		fprintf(stderr, "AM_DEBUG:(\"%s\" %d)", __FILE__, __LINE__);\
-		fprintf(stderr, _fmt);\
-		fprintf(stderr, "\n");\
-	} while (0) \
-//for buildroot end
-#endif//end ANDROID
+#include "log_zvbi_android.h"
 
 
 #define elements(array) (sizeof(array) / sizeof(array[0]))
-
-#define LOG_TAG    "ZVBI"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 #if __GNUC__ < 3
 #  define likely(expr) (expr)
@@ -2510,7 +2486,7 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	//sequence number will change, and call dtvcc_reset();so here dw will be null, this line cc will
 	//lost, so we set default command for workaround
 	if (NULL == dw && c == 0x3e) {
-		AM_DEBUG(0, "debug-cc window null! First frame is not set window command, try set default!");
+		ALOGE("debug-cc window null! First frame is not set window command, try set default!");
 		dtvcc_default_command(dc, ds);
 		dw = ds->curr_window;
 	}
@@ -2518,7 +2494,7 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 
 	if (NULL == dw) {
 		ds->error_line = __LINE__;
-		AM_DEBUG(0, "debug-cc Error! Dtvcc Window null !");
+		ALOGE("debug-cc Error! Dtvcc Window null !");
 		return FALSE;
 	}
 	dw->latest_cmd_cr = 0;
@@ -2528,7 +2504,7 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 		return TRUE;
 	column = dw->curr_column;
 	row = dw->curr_row;
-	AM_DEBUG(AM_DEBUG_LEVEL, "debug-cc row:%d, column:%d, dw->column:%d, c:%x", row ,column, dw->column_count, c);
+	ALOGI("debug-cc row:%d, column:%d, dw->column:%d, c:%x", row ,column, dw->column_count, c);
 
 	/* FIXME how should we handle TEXT_TAG_NOT_DISPLAYABLE? */
 	/* Add row column lock support */
@@ -3104,7 +3080,7 @@ dtvcc_define_window		(struct dtvcc_decoder *	dc,
 	char* lang_korea;
 	int column_count;
 	lang_korea = strstr(dc->lang, "kor");
-	AM_DEBUG(0, "kor lang, width 84");
+	ALOGE("kor lang, width 84");
 
 	/* Korea has full word and half word */
 	if (lang_korea)
@@ -3323,7 +3299,7 @@ dtvcc_carriage_return		(struct dtvcc_decoder *	dc,
 	case DIR_TOP_BOTTOM:
 		if (dw->style.print_direction == DIR_RIGHT_LEFT)
 		{
-			AM_DEBUG(0, "CR: print_r_l cur_col %d row %d", dw->curr_column, dw->curr_row);
+			ALOGE("CR: print_r_l cur_col %d row %d", dw->curr_column, dw->curr_row);
 			dw->curr_column = dw->column_count - 1;
 			if (row > 0) {
 				dw->curr_row = row - 1;
@@ -3368,7 +3344,7 @@ dtvcc_carriage_return		(struct dtvcc_decoder *	dc,
 				// carriage return + print[left->rignth] + scroll botoom->top = roll up
 				dw->style.need_rollup = TRUE;
 				dw->style.curr_row = dw->curr_row;
-				AM_DEBUG(0, "CR: rollup");
+				ALOGE("CR: rollup");
 			}
 		}
 		dw->streamed >>= 1;
@@ -3591,7 +3567,7 @@ dtvcc_delay_cmd (struct dtvcc_decoder *	dc,
 		ds->delay_timer.tv_sec = now_ts.tv_sec + 1;
 		ds->delay = 1;
 		ds->delay_cancel = 0;
-		//AM_DEBUG(1, "Enter delay cmd, now %d until %d", now_ts.tv_sec, ds->delay_timer.tv_sec);
+		//ALOGI("Enter delay cmd, now %d until %d", now_ts.tv_sec, ds->delay_timer.tv_sec);
 	}
 	else if (delay_cmd == 0x8E)
 	{
@@ -3742,7 +3718,7 @@ dtvcc_ignore_invalid_data (unsigned int c)
 						valid_data = 0;
 				}
 		}
-		AM_DEBUG(0, "debug-cc cc data:%x, invalid_data %x", c, valid_data);
+		ALOGE("debug-cc cc data:%x, invalid_data %x", c, valid_data);
 		return valid_data;
 }
 
@@ -3759,14 +3735,14 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 	unsigned int valid_data;
 
 	c = buf[0];
-	AM_DEBUG(0, "debug-cc decode_se c:%x,n_bytes:%d", c, n_bytes);
+	ALOGE("debug-cc decode_se c:%x,n_bytes:%d", c, n_bytes);
 
 	/*fix no 0x18 byte pair*/
 	if (!dc->has_dtvstart_header) {
 		if (n_bytes > 1 && dc->first_valid_data &&  (c != 0) && (c!= 0x18) && (buf[1] != 0x18)) {
 			*se_length = 2;
 			c = buf[0]<<8|buf[1];
-			AM_DEBUG(0, "debug-cc warning!Adjust to c:%x", c);
+			ALOGE("debug-cc warning!Adjust to c:%x", c);
 			dc->first_valid_data = FALSE;
 
 
@@ -3774,7 +3750,7 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 			valid_data = dtvcc_ignore_invalid_data(c);
 			c = valid_data;
 			if (c == 0x2a || c == 0x2e || !c) {
-				//AM_DEBUG(0, "debug-cc warning! error info, need delete %x", c);
+				//ALOGE("debug-cc warning! error info, need delete %x", c);
 				return TRUE;
 			}
 			return dtvcc_put_char (dc, ds, c);
@@ -3790,12 +3766,12 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 			valid_data = dtvcc_ignore_invalid_data(c);
 			c = valid_data;
 
-			AM_DEBUG(0, "debug-cc warning!Adjust one byte c:%x", c);
+			ALOGE("debug-cc warning!Adjust one byte c:%x", c);
 			switch (c) {
 				case 0:
 					return TRUE;
 				case 0x2a:
-					//AM_DEBUG(0, "debug-cc warning! error info, need delete %x", c);
+					//ALOGE("debug-cc warning! error info, need delete %x", c);
 					return TRUE;
 			}
 		}
@@ -3805,7 +3781,7 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 	{
 		*se_length = 3;
 		c = buf[1]<<8|buf[2];
-		AM_DEBUG(0, "lang korea decode_se 0x%x", c);
+		ALOGE("lang korea decode_se 0x%x", c);
 
 		return dtvcc_put_char (dc, ds, c);
 	}
@@ -3823,7 +3799,7 @@ dtvcc_decode_se			(struct dtvcc_decoder *	dc,
 
 	if (0x10 != c) {
 		/* C0/C1 control code. */
-		//AM_DEBUG(0, "debug-cc dtvcc command c:%x", c);
+		//ALOGE("debug-cc dtvcc command c:%x", c);
 		return dtvcc_command (dc, ds, se_length,
 				      buf, n_bytes);
 	}
@@ -3880,12 +3856,12 @@ dtvcc_decode_syntactic_elements	(struct dtvcc_decoder *	dc,
 	struct timespec ts_now;
 
 #if 0
-	AM_DEBUG(1, "+++++++++++++++++++++ servie %d\n", n_bytes);
+	ALOGI("+++++++++++++++++++++ servie %d\n", n_bytes);
 	{
 		int i;
 
 		for (i = 0; i < n_bytes; i ++)
-			AM_DEBUG(1, "++++++++++++++ %02x ", buf[i]);
+			ALOGI("++++++++++++++ %02x ", buf[i]);
 	}
 #endif
 	while (n_bytes > 0) {
@@ -3922,7 +3898,7 @@ dtvcc_try_decode_channels (struct dtvcc_decoder *dc)
 		if (!ds->delay ||
 			(ds->delay && ds->service_data_in>=128))
 		{
-			//AM_DEBUG(1, "service datain %d", ds->service_data_in);
+			//ALOGI("service datain %d", ds->service_data_in);
 			success = dtvcc_decode_syntactic_elements
 				(dc, ds, ds->service_data, ds->service_data_in);
 			if (ds->service_data_in >= 128)
@@ -3976,7 +3952,7 @@ dtvcc_decode_packet		(struct dtvcc_decoder *	dc,
 		dc->next_sequence_number = (sequence_number+1)&3;
 	}
 #endif
-	//AM_DEBUG(0, "sn %d nsn %d", sequence_number, dc->next_sequence_number);
+	//ALOGE("sn %d nsn %d", sequence_number, dc->next_sequence_number);
 	packet_size_code = dc->packet[0] & 0x3F;
 	packet_size = 128;
 	if (packet_size_code > 0)
@@ -4189,7 +4165,7 @@ dtvcc_try_decode_packet		(struct dtvcc_decoder *	dc,
 				in = ds->service_data_in;
 				if (block_size + in > 128)
 				{
-					AM_DEBUG(0, "Unexpect data length, warn");
+					ALOGE("Unexpect data length, warn");
 					block_size = 128 - in;
 				}
 				memcpy (ds->service_data + in,
@@ -4225,7 +4201,7 @@ dtvcc_try_decode_packet		(struct dtvcc_decoder *	dc,
 					if (parsed + in > 128)
 					{
 						parsed = 128 - in;
-						AM_DEBUG(0, "Unexpect data length, warn");
+						ALOGE("Unexpect data length, warn");
 					}
 					memcpy (ds->service_data + in,
 							p + header_size,
@@ -4390,7 +4366,7 @@ static void dtvcc_window_to_page(vbi_decoder *vbi, struct dtvcc_window *dw, stru
 			else
 				c = '0' + (j%10);
 			ac.unicode = dtvcc_unicode (c);
-			LOGI("TEXT(%x): %c", ac.unicode, ac.unicode);
+			ALOGI("TEXT(%x): %c", ac.unicode, ac.unicode);
 			pg->text[i*pg->columns + j] = ac;
 		}
 	}
@@ -4496,7 +4472,7 @@ static void update_service_status_internal (struct tvcc_decoder *td)
 			((ts_now.tv_sec == ds->delay_timer.tv_sec) &&(ts_now.tv_nsec > ds->delay_timer.tv_nsec)) ||
 			ds->delay_cancel)
 			{
-				//AM_DEBUG(1, "delay timeup");
+				//ALOGI("delay timeup");
 				ds->delay = 0;
 				ds->delay_cancel = 0;
 				dtvcc_decode_syntactic_elements
@@ -4607,7 +4583,7 @@ calc_packet_code_byte(struct dtvcc_decoder *	dc, const uint8_t * buf, int cc_cou
 	}
 
 	packet_code_byte = (vaild_byte_pair + 1);
-	AM_DEBUG(0, "debug-cc packet_code_byte:0x%x(%d)", packet_code_byte, packet_code_byte);
+	ALOGE("debug-cc packet_code_byte:0x%x(%d)", packet_code_byte, packet_code_byte);
 	return packet_code_byte;
 }
 
@@ -4642,7 +4618,7 @@ calc_block_size_byte(const uint8_t * buf, int cc_count)
 	}
 
 	block_byte = valid_data_bytes | 0x20; /*0x20: service number:1*/
-	AM_DEBUG(0, "debug-cc valid_data_byte:%d, block_byte:0x%x", valid_data_bytes, block_byte);
+	ALOGE("debug-cc valid_data_byte:%d, block_byte:0x%x", valid_data_bytes, block_byte);
 	return block_byte;
 }
 
@@ -4651,11 +4627,11 @@ dtvcc_have_start_header(const uint8_t * buf, int cc_count)
 {
 	for (int i = 0; i < cc_count - 1; ++i) {/*last byte is 0xff, so minus 1*/
 		if (buf[3 + i * 3] == 0xff) {
-			AM_DEBUG(0, "debug-cc have dtvcc start header!");
+			ALOGE("debug-cc have dtvcc start header!");
 			return TRUE;
 		}
 	}
-	AM_DEBUG(0, "debug-cc not have dtvcc start header!");
+	ALOGE("debug-cc not have dtvcc start header!");
 
 	return FALSE;
 }
@@ -4673,7 +4649,7 @@ dtvcc_no_whole_command_data(const uint8_t * buf, int cc_count)
 		cc_data_1 = buf[4 + i * 3];
 		cc_data_2 = buf[5 + i * 3];
 		if (cc_data_1 == 0x99 && cc_data_2 == 0x38) {//99 38: DFx DefineWindow
-			//AM_DEBUG(0, "debug-cccc have style header, continue!");
+			//ALOGE("debug-cccc have style header, continue!");
 			has_style_header = TRUE;
 			continue;
 		}
@@ -4685,10 +4661,10 @@ dtvcc_no_whole_command_data(const uint8_t * buf, int cc_count)
 	}
 
 	if (has_style_header && !has_style_info) {
-		AM_DEBUG(0, "debug-cc Warning!no find whole command data, need set default command!");
+		ALOGE("debug-cc Warning!no find whole command data, need set default command!");
 		return TRUE;
 	}
-	AM_DEBUG(0, "debug-cc no need set default command!");
+	ALOGE("debug-cc no need set default command!");
 
 	return FALSE;
 }
@@ -4707,12 +4683,12 @@ dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
 		cc_data_1 = buf[4 + i * 3];
 		cc_data_2 = buf[5 + i * 3];
 		if (b0 == 0xfe && cc_data_2 == 0x0f) {//0f q-tone header
-			//AM_DEBUG(0, "debug-cccc have style header, continue!");
+			//ALOGE("debug-cccc have style header, continue!");
 			has_q_tone_data = TRUE;
 			break;
 		}
 	}
-	//AM_DEBUG(0, "debug-cc has_q_tone_data:%d", has_q_tone_data);
+	//ALOGE("debug-cc has_q_tone_data:%d", has_q_tone_data);
 
 	return has_q_tone_data;
 }
@@ -4752,7 +4728,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 	char dbuff[1024];
 	for (i=0; i<n_bytes; i++)
 		sprintf(dbuff + 3*i, " %02x", buf[i]);
-	AM_DEBUG(0, "incoming data: %s", dbuff);
+	ALOGE("incoming data: %s", dbuff);
 #endif
 	pthread_mutex_lock(&td->mutex);
 
@@ -4774,7 +4750,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 		cc_data_1 = buf[4 + i * 3];
 		cc_data_2 = buf[5 + i * 3];
 
-		//AM_DEBUG(4,"cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
+		//ALOGI("cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
 
 #ifdef KOREAN_DETECT_Q_TONE_DATA
 		td->dtvcc.has_q_tone_data = dtvcc_detect_q_tone_data(buf, cc_count);
@@ -4857,16 +4833,16 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 								     &now, pts);
 						td->dtvcc.packet_size = 0;
 						dtvcc = FALSE;
-						AM_DEBUG(0, "debug-cc case1 %d", j);
+						ALOGE("debug-cc case1 %d", j);
 					} else if (calc_packet_code_byte(&td->dtvcc, buf, cc_count) > 1) {
 						/* new frame has 0xfe, as last cc frame continuous frame to deal with */
-						AM_DEBUG(0, "debug-cc case2 %d", j);
+						ALOGE("debug-cc case2 %d", j);
 						break;
 					} else {
 						/* new frame has no 0xfe & 0xff */
 						td->dtvcc.packet_size = 0;
 						dtvcc = FALSE;
-						AM_DEBUG(0, "debug-cc case3 %d", j);
+						ALOGE("debug-cc case3 %d", j);
 					}
 				} else {
 					/* new frame as new frame*/
@@ -4912,7 +4888,7 @@ void tvcc_init(struct tvcc_decoder *td, char* lang, int lang_len, unsigned int d
 {
 	pthread_mutex_init(&td->mutex, NULL);
 	dtvcc_init(&td->dtvcc, lang, lang_len, decoder_param);
-	AM_DEBUG(0, "tvcc_init lang %s dp %x", lang, decoder_param);
+	ALOGE("tvcc_init lang %s dp %x", lang, decoder_param);
 	cc_init(&td->cc);
 	td->vbi = vbi_decoder_new();
 }

@@ -39,19 +39,8 @@
 #include "export.h"
 #include "conv.h"
 #include "vbi.h" /* asprintf */
+#include "log_zvbi_android.h"
 
-#ifdef ANDROID
-#include <android/log.h>
-#endif
-
-#define LOG_TAG    "ZVBI"
-#ifdef ANDROID
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#define LOGE(...) printf(__VA_ARGS__)
-#endif
 
 extern const char _zvbi_intl_domainname[];
 

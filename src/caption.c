@@ -34,35 +34,10 @@
 #include "hamm.h"
 #include "tables.h"
 #include "vbi.h"
-#ifdef ANDROID
-#include <android/log.h>
-#define AM_DEBUG(_level,_fmt...) \
-    do {\
-        __android_log_print(ANDROID_LOG_INFO,"ZVBI",_fmt);\
-    } while (0)
-#else
-//for buildroot begin
-#undef AM_DEBUG
-#define AM_DEBUG(_level,_fmt...) \
-	do {\
-		fprintf(stderr, "AM_DEBUG:(\"%s\" %d)", __FILE__, __LINE__);\
-		fprintf(stderr, _fmt);\
-		fprintf(stderr, "\n");\
-	} while (0) \
-//for buildroot end
-#endif//end ANDROID
+#include "log_zvbi_android.h"
+
 
 #define elements(array) (sizeof(array) / sizeof(array[0]))
-
-#ifdef ANDROID
-#define LOG_TAG    "ZVBI"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#define LOGE(...) printf(__VA_ARGS__)
-#endif
-
 
 #define ITV_DEBUG(x) /* x */
 #define XDS_SEP_DEBUG /* x */  printf
@@ -1416,7 +1391,7 @@ vbi_decode_caption(vbi_decoder *vbi, int line, uint8_t *buf)
 	struct timespec now;
 
 	pthread_mutex_lock(&cc->mutex);
-	//AM_DEBUG(1, "vbi_data: line: %d %x %x", line, buf[0], buf[1]);
+	//ALOGI("vbi_data: line: %d %x %x", line, buf[0], buf[1]);
 
 	if (line == 21) {
 		cc->curr_chan = cc->curr_chan_f1;
@@ -1528,7 +1503,7 @@ vbi_decode_caption(vbi_decoder *vbi, int line, uint8_t *buf)
 			fflush(stdout);
 		)
 #if 0
-		AM_DEBUG(1, "text value: %c %c %x %x", _vbi_to_ascii(buf[0]),
+		ALOGI("text value: %c %c %x %x", _vbi_to_ascii(buf[0]),
 			_vbi_to_ascii(buf[1]), buf[0], buf[1]);
 #endif
 

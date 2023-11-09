@@ -38,6 +38,8 @@
 #include "exp-gfx.h"
 #include "vt.h" /* VBI_TRANSPARENT_BLACK */
 
+#include "log_zvbi_android.h"
+
 #ifdef NEED_TELETEXT_USES_VECTOR_FONTS
 #include "wstfont2_25.xbm"
 #include "reveal_25.xbm"
@@ -49,17 +51,6 @@
 #endif
 #include "bwstfont2.xbm"
 #include "ccfont2.xbm"
-
-#ifdef ANDROID
-#include <android/log.h>
-#define LOG_TAG    "ZVBI"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#define LOGE(...) printf(__VA_ARGS__)
-#endif
 
 #ifdef NEED_TELETEXT_USES_VECTOR_FONTS
 #define MULTIPLE 5
@@ -76,8 +67,6 @@
 #define PSCPL (psymbol_width / TCW * psymbol_height / TCH)
 #define RVCPL (reveal_width / TCW * reveal_height / TCH)
 
-
-#define TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 
 /* Closed Caption character cell dimensions */
 
@@ -538,7 +527,7 @@ draw_drcs(int canvas_type, uint8_t *canvas, unsigned int rowstride,
 
 	if (!canvas || !pen || !src)
 	{
-		LOGI("failed: draw_drcs encounters null");
+		ALOGI("failed: draw_drcs encounters null");
 		return;
 	}
 
@@ -737,7 +726,7 @@ vbi_draw_cc_page_region(vbi_page *pg,
 
 void
 vbi_teletext_set_change_character_table(vbi_bool isChangeCharacterTable) {
-	LOGI("vbi_teletext_set_change_character_table isChangeCharacterTable: %d", isChangeCharacterTable);
+	ALOGI("vbi_teletext_set_change_character_table isChangeCharacterTable: %d", isChangeCharacterTable);
 	is_change_character_table = isChangeCharacterTable;
 }
 /**
@@ -788,7 +777,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 
 	if (!pg || !canvas)
 	{
-		LOGI("pg canvas null");
+		ALOGI("pg canvas null");
 		return;
 	}
 
@@ -800,9 +789,9 @@ vbi_draw_vt_page_region(vbi_page *pg,
 		return;
 	}
 
-	#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+	#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 		if (pg->pgno < 0) {
-			LOGI("amlogic do not display page number pg->pgno:%d ", pg->pgno);
+			ALOGI("amALOGIc do not display page number pg->pgno:%d ", pg->pgno);
 		} else if ((pg->pgno >0x99) && (pg->pgno <0x900)) {
 			snprintf (page_no_buf, sizeof (page_no_buf), "P%x", pg->pgno);
 		} else	if((pg->pgno >0) && (pg->pgno <0x10)){
@@ -822,10 +811,10 @@ vbi_draw_vt_page_region(vbi_page *pg,
 		int i, j;
 
 		for (i = 0; i < pg->rows; i++) {
-			LOGI("row: %2d: ", i);
+			ALOGI("row: %2d: ", i);
 			ac = &pg->text[i * pg->columns];
 			for (j = 0; j < pg->columns; j++)
-				LOGI("%04x ", ac[j].unicode);
+				ALOGI("%04x ", ac[j].unicode);
 		}
 	}
 
@@ -834,7 +823,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 	if (subno != 0)
 	{
 		if (subno > 10)
-			LOGI("Subno too large");
+			ALOGI("Subno too large");
 		else
 		{
 			for (i = 1; i <= subno; i++)
@@ -981,7 +970,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 				pen.pal8[1] = ac->foreground;
 				if (row == 0)
 				{
-					#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+					#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 						if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE && pg->pgno > 0)
 						{
 							ac->opacity = VBI_OPAQUE;
@@ -1046,7 +1035,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 					pen.rgba[0] &= 0x00FFFFFF;
 					pen.rgba[1] &= 0xFFFFFFFF;
 				} else {
-					LOGI("char opacity may not right");
+					ALOGI("char opacity may not right");
 				}
 			}
 
@@ -1077,7 +1066,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 					ac->italic = 0;
 					ac->bold = 0;
 					ac->underline = 0;
-					//LOGI("subno %d height %d col %d unicode %x for %x back %x size %d",
+					//ALOGI("subno %d height %d col %d unicode %x for %x back %x size %d",
 						// subno, height, width - count, unicode, pen.rgba[1], pen.rgba[0], ac->size);
 				}
 				else if (subtitle == 0)
@@ -1111,7 +1100,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 
 			if (mode == 1 && pg->pgno > 0)//Display only page number
 			{
-				#ifdef TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
+				#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 					if (pg->subtitleMode == VBI_TELETEXT_BITMAP_SUBTITLE && row == 0 && (width - count > 3) && pg->pgno > 0)
 					{
 						pen.rgba[0] = 0x00FFFFFF;

@@ -43,17 +43,8 @@
 #include "vps.h"
 #include "vbi.h"
 #include "cache-priv.h"
-#ifdef ANDROID
-#include <android/log.h>
+#include "log_zvbi_android.h"
 
-
-#define LOG_TAG    "ZVBI"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#else
-#define LOGI(...) printf(__VA_ARGS__)
-#define LOGE(...) printf(__VA_ARGS__)
-#endif
 
 #define VBI_FIRST_LINE_SKIP_SUBPAGE_COLUMNS 6  // 0*/0* subpage
 
@@ -563,7 +554,7 @@ parse_mip_page(vbi_decoder *vbi, cache_page *vtp,
 					  /* subno_mask */ 0);
 		ps->charset_code =
 			page_language (&vbi->vt, vbi->cn, cp, pgno, code & 7);
-		LOGE("Mip charset_code 0x%x pgno %x national 0x%x", ps->charset_code, pgno, code & 7);
+		ALOGE("Mip charset_code 0x%x pgno %x national 0x%x", ps->charset_code, pgno, code & 7);
 		cache_page_unref (cp);
 
 		break;
@@ -2085,8 +2076,8 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 			snprintf(display_raw_buffer+3*i, 1024 - 3*i, "%02x ",  p[i]);
 		}
 
-		LOGI("pgno %x.%d dump packet %d    buffer: %s", cvtp->pgno, cvtp->subno, packet, display_buffer);
-		LOGI("pgno %x.%d dump packet %d raw buffer: %s", cvtp->pgno, cvtp->subno, packet, display_raw_buffer);
+		ALOGI("pgno %x.%d dump packet %d    buffer: %s", cvtp->pgno, cvtp->subno, packet, display_buffer);
+		ALOGI("pgno %x.%d dump packet %d raw buffer: %s", cvtp->pgno, cvtp->subno, packet, display_raw_buffer);
 	}
 
 	switch (packet) {
@@ -2099,7 +2090,7 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 		page = vbi_unham16p (p);
 		if (page < 0 || page >= 0x100) {
 			vbi_teletext_desync(vbi);
-			LOGI("Hamming error in packet 0 page number\n");
+			ALOGI("Hamming error in packet 0 page number\n");
 			return FALSE;
 		}
 
@@ -2118,7 +2109,7 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 				vtp = curr->page;
 
 				if ((vtp->pgno & 0xFF) == page) {
-					LOGI("vbi_decode_teletext vtp->pgno:%d page:%d\n",vtp->pgno, page);
+					ALOGI("vbi_decode_teletext vtp->pgno:%d page:%d\n",vtp->pgno, page);
 					//break;
 				}
 			}
@@ -2130,7 +2121,7 @@ vbi_decode_teletext(vbi_decoder *vbi, uint8_t *p)
 			case PAGE_FUNCTION_LOP:
 				if (!store_lop(vbi, vtp))
 				{
-					//LOGI("packet 0 out %d", __LINE__);
+					//ALOGI("packet 0 out %d", __LINE__);
 					return FALSE;
 				}
 				break;
