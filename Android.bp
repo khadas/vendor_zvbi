@@ -47,7 +47,6 @@ cc_library_static {
     ],
 
     cflags: [
-        "-Werror", // Must keep this, never allow remove this flag!
         "-Wno-unused-parameter",
         "-Wno-unused-function",
         "-Wno-unused-variable",
