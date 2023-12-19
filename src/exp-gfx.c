@@ -791,7 +791,7 @@ vbi_draw_vt_page_region(vbi_page *pg,
 
 	#ifdef NEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND
 		if (pg->pgno < 0) {
-			ALOGI("amALOGIc do not display page number pg->pgno:%d ", pg->pgno);
+			ALOGI("amlogic do not display page number pg->pgno:%d ", pg->pgno);
 		} else if ((pg->pgno >0x99) && (pg->pgno <0x900)) {
 			snprintf (page_no_buf, sizeof (page_no_buf), "P%x", pg->pgno);
 		} else	if((pg->pgno >0) && (pg->pgno <0x10)){

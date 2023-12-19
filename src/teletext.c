@@ -284,6 +284,14 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				n += 'A' - '9';
 
 			ac.unicode = n;
+			#ifdef NEED_TELETEXT_REMOVE_FOUR_COLOR_KEY_BACKGROUND
+			if (vbi->vt.use_subtitleserver) {
+				ac.foreground = flof_link_col[i];
+				ac.background = VBI_BLACK;//flof_link_col[i];
+			} else {
+				ac.foreground = flof_link_col[i];
+			}
+			#else
 			if (vbi->vt.use_subtitleserver && !(vbi->vt.mix_video_mode == TT2_MIX_TRANSPARENT)) {
 				ac.background = flof_link_col[i];
 				ac.foreground = VBI_BLACK;//flof_link_col[i];
@@ -295,6 +303,7 @@ flof_navigation_bar(vbi_decoder *vbi, vbi_page *pg, cache_page *vtp)
 				ac.foreground = flof_link_col[i];
 				#endif
 			}
+			#endif
 
 			pg->text[LAST_ROW + ii + k] = ac;
 			pg->nav_index[ii + k] = i;

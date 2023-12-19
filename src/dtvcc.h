@@ -26,6 +26,10 @@
 #include <unistd.h>
 #include "libzvbi.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum field_num {
 	FIELD_1 = 0,
 	FIELD_2,
@@ -547,12 +551,17 @@ extern void     cc_reset(struct cc_decoder *cd);
 
 extern void     vbi_decode_caption(vbi_decoder *vbi, int line, const uint8_t *buf);
 
+extern void     vbi_refresh_cc(vbi_decoder *vbi);
+
+extern void     vbi_caption_reset(vbi_decoder *vbi);
+
 extern int      get_input_offset();
 
 extern void update_service_status(struct tvcc_decoder *td);
 static vbi_bool dtvcc_carriage_return		(struct dtvcc_decoder *dc, struct dtvcc_service * ds);
 
-
-
+#ifdef __cplusplus
+}
 #endif
 
+#endif
