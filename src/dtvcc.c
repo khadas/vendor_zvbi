@@ -2459,7 +2459,6 @@ dtvcc_stream_event		(struct dtvcc_decoder *	dc,
 	cc_timestamp_reset (&dw->timestamp_c0);
 }
 
-#define SARNOFF_FOOTBALL_708_DEFAULT_HEADER
 /*
 static vbi_bool dtvcc_default_command	(struct dtvcc_decoder * dc,
 				struct dtvcc_service * ds)
@@ -2481,7 +2480,7 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 
 	dw = ds->curr_window;
 
-#ifdef SARNOFF_FOOTBALL_708_DEFAULT_HEADER
+#ifdef NEED_SARNOFF_FOOTBALL_708_DEFAULT_HEADER
 	//now sarnoff football.ts first line cc not set dtvcc_command, and when stream play from head
 	//sequence number will change, and call dtvcc_reset();so here dw will be null, this line cc will
 	//lost, so we set default command for workaround
@@ -4693,10 +4692,6 @@ dtvcc_detect_q_tone_data(const uint8_t * buf, int cc_count)
 	return has_q_tone_data;
 }
 
-
-//#define KOREAN_CALC_708_CC_HEADER
-#define KOREAN_DETECT_Q_TONE_DATA
-#define CALC_708_CC_HEADER
 /* Note pts may be < 0 if no PTS was received. */
 void
 tvcc_decode_data			(struct tvcc_decoder *td,
@@ -4752,7 +4747,7 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 
 		//ALOGI("cc type %02x %02x %02x %02x\n", cc_type, cc_valid, cc_data_1, cc_data_2);
 
-#ifdef KOREAN_DETECT_Q_TONE_DATA
+#ifdef NEED_KOREAN_CC_DETECT_Q_TONE_DATA
 		td->dtvcc.has_q_tone_data = dtvcc_detect_q_tone_data(buf, cc_count);
 #endif
 
@@ -4779,14 +4774,14 @@ tvcc_decode_data			(struct tvcc_decoder *td,
 
 		case DTVCC_DATA:
 			j = td->dtvcc.packet_size;
-#ifdef CALC_708_CC_HEADER
+#ifdef NEED_CC_CALC_708_HEADER
 			if (cc_valid && b0 == 0xfe && !td->dtvcc.dtvcc_no_whole_command_data) {
 				td->dtvcc.dtvcc_no_whole_command_data = dtvcc_no_whole_command_data(buf, cc_count);
 			}
 #endif
 			if (j <= 0) {
 				/* Missed packet start. */
-#ifdef KOREAN_CALC_708_CC_HEADER
+#ifdef NEED_KOREAN_CC_CALC_708_HEADER
 				if (cc_valid && b0 == 0xfe && !dtvcc && !dtvcc_have_start_header(buf, cc_count)) {
 					dtvcc = TRUE;
 					td->dtvcc.has_dtvstart_header = FALSE;
