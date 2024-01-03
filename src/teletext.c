@@ -64,6 +64,14 @@ do {									\
 #define SUBPAGE_NUMBER_FORMATE 16 // 16 for the hexadecimal;10 for the decimal
 #define TT2_MIX_TRANSPARENT 1
 
+#define SUBPAGE_NUMBER_FIRST_DIGIT  1
+#define SUBPAGE_NUMBER_SECOND_DIGIT 2
+#define SUBPAGE_NUMBER_THIRD_DIGIT  3
+#define SUBPAGE_NUMBER_FOURTH_DIGIT 4
+
+#define PAGE_SUBPAGE_NUMBER_DIGIT   11
+
+
 extern const char _zvbi_intl_domainname[];
 extern vbi_bool
 _vbi_cache_get_sub_info(vbi_cache *ca, vbi_subno pgno, int *subs, int *len);
@@ -1172,7 +1180,7 @@ void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, vbi_boo
 	vbi->vt.use_subtitleserver = useSubtitleserver;
 }
 
-extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode)
+void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode)
 {
 	vbi->vt.mix_video_mode = mixVideoMode;
 }
@@ -1191,6 +1199,22 @@ vbi_get_sub_info(vbi_decoder *vbi, vbi_pgno pgno, int *subs, int *len)
 void vbi_set_subtitle_page(vbi_decoder *vbi, int index)
 {
 	vbi->vt.goto_page = index;
+}
+
+void vbi_set_subtitle_subpage_mode(vbi_decoder *vbi, vbi_bool subpageMode, int subpageDigit)
+{
+	vbi->vt.subpage_mode = subpageMode;
+	vbi->vt.goto_subpage_digit = subpageDigit;
+}
+
+vbi_bool vbi_get_subtitle_subpage_mode(vbi_decoder *vbi)
+{
+	return vbi->vt.subpage_mode;
+}
+
+void vbi_set_subtitle_subpage(vbi_decoder *vbi, int index)
+{
+	vbi->vt.goto_subpage = index;
 }
 
 /**
@@ -2811,18 +2835,33 @@ vbi_format_vt_page(vbi_decoder *vbi,
 	//snprintf (buf, sizeof (buf),
 	if (vbi->vt.use_subtitleserver) {
 		if ((vbi->vt.goto_page >0x99) && (vbi->vt.goto_page <0x900)) {
-			snprintf (buf, sizeof (buf), "P%x    ", vbi->vt.goto_page);
+			if (vbi->vt.subpage_mode) {
+				if (vbi->vt.goto_subpage_digit == SUBPAGE_NUMBER_FIRST_DIGIT) {
+					snprintf (buf, sizeof (buf), "P%03x.%x---  ", vbi->vt.goto_page, vbi->vt.goto_subpage);
+				} else 	if (vbi->vt.goto_subpage_digit == SUBPAGE_NUMBER_SECOND_DIGIT) {
+					snprintf (buf, sizeof (buf), "P%03x.%02x--  ", vbi->vt.goto_page, vbi->vt.goto_subpage);
+				} else 	if (vbi->vt.goto_subpage_digit == SUBPAGE_NUMBER_THIRD_DIGIT) {
+					snprintf (buf, sizeof (buf), "P%03x.%03x-  ", vbi->vt.goto_page, vbi->vt.goto_subpage);
+				} else 	if (vbi->vt.goto_subpage_digit >= SUBPAGE_NUMBER_FOURTH_DIGIT) {
+					vbi->vt.current_subno = vbi->vt.goto_subpage;
+					snprintf (buf, sizeof (buf), "P%03x.%04x  ", vbi->vt.goto_page, vbi->vt.goto_subpage);
+				} else {
+					snprintf (buf, sizeof (buf), "P%03x.----  ", vbi->vt.goto_page);
+				}
+			} else {
+				snprintf (buf, sizeof (buf), "P%03x.%04x  ", vbi->vt.goto_page, vbi->vt.current_subno);
+			}
 		} else	if((vbi->vt.goto_page >0) && (vbi->vt.goto_page <0x10)){
-			snprintf (buf, sizeof (buf), "P%x--    ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%x--.%04x  ", vbi->vt.goto_page, vbi->vt.current_subno);
 		} else	if(vbi->vt.goto_page == 0){
 			  vbi->vt.goto_page = 0x100;
-			snprintf (buf, sizeof (buf), "P%x    ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%03x.%04x  ", vbi->vt.goto_page, vbi->vt.current_subno);
 		} else {
-			snprintf (buf, sizeof (buf), "P%x-    ", vbi->vt.goto_page);
+			snprintf (buf, sizeof (buf), "P%02x-.%04x  ", vbi->vt.goto_page, vbi->vt.current_subno);
 		}
 	} else {
 		snprintf (buf, sizeof (buf),
-			"P%x    ", vbi->vt.goto_page);
+			"P%x.%04x  ", vbi->vt.goto_page, vbi->vt.current_subno);
 	}
 	/* Level 1 formatting */
 
@@ -2869,7 +2908,7 @@ vbi_format_vt_page(vbi_decoder *vbi,
 		for (column = 0; column < COLUMNS; ++column) {
 			int raw;
 
-			if (row == 0 && column < 8) {
+			if (row == 0 && column < PAGE_SUBPAGE_NUMBER_DIGIT) {
 				raw = buf[column];
 				i++;
 			} else if ((raw = vbi_unpar8 (vtp->data.lop.raw[0][i++])) < 0) {

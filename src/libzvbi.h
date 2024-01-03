@@ -147,7 +147,7 @@ typedef int vbi_subno;
 _vbi_inline unsigned int
 vbi_dec2bcd(unsigned int dec)
 {
-	return (dec % 10) + ((dec / 10) % 10) * 16 + ((dec / 100) % 10) * 256;
+	return (dec % 10) + ((dec / 10) % 10) * 16 + ((dec / 100) % 10) * 256 + ((dec / 1000) % 10) * 4096;
 }
 
 #define vbi_bin2bcd(n) vbi_dec2bcd(n)
@@ -155,7 +155,7 @@ vbi_dec2bcd(unsigned int dec)
 _vbi_inline unsigned int
 vbi_bcd2dec(unsigned int bcd)
 {
-	return (bcd & 15) + ((bcd >> 4) & 15) * 10 + ((bcd >> 8) & 15) * 100;
+	return (bcd & 15) + ((bcd >> 4) & 15) * 10 + ((bcd >> 8) & 15) * 100 + ((bcd >> 12) & 15) * 1000;
 }
 
 #define vbi_bcd2bin(n) vbi_bcd2dec(n)
@@ -1863,6 +1863,9 @@ extern void vbi_set_subtitle_flag(vbi_decoder *vbi, int flag, int subtitleMode, 
 extern void vbi_set_subtitle_mix_video_flag(vbi_decoder *vbi, int mixVideoMode);
 extern int vbi_get_subtitle_mix_video_flag(vbi_decoder *vbi);
 extern void vbi_set_subtitle_page(vbi_decoder *vbi, int index);
+extern void vbi_set_subtitle_subpage_mode(vbi_decoder *vbi, vbi_bool subpageMode, int subpageDigit);
+extern vbi_bool vbi_get_subtitle_subpage_mode(vbi_decoder *vbi);
+extern void vbi_set_subtitle_subpage(vbi_decoder *vbi, int index);
 extern vbi_bool		vbi_fetch_vt_page(vbi_decoder *vbi, vbi_page *pg,
 					  vbi_pgno pgno, vbi_subno subno,
 					  vbi_wst_level max_level, int display_rows,

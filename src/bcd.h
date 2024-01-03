@@ -108,7 +108,7 @@ typedef int vbi_subno;
 _vbi_inline unsigned int
 vbi_dec2bcd(unsigned int dec)
 {
-	return (dec % 10) + ((dec / 10) % 10) * 16 + ((dec / 100) % 10) * 256;
+	return (dec % 10) + ((dec / 10) % 10) * 16 + ((dec / 100) % 10) * 256 + ((dec / 1000) % 10) * 4096;
 }
 
 /**
@@ -132,7 +132,7 @@ vbi_dec2bcd(unsigned int dec)
 _vbi_inline unsigned int
 vbi_bcd2dec(unsigned int bcd)
 {
-	return (bcd & 15) + ((bcd >> 4) & 15) * 10 + ((bcd >> 8) & 15) * 100;
+	return (bcd & 15) + ((bcd >> 4) & 15) * 10 + ((bcd >> 8) & 15) * 100 + ((bcd >> 12) & 15) * 1000;
 }
 
 /**
