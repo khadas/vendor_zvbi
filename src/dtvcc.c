@@ -2481,11 +2481,13 @@ dtvcc_put_char			(struct dtvcc_decoder *	dc,
 	dw = ds->curr_window;
 
 #ifdef NEED_SARNOFF_FOOTBALL_708_DEFAULT_HEADER
-	//now sarnoff football.ts first line cc not set dtvcc_command, and when stream play from head
-	//sequence number will change, and call dtvcc_reset();so here dw will be null, this line cc will
-	//lost, so we set default command for workaround
-	if (NULL == dw && c == 0x3e) {
-		ALOGE("debug-cc window null! First frame is not set window command, try set default!");
+	/*1、now sarnoff football.ts first line cc not set dtvcc_command, and when stream play from head
+	 *sequence number will change, and call dtvcc_reset();so here dw will be null, this line cc will
+	 *lost, so we add (NULL == dw && c == 0x3e) and set default command for workaround
+	 *2、New testing has found some special cc streams, not only the first line cc has not been set
+	 *with not set dtvcc_command, so we only keep (NULL==dw)*/
+	if (NULL == dw) {
+		ALOGE("debug-cc window null! cc frame is not set window command, try set default!");
 		dtvcc_default_command(dc, ds);
 		dw = ds->curr_window;
 	}
