@@ -1,13 +1,16 @@
 OUTPUT = libzvbi.so
+
+OUT_DIR ?= .
+$(info "OUT_DIR : $(OUT_DIR)")
+
 DEFINES = -D_REENTRANT -D_GNU_SOURCE -DENABLE_DVB=1 -DENABLE_V4L=1 -DENABLE_V4L2=1 -DPACKAGE=\"zvbi\" -DVERSION=\"0.2.33\" -DLIBICONV_PLUG -DDEBUG_ANDROID -DNEED_TELETEXT_DISPLAY_SUB_PGNO -DNEED_TELETEXT_FIX_NULL_FLOF_LINKS -DNEED_TELETEXT_FIX_WRONG_CODE_STREAM_FOUR_COLOR_KEY -DNEED_TELETEXT_BLOCK_TOP_NAVIGATION_BAR -DNEED_TELETEXT_EXTENDED_LOCAL_ENHANCEMENT_DATA_CHROMA_KEY_LABEL_BAR -DNEED_TELETEXT_GRAPHICS_SUBTITLE_PAGENUMBER_BLACKGROUND -DNEED_SARNOFF_FOOTBALL_708_DEFAULT_HEADER -DNEED_CC_CALC_708_HEADER
 USING_LIBS =
 USING_LIBS_PATH =
+SRC_FILES = $(wildcard src/*.c)
 OBJS = $(patsubst %.c,%.o,$(SRC_FILES))
 LOCAL_PATH = $(shell pwd)
 INSTALL_DIR = $(TARGET_DIR)/usr/lib
 AMADEC_C_INCLUDES =
-
-SRC_FILES = $(wildcard src/*.c)
 
 CFLAGS   := -c -Wall -shared -fPIC -Wno-unknown-pragmas -O3 -fexceptions -fnon-call-exceptions
 
@@ -23,15 +26,17 @@ LDFLAGS  := -shared -fPIC -L$(INSTALL_DIR)
 all : $(OBJS) $(OUTPUT)
 
 $(OBJS) : %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o ${OUT_DIR}/$@
 
 $(OUTPUT) : $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $^ $(USING_LIBS_PATH) $(USING_LIBS)
+	$(LD) $(LDFLAGS) -soname $(OUTPUT) -o ${OUT_DIR}/$@ $(patsubst %, $(OUT_DIR)/%, $^) $(USING_LIBS_PATH) $(USING_LIBS)
 
 install:
-	-install -m 555 ${OUTPUT} $(INSTALL_DIR)
+	-install -m 555 ${OUT_DIR}/${OUTPUT} $(INSTALL_DIR)
 	-install -m 644 $(LOCAL_PATH)/src/libzvbi.h $(STAGING_DIR)/usr/include/
 	-install -m 644 $(LOCAL_PATH)/src/dtvcc.h $(STAGING_DIR)/usr/include/
 
 clean:
-	@rm -f $(OBJS)
+	@rm -f ${OUT_DIR}/$(OBJS)
+
+$(shell mkdir -p $(OUT_DIR)/src)
